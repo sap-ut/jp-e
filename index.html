@@ -178,7 +178,7 @@
             display: none;
         }
         
-        /* HEADER - CLEAN WITH COMPANY NAME ONLY */
+        /* HEADER - ONLY MENU BAR, NO LOGO/TEXT */
         .header-bar {
             background: white;
             padding: 0;
@@ -186,30 +186,7 @@
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
         }
         
-        .company-header {
-            background: linear-gradient(135deg, var(--jp-dark), var(--jp-blue));
-            padding: 25px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .company-name {
-            font-size: 28px;
-            font-weight: 700;
-            color: white;
-            letter-spacing: 2px;
-        }
-        
-        .user-welcome {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        /* MAIN NAVIGATION - CLEAN */
+        /* MAIN NAVIGATION - FULL WIDTH MENU ONLY */
         .main-nav-container {
             background: white;
             padding: 0;
@@ -220,7 +197,6 @@
             overflow-x: auto;
             padding: 0;
             scrollbar-width: none;
-            background: linear-gradient(to right, #f8fafc, #ffffff);
             border-top: 1px solid #e2e8f0;
             border-bottom: 1px solid #e2e8f0;
         }
@@ -232,22 +208,27 @@
         .nav-main-item {
             position: relative;
             white-space: nowrap;
+            flex: 1;
         }
         
         .nav-main-btn {
             background: transparent;
             border: none;
             color: #475569;
-            padding: 18px 28px;
+            padding: 20px 10px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
+            gap: 8px;
             text-decoration: none;
             border-bottom: 3px solid transparent;
+            width: 100%;
+            min-height: 80px;
         }
         
         .nav-main-btn:hover {
@@ -262,13 +243,18 @@
             border-bottom: 3px solid var(--jp-blue);
         }
         
+        .nav-main-btn i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
         /* MEGA MENU */
         .mega-menu {
             position: absolute;
             top: 100%;
             left: 0;
             background: white;
-            min-width: 650px;
+            min-width: 700px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.15);
             border-radius: 15px;
             border: 1px solid #e2e8f0;
@@ -319,105 +305,108 @@
             transform: translateX(5px);
         }
         
-        /* USER BAR */
+        /* USER BAR - SIMPLE */
         .user-bar {
             background: #f8fafc;
-            padding: 15px 30px;
+            padding: 12px 30px;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
             border-top: 1px solid #e2e8f0;
             font-size: 13px;
         }
         
-        /* DASHBOARD - CLEAN WELCOME SCREEN */
+        /* DASHBOARD - WITH ICONS */
         .dashboard-container {
-            min-height: calc(100vh - 220px);
+            min-height: calc(100vh - 140px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: 
-                linear-gradient(45deg, transparent 49%, rgba(59, 130, 246, 0.02) 50%, rgba(59, 130, 246, 0.02) 50%, transparent 51%),
-                linear-gradient(-45deg, transparent 49%, rgba(59, 130, 246, 0.02) 50%, rgba(59, 130, 246, 0.02) 50%, transparent 51%);
-            background-size: 100px 100px;
             background-color: white;
-            padding: 40px;
+            padding: 40px 20px;
         }
         
-        .welcome-title {
-            font-size: 48px;
-            font-weight: 700;
-            color: var(--jp-blue);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .welcome-subtitle {
-            font-size: 20px;
-            color: #64748b;
-            font-weight: 300;
-            margin-bottom: 50px;
-            text-align: center;
-            max-width: 800px;
-            line-height: 1.6;
-        }
-        
-        .quick-access {
+        .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 25px;
-            max-width: 1000px;
+            max-width: 1200px;
+            width: 100%;
             margin-top: 40px;
         }
         
-        .quick-card {
+        .dashboard-card {
             background: white;
             border-radius: 15px;
-            padding: 30px;
+            padding: 30px 25px;
             text-align: center;
             border: 2px solid #e2e8f0;
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
         }
         
-        .quick-card:hover {
-            transform: translateY(-5px);
+        .dashboard-card:hover {
+            transform: translateY(-8px);
             border-color: var(--jp-light);
             box-shadow: 0 20px 40px rgba(30, 64, 175, 0.1);
         }
         
-        .quick-icon {
-            width: 70px;
-            height: 70px;
+        .dashboard-icon {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 30px;
-            color: var(--jp-blue);
+            margin-bottom: 20px;
+            font-size: 32px;
+            color: white;
         }
         
-        .quick-card:nth-child(2) .quick-icon {
-            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        .dashboard-card:nth-child(1) .dashboard-icon {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
         }
         
-        .quick-card:nth-child(3) .quick-icon {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
+        .dashboard-card:nth-child(2) .dashboard-icon {
+            background: linear-gradient(135deg, #10b981, #047857);
         }
         
-        .quick-card:nth-child(4) .quick-icon {
-            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+        .dashboard-card:nth-child(3) .dashboard-icon {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .dashboard-card:nth-child(4) .dashboard-icon {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+        
+        .dashboard-card:nth-child(5) .dashboard-icon {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+        }
+        
+        .dashboard-card:nth-child(6) .dashboard-icon {
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+        }
+        
+        .dashboard-card:nth-child(7) .dashboard-icon {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+        }
+        
+        .dashboard-card:nth-child(8) .dashboard-icon {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
         }
         
         /* CONTENT AREAS */
         .content-area {
             padding: 40px;
             display: none;
-            min-height: calc(100vh - 220px);
+            min-height: calc(100vh - 140px);
             background: white;
         }
         
@@ -460,7 +449,21 @@
         
         /* RESPONSIVE */
         @media (max-width: 1200px) {
-            .quick-access {
+            .dashboard-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .mega-menu {
+                min-width: 500px;
+            }
+            
+            .mega-menu-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
@@ -480,21 +483,24 @@
                 padding: 40px 30px;
             }
             
-            .company-name {
-                font-size: 22px;
-            }
-            
-            .welcome-title {
-                font-size: 36px;
-            }
-            
-            .quick-access {
+            .dashboard-grid {
                 grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+            
+            .nav-main-btn {
+                padding: 15px 5px;
+                font-size: 12px;
+                min-height: 70px;
+            }
+            
+            .nav-main-btn i {
+                font-size: 20px;
             }
             
             .mega-menu {
                 position: fixed;
-                top: 180px;
+                top: 140px;
                 left: 20px;
                 right: 20px;
                 min-width: auto;
@@ -506,11 +512,6 @@
                 grid-template-columns: 1fr;
             }
             
-            .nav-main-btn {
-                padding: 15px 20px;
-                font-size: 13px;
-            }
-            
             .action-btn {
                 width: 55px;
                 height: 55px;
@@ -518,22 +519,17 @@
             }
         }
         
-        @media (max-width: 480px) {
+        @media (max-width: 576px) {
             .jp-solutions-title {
                 font-size: 28px;
             }
             
-            .company-name {
+            .nav-main-btn span {
+                font-size: 11px;
+            }
+            
+            .nav-main-btn i {
                 font-size: 18px;
-            }
-            
-            .welcome-title {
-                font-size: 28px;
-            }
-            
-            .nav-main-btn {
-                padding: 12px 15px;
-                font-size: 12px;
             }
         }
     </style>
@@ -581,23 +577,16 @@
             </button>
         </div>
 
-        <!-- HEADER - CLEAN WITH COMPANY NAME -->
+        <!-- HEADER - ONLY MENU BAR, NO LOGO/TEXT -->
         <header class="header-bar">
-            <div class="company-header">
-                <div class="company-name">JP SOLUTIONS</div>
-                <div class="user-welcome">
-                    <i class="fas fa-user-circle"></i>
-                    Welcome, Admin
-                </div>
-            </div>
-            
-            <!-- MAIN NAVIGATION -->
+            <!-- MAIN NAVIGATION - FULL WIDTH MENU -->
             <div class="main-nav-container">
                 <div class="nav-scroll">
                     <!-- 🧱 MASTERS -->
                     <div class="nav-main-item">
                         <a href="#" class="nav-main-btn" onclick="showModule('masters')">
-                            <i class="fas fa-cubes"></i> Masters
+                            <i class="fas fa-cubes"></i>
+                            <span>Masters</span>
                         </a>
                         <div class="mega-menu">
                             <div class="mega-menu-grid">
@@ -658,7 +647,8 @@
                     <!-- 🔁 TRANSACTIONS -->
                     <div class="nav-main-item">
                         <a href="#" class="nav-main-btn" onclick="showModule('transactions')">
-                            <i class="fas fa-exchange-alt"></i> Transactions
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transactions</span>
                         </a>
                         <div class="mega-menu">
                             <div class="mega-menu-grid">
@@ -701,7 +691,8 @@
                     <!-- 📦 INVENTORY -->
                     <div class="nav-main-item">
                         <a href="#" class="nav-main-btn" onclick="showModule('inventory')">
-                            <i class="fas fa-warehouse"></i> Inventory
+                            <i class="fas fa-warehouse"></i>
+                            <span>Inventory</span>
                         </a>
                         <div class="mega-menu">
                             <div class="mega-category">
@@ -721,7 +712,8 @@
                     <!-- ⚙️ SYSTEM SETTINGS -->
                     <div class="nav-main-item">
                         <a href="#" class="nav-main-btn" onclick="showModule('system-settings')">
-                            <i class="fas fa-sliders-h"></i> System Settings
+                            <i class="fas fa-sliders-h"></i>
+                            <span>Settings</span>
                         </a>
                         <div class="mega-menu">
                             <div class="mega-menu-grid">
@@ -770,7 +762,8 @@
                     <!-- 👥 CUSTOMER -->
                     <div class="nav-main-item">
                         <a href="#" class="nav-main-btn" onclick="showModule('customer')">
-                            <i class="fas fa-users"></i> Customers
+                            <i class="fas fa-users"></i>
+                            <span>Customers</span>
                         </a>
                         <div class="mega-menu">
                             <div class="mega-category">
@@ -790,7 +783,8 @@
                     <!-- 🧑‍💼 SALES -->
                     <div class="nav-main-item">
                         <a href="#" class="nav-main-btn" onclick="showModule('sales')">
-                            <i class="fas fa-user-tie"></i> Sales
+                            <i class="fas fa-user-tie"></i>
+                            <span>Sales</span>
                         </a>
                         <div class="mega-menu">
                             <div class="mega-category">
@@ -810,7 +804,8 @@
                     <!-- 📊 REPORTS -->
                     <div class="nav-main-item">
                         <a href="#" class="nav-main-btn" onclick="showModule('reports')">
-                            <i class="fas fa-chart-bar"></i> Reports
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Reports</span>
                         </a>
                         <div class="mega-menu">
                             <div class="mega-menu-grid">
@@ -877,67 +872,92 @@
                     <!-- 👤 USER MANAGEMENT -->
                     <div class="nav-main-item">
                         <a href="#" class="nav-main-btn" onclick="showModule('user-management')">
-                            <i class="fas fa-user-cog"></i> User Management
+                            <i class="fas fa-user-cog"></i>
+                            <span>Users</span>
                         </a>
                     </div>
                 </div>
             </div>
             
-            <!-- USER BAR -->
+            <!-- USER BAR - SIMPLE -->
             <div class="user-bar">
                 <div class="text-muted">
                     <i class="fas fa-calendar-alt me-1"></i>
                     <span id="currentDateTime"></span>
                 </div>
-                <div class="user-info">
-                    <span class="badge bg-primary">Administrator</span>
-                    <button class="btn btn-sm btn-outline-danger" onclick="logout()">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
+                <button class="btn btn-sm btn-outline-danger ms-3" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
             </div>
         </header>
 
         <!-- MAIN CONTENT -->
         <main>
-            <!-- DASHBOARD - CLEAN WELCOME -->
+            <!-- DASHBOARD - WITH ICONS -->
             <section id="dashboard" class="dashboard-container">
-                <div class="welcome-title">Welcome to JP Solutions</div>
-                <div class="welcome-subtitle">
-                    Complete Enterprise Management System for Glass Manufacturing Business
-                </div>
-                
-                <div class="quick-access">
-                    <div class="quick-card" onclick="showModule('proforma')">
-                        <div class="quick-icon">
+                <div class="dashboard-grid">
+                    <div class="dashboard-card" onclick="showModule('proforma')">
+                        <div class="dashboard-icon">
                             <i class="fas fa-file-invoice-dollar"></i>
                         </div>
                         <h5>Proforma Invoice</h5>
                         <p class="text-muted">Create new invoices</p>
                     </div>
                     
-                    <div class="quick-card" onclick="showModule('customer')">
-                        <div class="quick-icon">
+                    <div class="dashboard-card" onclick="showModule('customer')">
+                        <div class="dashboard-icon">
                             <i class="fas fa-users"></i>
                         </div>
                         <h5>Customers</h5>
                         <p class="text-muted">Manage customers</p>
                     </div>
                     
-                    <div class="quick-card" onclick="showModule('inventory')">
-                        <div class="quick-icon">
+                    <div class="dashboard-card" onclick="showModule('inventory')">
+                        <div class="dashboard-icon">
                             <i class="fas fa-warehouse"></i>
                         </div>
                         <h5>Inventory</h5>
                         <p class="text-muted">Stock management</p>
                     </div>
                     
-                    <div class="quick-card" onclick="showModule('reports')">
-                        <div class="quick-icon">
+                    <div class="dashboard-card" onclick="showModule('reports')">
+                        <div class="dashboard-icon">
                             <i class="fas fa-chart-bar"></i>
                         </div>
                         <h5>Reports</h5>
                         <p class="text-muted">View all reports</p>
+                    </div>
+                    
+                    <div class="dashboard-card" onclick="showModule('transactions')">
+                        <div class="dashboard-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h5>Transactions</h5>
+                        <p class="text-muted">Sales & Production</p>
+                    </div>
+                    
+                    <div class="dashboard-card" onclick="showModule('masters')">
+                        <div class="dashboard-icon">
+                            <i class="fas fa-cubes"></i>
+                        </div>
+                        <h5>Masters</h5>
+                        <p class="text-muted">Manage master data</p>
+                    </div>
+                    
+                    <div class="dashboard-card" onclick="showModule('sales')">
+                        <div class="dashboard-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h5>Sales Team</h5>
+                        <p class="text-muted">Sales management</p>
+                    </div>
+                    
+                    <div class="dashboard-card" onclick="showModule('system-settings')">
+                        <div class="dashboard-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h5>Settings</h5>
+                        <p class="text-muted">System configuration</p>
                     </div>
                 </div>
             </section>
