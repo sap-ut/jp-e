@@ -8,9 +8,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --jp-blue: #1e40af;
-            --jp-light: #3b82f6;
-            --jp-dark: #1e3a8a;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary: #f472b6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --background: #fafafa;
+            --surface: #ffffff;
+            --text-primary: #374151;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
         }
         
         * {
@@ -20,9 +29,11 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f8fafc;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
             overflow-x: hidden;
+            line-height: 1.6;
         }
         
         /* SPLASH SCREEN */
@@ -32,13 +43,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            animation: splashFade 3s ease-in-out forwards;
+            animation: splashFade 2.5s ease-in-out forwards;
         }
         
         @keyframes splashFade {
@@ -47,31 +58,362 @@
             100% { opacity: 0; visibility: hidden; }
         }
         
-        .jp-logo-splash {
-            font-size: 140px;
-            font-weight: 900;
+        .splash-content {
+            text-align: center;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .splash-title {
+            font-size: 5rem;
+            font-weight: 800;
             color: white;
-            letter-spacing: 20px;
-            text-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            animation: pulse 2s infinite;
+            letter-spacing: 0.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .powered-by-splash {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 24px;
-            letter-spacing: 8px;
-            margin-top: 30px;
+        .splash-subtitle {
+            font-size: 1.2rem;
             font-weight: 300;
-            animation: fadeInUp 1s ease-out 1s both;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 0.3rem;
         }
         
-        @keyframes fadeInUp {
+        /* LOGIN SCREEN */
+        #loginScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+        }
+        
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            width: 420px;
+            padding: 3rem;
+            text-align: center;
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .login-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.1rem;
+        }
+        
+        .login-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.2rem;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+        }
+        
+        .login-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(99, 102, 241, 0.05);
+            color: var(--text-primary);
+        }
+        
+        .login-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 0.5rem;
+            letter-spacing: 0.05rem;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+        
+        /* MAIN APPLICATION */
+        #mainApp {
+            display: none;
+        }
+        
+        /* HEADER - COMPACT MENU ONLY */
+        .header-container {
+            background: var(--surface);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .main-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0.5rem 1rem;
+            scrollbar-width: none;
+            gap: 1px;
+            background: linear-gradient(90deg, #f8fafc, #f1f5f9);
+        }
+        
+        .main-nav::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-item {
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.75rem 1.25rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+        
+        .nav-btn:hover {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.08);
+            transform: translateY(-1px);
+        }
+        
+        .nav-btn.active {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.12);
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.1);
+        }
+        
+        /* MEGA MENU */
+        .mega-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--surface);
+            min-width: 650px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            z-index: 1000;
+            display: none;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.98);
+        }
+        
+        .nav-item:hover .mega-dropdown {
+            display: block;
+            animation: fadeIn 0.2s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .mega-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .mega-section {
+            margin-bottom: 1rem;
+        }
+        
+        .mega-title {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .mega-link {
+            display: block;
+            color: var(--text-secondary);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .mega-link:hover {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.08);
+            transform: translateX(3px);
+        }
+        
+        /* USER BAR */
+        .user-bar {
+            background: var(--surface);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        /* DASHBOARD - CLEAN, MINIMALISTIC, NO ICONS */
+        .dashboard-wrapper {
+            min-height: calc(100vh - 120px);
+            padding: 2rem;
+            background: var(--background);
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .card-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        
+        .card-action-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border: none;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .card-action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* CONTENT AREAS */
+        .content-area {
+            padding: 2rem;
+            display: none;
+            min-height: calc(100vh - 120px);
+            background: var(--background);
+        }
+        
+        .content-area.active {
+            display: block;
+            animation: contentFade 0.3s ease-out;
+        }
+        
+        @keyframes contentFade {
             from {
                 opacity: 0;
                 transform: translateY(20px);
@@ -82,454 +424,108 @@
             }
         }
         
-        /* LOGIN SCREEN */
-        #loginScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9998;
-        }
-        
-        .login-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
-            width: 450px;
-            padding: 50px;
-            text-align: center;
-            animation: slideUp 0.6s ease-out;
-        }
-        
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .jp-solutions-title {
-            font-size: 42px;
-            font-weight: 800;
-            color: var(--jp-blue);
-            letter-spacing: 3px;
-            margin-bottom: 10px;
-            text-shadow: 0 4px 10px rgba(30, 64, 175, 0.15);
-        }
-        
-        .powered-by-login {
-            color: #64748b;
-            font-size: 16px;
-            font-weight: 400;
-            letter-spacing: 3px;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-        }
-        
-        .login-input {
-            width: 100%;
-            padding: 15px 25px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 16px;
-            margin-bottom: 25px;
-            transition: all 0.3s;
-            background: #f8fafc;
-        }
-        
-        .login-input:focus {
-            outline: none;
-            border-color: var(--jp-light);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-        }
-        
-        .login-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--jp-blue), var(--jp-light));
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 15px;
-            letter-spacing: 2px;
-        }
-        
-        .login-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(30, 64, 175, 0.3);
-        }
-        
-        /* MAIN APPLICATION */
-        #mainApp {
-            display: none;
-        }
-        
-        /* HEADER - ONLY MENU BAR, NO LOGO/TEXT */
-        .header-bar {
-            background: white;
-            padding: 0;
-            border-bottom: 4px solid var(--jp-blue);
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* MAIN NAVIGATION - FULL WIDTH MENU ONLY */
-        .main-nav-container {
-            background: white;
-            padding: 0;
-        }
-        
-        .nav-scroll {
-            display: flex;
-            overflow-x: auto;
-            padding: 0;
-            scrollbar-width: none;
-            border-top: 1px solid #e2e8f0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .nav-scroll::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .nav-main-item {
-            position: relative;
-            white-space: nowrap;
-            flex: 1;
-        }
-        
-        .nav-main-btn {
-            background: transparent;
-            border: none;
-            color: #475569;
-            padding: 20px 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-decoration: none;
-            border-bottom: 3px solid transparent;
-            width: 100%;
-            min-height: 80px;
-        }
-        
-        .nav-main-btn:hover {
-            color: var(--jp-blue);
-            background: #f1f5f9;
-            border-bottom: 3px solid var(--jp-light);
-        }
-        
-        .nav-main-btn.active {
-            color: var(--jp-blue);
-            background: #f1f5f9;
-            border-bottom: 3px solid var(--jp-blue);
-        }
-        
-        .nav-main-btn i {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        
-        /* MEGA MENU */
-        .mega-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: white;
-            min-width: 700px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-            border-radius: 15px;
-            border: 1px solid #e2e8f0;
-            z-index: 1000;
-            display: none;
-            padding: 30px;
-        }
-        
-        .nav-main-item:hover .mega-menu {
-            display: block;
-        }
-        
-        .mega-menu-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-        }
-        
-        .mega-category-title {
-            color: var(--jp-blue);
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .mega-menu-item {
-            display: block;
-            color: #475569;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-bottom: 6px;
-            text-decoration: none;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .mega-menu-item:hover {
-            background: #f8fafc;
-            color: var(--jp-blue);
-            transform: translateX(5px);
-        }
-        
-        /* USER BAR - SIMPLE */
-        .user-bar {
-            background: #f8fafc;
-            padding: 12px 30px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            border-top: 1px solid #e2e8f0;
-            font-size: 13px;
-        }
-        
-        /* DASHBOARD - WITH ICONS */
-        .dashboard-container {
-            min-height: calc(100vh - 140px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: white;
-            padding: 40px 20px;
-        }
-        
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-            max-width: 1200px;
-            width: 100%;
-            margin-top: 40px;
-        }
-        
-        .dashboard-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px 25px;
-            text-align: center;
-            border: 2px solid #e2e8f0;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 200px;
-        }
-        
-        .dashboard-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--jp-light);
-            box-shadow: 0 20px 40px rgba(30, 64, 175, 0.1);
-        }
-        
-        .dashboard-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 32px;
-            color: white;
-        }
-        
-        .dashboard-card:nth-child(1) .dashboard-icon {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-        }
-        
-        .dashboard-card:nth-child(2) .dashboard-icon {
-            background: linear-gradient(135deg, #10b981, #047857);
-        }
-        
-        .dashboard-card:nth-child(3) .dashboard-icon {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-        }
-        
-        .dashboard-card:nth-child(4) .dashboard-icon {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-        }
-        
-        .dashboard-card:nth-child(5) .dashboard-icon {
-            background: linear-gradient(135deg, #ec4899, #db2777);
-        }
-        
-        .dashboard-card:nth-child(6) .dashboard-icon {
-            background: linear-gradient(135deg, #14b8a6, #0d9488);
-        }
-        
-        .dashboard-card:nth-child(7) .dashboard-icon {
-            background: linear-gradient(135deg, #f97316, #ea580c);
-        }
-        
-        .dashboard-card:nth-child(8) .dashboard-icon {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-        }
-        
-        /* CONTENT AREAS */
-        .content-area {
-            padding: 40px;
-            display: none;
-            min-height: calc(100vh - 140px);
-            background: white;
-        }
-        
-        .content-area.active {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-        
-        /* FLOATING BUTTONS */
+        /* FLOATING BUTTONS - SUBTLE */
         .float-actions {
             position: fixed;
-            bottom: 40px;
-            right: 40px;
+            bottom: 2rem;
+            right: 2rem;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            z-index: 1000;
+            gap: 0.75rem;
+            z-index: 90;
         }
         
-        .action-btn {
-            width: 65px;
-            height: 65px;
+        .float-btn {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             border: none;
-            background: linear-gradient(135deg, var(--jp-blue), var(--jp-light));
-            color: white;
-            font-size: 24px;
+            background: var(--surface);
+            color: var(--primary);
+            font-size: 1.2rem;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.3);
-            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
         }
         
-        .action-btn:hover {
-            transform: scale(1.15);
-            box-shadow: 0 15px 40px rgba(30, 64, 175, 0.4);
+        .float-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+            background: var(--primary);
+            color: white;
         }
         
         /* RESPONSIVE */
         @media (max-width: 1200px) {
-            .dashboard-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        
-        @media (max-width: 992px) {
-            .dashboard-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .mega-menu {
+            .mega-dropdown {
                 min-width: 500px;
             }
             
-            .mega-menu-grid {
+            .mega-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
         
         @media (max-width: 768px) {
-            .jp-logo-splash {
-                font-size: 100px;
-                letter-spacing: 15px;
-            }
-            
-            .jp-solutions-title {
-                font-size: 32px;
+            .splash-title {
+                font-size: 3.5rem;
             }
             
             .login-container {
                 width: 90%;
-                padding: 40px 30px;
+                padding: 2rem;
+            }
+            
+            .login-title {
+                font-size: 2rem;
+            }
+            
+            .main-nav {
+                padding: 0.5rem;
+            }
+            
+            .nav-btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+            
+            .dashboard-wrapper {
+                padding: 1rem;
             }
             
             .dashboard-grid {
                 grid-template-columns: 1fr;
-                max-width: 400px;
             }
             
-            .nav-main-btn {
-                padding: 15px 5px;
-                font-size: 12px;
-                min-height: 70px;
-            }
-            
-            .nav-main-btn i {
-                font-size: 20px;
-            }
-            
-            .mega-menu {
+            .mega-dropdown {
                 position: fixed;
-                top: 140px;
-                left: 20px;
-                right: 20px;
+                top: 60px;
+                left: 1rem;
+                right: 1rem;
                 min-width: auto;
                 max-height: 70vh;
                 overflow-y: auto;
             }
             
-            .mega-menu-grid {
+            .mega-grid {
                 grid-template-columns: 1fr;
-            }
-            
-            .action-btn {
-                width: 55px;
-                height: 55px;
-                font-size: 20px;
             }
         }
         
-        @media (max-width: 576px) {
-            .jp-solutions-title {
-                font-size: 28px;
+        @media (max-width: 480px) {
+            .nav-btn span {
+                display: none;
             }
             
-            .nav-main-btn span {
-                font-size: 11px;
+            .nav-btn {
+                padding: 0.75rem;
             }
             
-            .nav-main-btn i {
-                font-size: 18px;
+            .dashboard-card {
+                padding: 1.5rem;
             }
         }
     </style>
@@ -537,15 +533,17 @@
 <body>
     <!-- SPLASH SCREEN -->
     <div id="splashScreen">
-        <div class="jp-logo-splash">JP</div>
-        <div class="powered-by-splash">POWERED BY JP</div>
+        <div class="splash-content">
+            <div class="splash-title">JP</div>
+            <div class="splash-subtitle">POWERED BY JP</div>
+        </div>
     </div>
 
     <!-- LOGIN SCREEN -->
     <div id="loginScreen">
         <div class="login-container">
-            <div class="jp-solutions-title">JP SOLUTIONS</div>
-            <div class="powered-by-login">Powered by JP</div>
+            <div class="login-title">JP SOLUTIONS</div>
+            <div class="login-subtitle">Powered by JP</div>
             
             <form id="loginForm">
                 <input type="text" class="login-input" placeholder="Username" id="username" required>
@@ -566,398 +564,397 @@
     <div id="mainApp">
         <!-- FLOATING BUTTONS -->
         <div class="float-actions">
-            <button class="action-btn" onclick="showDashboard()" title="Dashboard">
+            <button class="float-btn" onclick="showDashboard()" title="Dashboard">
                 <i class="fas fa-home"></i>
             </button>
-            <button class="action-btn" onclick="showModule('proforma')" title="Proforma">
-                <i class="fas fa-file-invoice-dollar"></i>
+            <button class="float-btn" onclick="showModule('proforma')" title="Proforma">
+                <i class="fas fa-file-invoice"></i>
             </button>
-            <button class="action-btn" onclick="window.print()" title="Print">
+            <button class="float-btn" onclick="window.print()" title="Print">
                 <i class="fas fa-print"></i>
             </button>
         </div>
 
-        <!-- HEADER - ONLY MENU BAR, NO LOGO/TEXT -->
-        <header class="header-bar">
-            <!-- MAIN NAVIGATION - FULL WIDTH MENU -->
-            <div class="main-nav-container">
-                <div class="nav-scroll">
-                    <!-- 🧱 MASTERS -->
-                    <div class="nav-main-item">
-                        <a href="#" class="nav-main-btn" onclick="showModule('masters')">
-                            <i class="fas fa-cubes"></i>
-                            <span>Masters</span>
-                        </a>
-                        <div class="mega-menu">
-                            <div class="mega-menu-grid">
-                                <div class="mega-category">
-                                    <div class="mega-category-title">
-                                        <i class="fas fa-box"></i> Product Masters
-                                    </div>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('item-master')">
-                                        Item Master
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('price-master')">
-                                        Price Master
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('process-master')">
-                                        Process Master
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('cutting-rule')">
-                                        Cutting Rule
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('glass-size')">
-                                        Glass Size Master
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('glass-type')">
-                                        Glass Type Master
-                                    </a>
+        <!-- HEADER - COMPACT MENU BAR -->
+        <header class="header-container">
+            <nav class="main-nav">
+                <!-- 🧱 MASTERS -->
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="showModule('masters')">
+                        <i class="fas fa-cubes"></i>
+                        <span>Masters</span>
+                    </button>
+                    <div class="mega-dropdown">
+                        <div class="mega-grid">
+                            <div class="mega-section">
+                                <div class="mega-title">
+                                    <i class="fas fa-box"></i> Product Masters
                                 </div>
-                                
-                                <div class="mega-category">
-                                    <div class="mega-category-title">
-                                        <i class="fas fa-cog"></i> System Masters
-                                    </div>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('route-master')">
-                                        Route Master
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('payment-terms')">
-                                        Payment Terms Master
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('film-type')">
-                                        Film Type Master
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('bank-master')">
-                                        Bank Master
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('vehicle-master')">
-                                        Vehicle Master
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('additional-charges')">
-                                        Additional Charges Master
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('remarks-master')">
-                                        Remarks Master
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 🔁 TRANSACTIONS -->
-                    <div class="nav-main-item">
-                        <a href="#" class="nav-main-btn" onclick="showModule('transactions')">
-                            <i class="fas fa-exchange-alt"></i>
-                            <span>Transactions</span>
-                        </a>
-                        <div class="mega-menu">
-                            <div class="mega-menu-grid">
-                                <div class="mega-category">
-                                    <div class="mega-category-title">
-                                        <i class="fas fa-file-invoice-dollar"></i> Sales Transactions
-                                    </div>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('proforma')">
-                                        Proforma Invoice
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('work-order')">
-                                        Work Order
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('sales-invoice')">
-                                        Sales Invoice
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('direct-invoice')">
-                                        Direct Invoice
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('credit-note')">
-                                        Credit Note
-                                    </a>
-                                </div>
-                                
-                                <div class="mega-category">
-                                    <div class="mega-category-title">
-                                        <i class="fas fa-cut"></i> Production
-                                    </div>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('cutting-optimizer')">
-                                        Cutting Optimizer
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('label-generation')">
-                                        Label / Sticker Generation
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 📦 INVENTORY -->
-                    <div class="nav-main-item">
-                        <a href="#" class="nav-main-btn" onclick="showModule('inventory')">
-                            <i class="fas fa-warehouse"></i>
-                            <span>Inventory</span>
-                        </a>
-                        <div class="mega-menu">
-                            <div class="mega-category">
-                                <div class="mega-category-title">
-                                    <i class="fas fa-boxes"></i> Stock Management
-                                </div>
-                                <a href="#" class="mega-menu-item" onclick="showSubModule('hardware-inventory')">
-                                    Hardware Inventory
+                                <a href="#" class="mega-link" onclick="showSubModule('item-master')">
+                                    Item Master
                                 </a>
-                                <a href="#" class="mega-menu-item" onclick="showSubModule('glass-inventory')">
-                                    Glass Inventory
+                                <a href="#" class="mega-link" onclick="showSubModule('price-master')">
+                                    Price Master
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('process-master')">
+                                    Process Master
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('cutting-rule')">
+                                    Cutting Rule
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('glass-size')">
+                                    Glass Size Master
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('glass-type')">
+                                    Glass Type Master
+                                </a>
+                            </div>
+                            
+                            <div class="mega-section">
+                                <div class="mega-title">
+                                    <i class="fas fa-cog"></i> System Masters
+                                </div>
+                                <a href="#" class="mega-link" onclick="showSubModule('route-master')">
+                                    Route Master
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('payment-terms')">
+                                    Payment Terms Master
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('film-type')">
+                                    Film Type Master
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('bank-master')">
+                                    Bank Master
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('vehicle-master')">
+                                    Vehicle Master
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('additional-charges')">
+                                    Additional Charges Master
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('remarks-master')">
+                                    Remarks Master
                                 </a>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- ⚙️ SYSTEM SETTINGS -->
-                    <div class="nav-main-item">
-                        <a href="#" class="nav-main-btn" onclick="showModule('system-settings')">
-                            <i class="fas fa-sliders-h"></i>
-                            <span>Settings</span>
-                        </a>
-                        <div class="mega-menu">
-                            <div class="mega-menu-grid">
-                                <div class="mega-category">
-                                    <div class="mega-category-title">
-                                        <i class="fas fa-tools"></i> Configuration
-                                    </div>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('default-config')">
-                                        Default Configuration
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('file-storage')">
-                                        File Storage Config
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('network-config')">
-                                        Network Configuration
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('data-backup')">
-                                        Data Backup & Restore
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('sms-email')">
-                                        SMS / Email Config
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('billing-config')">
-                                        Billing Configuration
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('print-config')">
-                                        Print Configuration
-                                    </a>
-                                </div>
-                                
-                                <div class="mega-category">
-                                    <div class="mega-category-title">
-                                        <i class="fas fa-user-shield"></i> Security & Updates
-                                    </div>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('user-access')">
-                                        User Access Control
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('software-update')">
-                                        Software Update
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 👥 CUSTOMER -->
-                    <div class="nav-main-item">
-                        <a href="#" class="nav-main-btn" onclick="showModule('customer')">
-                            <i class="fas fa-users"></i>
-                            <span>Customers</span>
-                        </a>
-                        <div class="mega-menu">
-                            <div class="mega-category">
-                                <div class="mega-category-title">
-                                    <i class="fas fa-address-card"></i> Customer Management
-                                </div>
-                                <a href="#" class="mega-menu-item" onclick="showSubModule('customer-registration')">
-                                    Customer Registration
-                                </a>
-                                <a href="#" class="mega-menu-item" onclick="showSubModule('customer-list')">
-                                    Customer List / Master
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 🧑‍💼 SALES -->
-                    <div class="nav-main-item">
-                        <a href="#" class="nav-main-btn" onclick="showModule('sales')">
-                            <i class="fas fa-user-tie"></i>
-                            <span>Sales</span>
-                        </a>
-                        <div class="mega-menu">
-                            <div class="mega-category">
-                                <div class="mega-category-title">
-                                    <i class="fas fa-chart-line"></i> Sales Team
-                                </div>
-                                <a href="#" class="mega-menu-item" onclick="showSubModule('salesperson-registration')">
-                                    Salesperson Registration
-                                </a>
-                                <a href="#" class="mega-menu-item" onclick="showSubModule('salesperson-list')">
-                                    Salesperson List
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 📊 REPORTS -->
-                    <div class="nav-main-item">
-                        <a href="#" class="nav-main-btn" onclick="showModule('reports')">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>Reports</span>
-                        </a>
-                        <div class="mega-menu">
-                            <div class="mega-menu-grid">
-                                <div class="mega-category">
-                                    <div class="mega-category-title">
-                                        <i class="fas fa-file-invoice"></i> Sales Reports
-                                    </div>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('proforma-report')">
-                                        Proforma Report
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('invoice-report')">
-                                        Invoice Report
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('salesperson-performance')">
-                                        Salesperson Performance
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('direct-invoice-report')">
-                                        Direct Invoice Report
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('credit-note-report')">
-                                        Credit Note Report
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('pending-billing')">
-                                        Pending Billing Report
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('billed-area')">
-                                        Billed Area Report
-                                    </a>
-                                </div>
-                                
-                                <div class="mega-category">
-                                    <div class="mega-category-title">
-                                        <i class="fas fa-industry"></i> Production Reports
-                                    </div>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('production-report')">
-                                        Production Report
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('work-order-report')">
-                                        Work Order Report
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('glass-inventory-report')">
-                                        Glass Inventory Report
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('breakage-report')">
-                                        Breakage Report
-                                    </a>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('rejection-report')">
-                                        Rejection Report
-                                    </a>
-                                </div>
-                                
-                                <div class="mega-category">
-                                    <div class="mega-category-title">
-                                        <i class="fas fa-database"></i> System Reports
-                                    </div>
-                                    <a href="#" class="mega-menu-item" onclick="showSubModule('tally-export')">
-                                        Tally Export Report
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 👤 USER MANAGEMENT -->
-                    <div class="nav-main-item">
-                        <a href="#" class="nav-main-btn" onclick="showModule('user-management')">
-                            <i class="fas fa-user-cog"></i>
-                            <span>Users</span>
-                        </a>
                     </div>
                 </div>
-            </div>
+                
+                <!-- 🔁 TRANSACTIONS -->
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="showModule('transactions')">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Transactions</span>
+                    </button>
+                    <div class="mega-dropdown">
+                        <div class="mega-grid">
+                            <div class="mega-section">
+                                <div class="mega-title">
+                                    <i class="fas fa-file-invoice-dollar"></i> Sales Transactions
+                                </div>
+                                <a href="#" class="mega-link" onclick="showSubModule('proforma')">
+                                    Proforma Invoice
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('work-order')">
+                                    Work Order
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('sales-invoice')">
+                                    Sales Invoice
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('direct-invoice')">
+                                    Direct Invoice
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('credit-note')">
+                                    Credit Note
+                                </a>
+                            </div>
+                            
+                            <div class="mega-section">
+                                <div class="mega-title">
+                                    <i class="fas fa-cut"></i> Production
+                                </div>
+                                <a href="#" class="mega-link" onclick="showSubModule('cutting-optimizer')">
+                                    Cutting Optimizer
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('label-generation')">
+                                    Label / Sticker Generation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 📦 INVENTORY -->
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="showModule('inventory')">
+                        <i class="fas fa-warehouse"></i>
+                        <span>Inventory</span>
+                    </button>
+                    <div class="mega-dropdown">
+                        <div class="mega-section">
+                            <div class="mega-title">
+                                <i class="fas fa-boxes"></i> Stock Management
+                            </div>
+                            <a href="#" class="mega-link" onclick="showSubModule('hardware-inventory')">
+                                Hardware Inventory
+                            </a>
+                            <a href="#" class="mega-link" onclick="showSubModule('glass-inventory')">
+                                Glass Inventory
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ⚙️ SETTINGS -->
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="showModule('system-settings')">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Settings</span>
+                    </button>
+                    <div class="mega-dropdown">
+                        <div class="mega-grid">
+                            <div class="mega-section">
+                                <div class="mega-title">
+                                    <i class="fas fa-tools"></i> Configuration
+                                </div>
+                                <a href="#" class="mega-link" onclick="showSubModule('default-config')">
+                                    Default Configuration
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('file-storage')">
+                                    File Storage Config
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('network-config')">
+                                    Network Configuration
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('data-backup')">
+                                    Data Backup & Restore
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('sms-email')">
+                                    SMS / Email Config
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('billing-config')">
+                                    Billing Configuration
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('print-config')">
+                                    Print Configuration
+                                </a>
+                            </div>
+                            
+                            <div class="mega-section">
+                                <div class="mega-title">
+                                    <i class="fas fa-user-shield"></i> Security & Updates
+                                </div>
+                                <a href="#" class="mega-link" onclick="showSubModule('user-access')">
+                                    User Access Control
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('software-update')">
+                                    Software Update
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 👥 CUSTOMER -->
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="showModule('customer')">
+                        <i class="fas fa-users"></i>
+                        <span>Customers</span>
+                    </button>
+                    <div class="mega-dropdown">
+                        <div class="mega-section">
+                            <div class="mega-title">
+                                <i class="fas fa-address-card"></i> Customer Management
+                            </div>
+                            <a href="#" class="mega-link" onclick="showSubModule('customer-registration')">
+                                Customer Registration
+                            </a>
+                            <a href="#" class="mega-link" onclick="showSubModule('customer-list')">
+                                Customer List / Master
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 🧑‍💼 SALES -->
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="showModule('sales')">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Sales</span>
+                    </button>
+                    <div class="mega-dropdown">
+                        <div class="mega-section">
+                            <div class="mega-title">
+                                <i class="fas fa-chart-line"></i> Sales Team
+                            </div>
+                            <a href="#" class="mega-link" onclick="showSubModule('salesperson-registration')">
+                                Salesperson Registration
+                            </a>
+                            <a href="#" class="mega-link" onclick="showSubModule('salesperson-list')">
+                                Salesperson List
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 📊 REPORTS -->
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="showModule('reports')">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </button>
+                    <div class="mega-dropdown">
+                        <div class="mega-grid">
+                            <div class="mega-section">
+                                <div class="mega-title">
+                                    <i class="fas fa-file-invoice"></i> Sales Reports
+                                </div>
+                                <a href="#" class="mega-link" onclick="showSubModule('proforma-report')">
+                                    Proforma Report
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('invoice-report')">
+                                    Invoice Report
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('salesperson-performance')">
+                                    Salesperson Performance
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('direct-invoice-report')">
+                                    Direct Invoice Report
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('credit-note-report')">
+                                    Credit Note Report
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('pending-billing')">
+                                    Pending Billing Report
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('billed-area')">
+                                    Billed Area Report
+                                </a>
+                            </div>
+                            
+                            <div class="mega-section">
+                                <div class="mega-title">
+                                    <i class="fas fa-industry"></i> Production Reports
+                                </div>
+                                <a href="#" class="mega-link" onclick="showSubModule('production-report')">
+                                    Production Report
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('work-order-report')">
+                                    Work Order Report
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('glass-inventory-report')">
+                                    Glass Inventory Report
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('breakage-report')">
+                                    Breakage Report
+                                </a>
+                                <a href="#" class="mega-link" onclick="showSubModule('rejection-report')">
+                                    Rejection Report
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 👤 USERS -->
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="showModule('user-management')">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Users</span>
+                    </button>
+                </div>
+            </nav>
             
-            <!-- USER BAR - SIMPLE -->
+            <!-- USER BAR -->
             <div class="user-bar">
                 <div class="text-muted">
                     <i class="fas fa-calendar-alt me-1"></i>
                     <span id="currentDateTime"></span>
                 </div>
-                <button class="btn btn-sm btn-outline-danger ms-3" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
+                <div class="user-info">
+                    <span class="badge bg-primary">Admin</span>
+                    <button class="btn btn-sm btn-outline-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
             </div>
         </header>
 
         <!-- MAIN CONTENT -->
         <main>
-            <!-- DASHBOARD - WITH ICONS -->
-            <section id="dashboard" class="dashboard-container">
+            <!-- DASHBOARD - CLEAN, NO ICONS -->
+            <section id="dashboard" class="dashboard-wrapper">
                 <div class="dashboard-grid">
-                    <div class="dashboard-card" onclick="showModule('proforma')">
-                        <div class="dashboard-icon">
-                            <i class="fas fa-file-invoice-dollar"></i>
+                    <div class="dashboard-card">
+                        <div class="card-title">
+                            Quick Actions
+                            <i class="fas fa-bolt" style="color: var(--primary);"></i>
                         </div>
-                        <h5>Proforma Invoice</h5>
-                        <p class="text-muted">Create new invoices</p>
+                        <div class="card-subtitle">
+                            Quickly access frequently used features and perform common tasks.
+                        </div>
+                        <div class="card-actions">
+                            <button class="card-action-btn" onclick="showModule('proforma')">
+                                New Proforma
+                            </button>
+                            <button class="card-action-btn" onclick="showModule('customer')">
+                                Add Customer
+                            </button>
+                            <button class="card-action-btn" onclick="showModule('reports')">
+                                View Reports
+                            </button>
+                        </div>
                     </div>
                     
-                    <div class="dashboard-card" onclick="showModule('customer')">
-                        <div class="dashboard-icon">
-                            <i class="fas fa-users"></i>
+                    <div class="dashboard-card">
+                        <div class="card-title">
+                            Recent Activities
+                            <i class="fas fa-history" style="color: var(--success);"></i>
                         </div>
-                        <h5>Customers</h5>
-                        <p class="text-muted">Manage customers</p>
+                        <div class="card-subtitle">
+                            Track recent system activities and user actions.
+                        </div>
+                        <div class="card-actions">
+                            <button class="card-action-btn" onclick="showModule('transactions')">
+                                View All
+                            </button>
+                        </div>
                     </div>
                     
-                    <div class="dashboard-card" onclick="showModule('inventory')">
-                        <div class="dashboard-icon">
-                            <i class="fas fa-warehouse"></i>
+                    <div class="dashboard-card">
+                        <div class="card-title">
+                            System Overview
+                            <i class="fas fa-chart-line" style="color: var(--info);"></i>
                         </div>
-                        <h5>Inventory</h5>
-                        <p class="text-muted">Stock management</p>
+                        <div class="card-subtitle">
+                            Monitor system performance, user activity, and business metrics.
+                        </div>
+                        <div class="card-actions">
+                            <button class="card-action-btn" onclick="showModule('reports')">
+                                Analytics
+                            </button>
+                            <button class="card-action-btn" onclick="showModule('system-settings')">
+                                Settings
+                            </button>
+                        </div>
                     </div>
                     
-                    <div class="dashboard-card" onclick="showModule('reports')">
-                        <div class="dashboard-icon">
-                            <i class="fas fa-chart-bar"></i>
+                    <div class="dashboard-card">
+                        <div class="card-title">
+                            Inventory Status
+                            <i class="fas fa-boxes" style="color: var(--warning);"></i>
                         </div>
-                        <h5>Reports</h5>
-                        <p class="text-muted">View all reports</p>
-                    </div>
-                    
-                    <div class="dashboard-card" onclick="showModule('transactions')">
-                        <div class="dashboard-icon">
-                            <i class="fas fa-exchange-alt"></i>
+                        <div class="card-subtitle">
+                            Check current stock levels and inventory status across warehouses.
                         </div>
-                        <h5>Transactions</h5>
-                        <p class="text-muted">Sales & Production</p>
-                    </div>
-                    
-                    <div class="dashboard-card" onclick="showModule('masters')">
-                        <div class="dashboard-icon">
-                            <i class="fas fa-cubes"></i>
+                        <div class="card-actions">
+                            <button class="card-action-btn" onclick="showModule('inventory')">
+                                View Inventory
+                            </button>
+                            <button class="card-action-btn" onclick="showSubModule('glass-inventory-report')">
+                                Reports
+                            </button>
                         </div>
-                        <h5>Masters</h5>
-                        <p class="text-muted">Manage master data</p>
-                    </div>
-                    
-                    <div class="dashboard-card" onclick="showModule('sales')">
-                        <div class="dashboard-icon">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
-                        <h5>Sales Team</h5>
-                        <p class="text-muted">Sales management</p>
-                    </div>
-                    
-                    <div class="dashboard-card" onclick="showModule('system-settings')">
-                        <div class="dashboard-icon">
-                            <i class="fas fa-cogs"></i>
-                        </div>
-                        <h5>Settings</h5>
-                        <p class="text-muted">System configuration</p>
                     </div>
                 </div>
             </section>
@@ -1027,10 +1024,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Start with splash screen
             setTimeout(function() {
-                document.getElementById('splashScreen').style.animation = 'splashFade 3s ease-in-out forwards';
+                document.getElementById('splashScreen').style.animation = 'splashFade 2.5s ease-in-out forwards';
                 setTimeout(function() {
                     document.getElementById('loginScreen').style.display = 'flex';
-                }, 3000);
+                }, 2500);
             }, 100);
             
             // Update date time
@@ -1089,13 +1086,13 @@
             document.getElementById('dashboard').style.display = 'none';
             
             // Remove active class from all nav buttons
-            document.querySelectorAll('.nav-main-btn').forEach(btn => {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
             // Show selected module content
             if(moduleName === 'dashboard') {
-                document.getElementById('dashboard').style.display = 'flex';
+                document.getElementById('dashboard').style.display = 'block';
             } else {
                 const contentId = moduleName + 'Content';
                 const contentArea = document.getElementById(contentId);
@@ -1105,7 +1102,7 @@
                 }
                 
                 // Add active class to clicked button
-                const activeBtn = document.querySelector(`.nav-main-btn[onclick="showModule('${moduleName}')"]`);
+                const activeBtn = document.querySelector(`.nav-btn[onclick="showModule('${moduleName}')"]`);
                 if(activeBtn) activeBtn.classList.add('active');
             }
         }
@@ -1113,6 +1110,10 @@
         // Show dashboard
         function showDashboard() {
             showModule('dashboard');
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
         }
         
         // Show sub-module
