@@ -243,7 +243,7 @@
             top: 100%;
             left: 0;
             background: var(--surface);
-            min-width: 650px;
+            min-width: 750px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
             border-radius: 16px;
             border: 1px solid var(--border);
@@ -400,7 +400,7 @@
             color: white;
         }
         
-        /* CONTENT AREAS */
+        /* MODULE CONTENT AREAS - SHOWING ALL OPTIONS */
         .content-area {
             padding: 2rem;
             display: none;
@@ -422,6 +422,66 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+        
+        .module-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .module-header {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .option-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary);
+        }
+        
+        .option-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+        
+        .option-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .option-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.5;
         }
         
         /* FLOATING BUTTONS - SUBTLE */
@@ -466,6 +526,10 @@
             
             .mega-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .options-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
         }
         
@@ -513,6 +577,14 @@
             .mega-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .module-header {
+                padding: 1.5rem;
+            }
         }
         
         @media (max-width: 480px) {
@@ -526,6 +598,10 @@
             
             .dashboard-card {
                 padding: 1.5rem;
+            }
+            
+            .option-card {
+                padding: 1.25rem;
             }
         }
     </style>
@@ -567,8 +643,8 @@
             <button class="float-btn" onclick="showDashboard()" title="Dashboard">
                 <i class="fas fa-home"></i>
             </button>
-            <button class="float-btn" onclick="showModule('proforma')" title="Proforma">
-                <i class="fas fa-file-invoice"></i>
+            <button class="float-btn" onclick="showModule('masters')" title="Masters">
+                <i class="fas fa-cubes"></i>
             </button>
             <button class="float-btn" onclick="window.print()" title="Print">
                 <i class="fas fa-print"></i>
@@ -600,10 +676,10 @@
                                     Process Master
                                 </a>
                                 <a href="#" class="mega-link" onclick="showSubModule('cutting-rule')">
-                                    Cutting Rule
+                                    Cutting Rule (Z Rule)
                                 </a>
                                 <a href="#" class="mega-link" onclick="showSubModule('glass-size')">
-                                    Glass Size Master
+                                    Glass Size Master (Jumbo Size)
                                 </a>
                                 <a href="#" class="mega-link" onclick="showSubModule('glass-type')">
                                     Glass Type Master
@@ -721,7 +797,7 @@
                                     Default Configuration
                                 </a>
                                 <a href="#" class="mega-link" onclick="showSubModule('file-storage')">
-                                    File Storage Config
+                                    File Storage Configuration
                                 </a>
                                 <a href="#" class="mega-link" onclick="showSubModule('network-config')">
                                     Network Configuration
@@ -730,7 +806,7 @@
                                     Data Backup & Restore
                                 </a>
                                 <a href="#" class="mega-link" onclick="showSubModule('sms-email')">
-                                    SMS / Email Config
+                                    SMS / Email Configuration
                                 </a>
                                 <a href="#" class="mega-link" onclick="showSubModule('billing-config')">
                                     Billing Configuration
@@ -770,7 +846,7 @@
                                 Customer Registration
                             </a>
                             <a href="#" class="mega-link" onclick="showSubModule('customer-list')">
-                                Customer List / Master
+                                Customer List / Customer Master
                             </a>
                         </div>
                     </div>
@@ -816,7 +892,7 @@
                                     Invoice Report
                                 </a>
                                 <a href="#" class="mega-link" onclick="showSubModule('salesperson-performance')">
-                                    Salesperson Performance
+                                    Salesperson Performance Report
                                 </a>
                                 <a href="#" class="mega-link" onclick="showSubModule('direct-invoice-report')">
                                     Direct Invoice Report
@@ -828,7 +904,7 @@
                                     Pending Billing Report
                                 </a>
                                 <a href="#" class="mega-link" onclick="showSubModule('billed-area')">
-                                    Billed Area Report
+                                    Billed Area Report (Sq.Mtr)
                                 </a>
                             </div>
                             
@@ -850,6 +926,15 @@
                                 </a>
                                 <a href="#" class="mega-link" onclick="showSubModule('rejection-report')">
                                     Rejection Report
+                                </a>
+                            </div>
+                            
+                            <div class="mega-section">
+                                <div class="mega-title">
+                                    <i class="fas fa-database"></i> System Reports
+                                </div>
+                                <a href="#" class="mega-link" onclick="showSubModule('tally-export')">
+                                    Tally Export Report
                                 </a>
                             </div>
                         </div>
@@ -959,60 +1044,496 @@
                 </div>
             </section>
 
-            <!-- MODULE CONTENT AREAS -->
+            <!-- MASTERS MODULE - SHOWING ALL OPTIONS -->
             <section id="mastersContent" class="content-area">
-                <div class="container">
-                    <h3 class="mb-4"><i class="fas fa-cubes me-2"></i>Masters Management</h3>
-                    <p>Master data management section</p>
+                <div class="module-container">
+                    <div class="module-header">
+                        <h3 class="mb-2"><i class="fas fa-cubes me-2"></i>Masters Management</h3>
+                        <p class="text-muted mb-0">Manage all master data and system configurations</p>
+                    </div>
+                    
+                    <div class="options-grid">
+                        <!-- Product Masters -->
+                        <div class="option-card" onclick="showSubModule('item-master')">
+                            <div class="option-icon">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="option-title">Item Master</div>
+                            <div class="option-desc">Manage product items, specifications, and details</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('price-master')">
+                            <div class="option-icon">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <div class="option-title">Price Master</div>
+                            <div class="option-desc">Manage pricing for all products and services</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('process-master')">
+                            <div class="option-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <div class="option-title">Process Master</div>
+                            <div class="option-desc">Define manufacturing and processing steps</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('cutting-rule')">
+                            <div class="option-icon">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <div class="option-title">Cutting Rule (Z Rule)</div>
+                            <div class="option-desc">Define glass cutting rules and patterns</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('glass-size')">
+                            <div class="option-icon">
+                                <i class="fas fa-expand-alt"></i>
+                            </div>
+                            <div class="option-title">Glass Size Master</div>
+                            <div class="option-desc">Manage standard and jumbo glass sizes</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('glass-type')">
+                            <div class="option-icon">
+                                <i class="fas fa-glass-whiskey"></i>
+                            </div>
+                            <div class="option-title">Glass Type Master</div>
+                            <div class="option-desc">Define different types of glass materials</div>
+                        </div>
+                        
+                        <!-- System Masters -->
+                        <div class="option-card" onclick="showSubModule('route-master')">
+                            <div class="option-icon">
+                                <i class="fas fa-route"></i>
+                            </div>
+                            <div class="option-title">Route Master</div>
+                            <div class="option-desc">Manage delivery and service routes</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('payment-terms')">
+                            <div class="option-icon">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <div class="option-title">Payment Terms Master</div>
+                            <div class="option-desc">Define payment terms and conditions</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('film-type')">
+                            <div class="option-icon">
+                                <i class="fas fa-film"></i>
+                            </div>
+                            <div class="option-title">Film Type Master</div>
+                            <div class="option-desc">Manage film types and specifications</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('bank-master')">
+                            <div class="option-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div class="option-title">Bank Master</div>
+                            <div class="option-desc">Manage bank accounts and details</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('vehicle-master')">
+                            <div class="option-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="option-title">Vehicle Master</div>
+                            <div class="option-desc">Manage vehicle fleet and details</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('additional-charges')">
+                            <div class="option-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="option-title">Additional Charges Master</div>
+                            <div class="option-desc">Manage extra charges and fees</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('remarks-master')">
+                            <div class="option-icon">
+                                <i class="fas fa-comment-alt"></i>
+                            </div>
+                            <div class="option-title">Remarks Master</div>
+                            <div class="option-desc">Manage standard remarks and notes</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
+            <!-- TRANSACTIONS MODULE -->
             <section id="transactionsContent" class="content-area">
-                <div class="container">
-                    <h3 class="mb-4"><i class="fas fa-exchange-alt me-2"></i>Transactions</h3>
-                    <p>Transaction management section</p>
+                <div class="module-container">
+                    <div class="module-header">
+                        <h3 class="mb-2"><i class="fas fa-exchange-alt me-2"></i>Transactions</h3>
+                        <p class="text-muted mb-0">Process sales, production, and other transactions</p>
+                    </div>
+                    
+                    <div class="options-grid">
+                        <div class="option-card" onclick="showSubModule('proforma')">
+                            <div class="option-icon">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <div class="option-title">Proforma Invoice</div>
+                            <div class="option-desc">Create and manage proforma invoices</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('work-order')">
+                            <div class="option-icon">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <div class="option-title">Work Order</div>
+                            <div class="option-desc">Create and track work orders</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('sales-invoice')">
+                            <div class="option-icon">
+                                <i class="fas fa-file-invoice"></i>
+                            </div>
+                            <div class="option-title">Sales Invoice</div>
+                            <div class="option-desc">Generate and manage sales invoices</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('direct-invoice')">
+                            <div class="option-icon">
+                                <i class="fas fa-receipt"></i>
+                            </div>
+                            <div class="option-title">Direct Invoice</div>
+                            <div class="option-desc">Create direct invoices without quotations</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('credit-note')">
+                            <div class="option-icon">
+                                <i class="fas fa-undo-alt"></i>
+                            </div>
+                            <div class="option-title">Credit Note</div>
+                            <div class="option-desc">Issue credit notes and refunds</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('cutting-optimizer')">
+                            <div class="option-icon">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <div class="option-title">Cutting Optimizer</div>
+                            <div class="option-desc">Optimize glass cutting for minimal waste</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('label-generation')">
+                            <div class="option-icon">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            <div class="option-title">Label / Sticker Generation</div>
+                            <div class="option-desc">Generate labels and stickers for products</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
+            <!-- INVENTORY MODULE -->
             <section id="inventoryContent" class="content-area">
-                <div class="container">
-                    <h3 class="mb-4"><i class="fas fa-warehouse me-2"></i>Inventory</h3>
-                    <p>Inventory management section</p>
+                <div class="module-container">
+                    <div class="module-header">
+                        <h3 class="mb-2"><i class="fas fa-warehouse me-2"></i>Inventory Management</h3>
+                        <p class="text-muted mb-0">Track and manage stock levels</p>
+                    </div>
+                    
+                    <div class="options-grid">
+                        <div class="option-card" onclick="showSubModule('hardware-inventory')">
+                            <div class="option-icon">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="option-title">Hardware Inventory</div>
+                            <div class="option-desc">Manage hardware items and accessories</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('glass-inventory')">
+                            <div class="option-icon">
+                                <i class="fas fa-glass-whiskey"></i>
+                            </div>
+                            <div class="option-title">Glass Inventory</div>
+                            <div class="option-desc">Manage glass stock and materials</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
+            <!-- SYSTEM SETTINGS MODULE -->
             <section id="systemSettingsContent" class="content-area">
-                <div class="container">
-                    <h3 class="mb-4"><i class="fas fa-sliders-h me-2"></i>System Settings</h3>
-                    <p>System settings management section</p>
+                <div class="module-container">
+                    <div class="module-header">
+                        <h3 class="mb-2"><i class="fas fa-sliders-h me-2"></i>System Settings</h3>
+                        <p class="text-muted mb-0">Configure system preferences and settings</p>
+                    </div>
+                    
+                    <div class="options-grid">
+                        <div class="option-card" onclick="showSubModule('default-config')">
+                            <div class="option-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <div class="option-title">Default Configuration</div>
+                            <div class="option-desc">Set system default values and preferences</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('file-storage')">
+                            <div class="option-icon">
+                                <i class="fas fa-hdd"></i>
+                            </div>
+                            <div class="option-title">File Storage Configuration</div>
+                            <div class="option-desc">Configure file storage and backup locations</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('network-config')">
+                            <div class="option-icon">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <div class="option-title">Network Configuration</div>
+                            <div class="option-desc">Configure network and connectivity settings</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('data-backup')">
+                            <div class="option-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="option-title">Data Backup & Restore</div>
+                            <div class="option-desc">Backup and restore system data</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('sms-email')">
+                            <div class="option-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="option-title">SMS / Email Configuration</div>
+                            <div class="option-desc">Configure communication settings</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('billing-config')">
+                            <div class="option-icon">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <div class="option-title">Billing Configuration</div>
+                            <div class="option-desc">Configure billing and invoicing settings</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('print-config')">
+                            <div class="option-icon">
+                                <i class="fas fa-print"></i>
+                            </div>
+                            <div class="option-title">Print Configuration</div>
+                            <div class="option-desc">Configure printing and report settings</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('user-access')">
+                            <div class="option-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <div class="option-title">User Access Control</div>
+                            <div class="option-desc">Manage user permissions and access</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('software-update')">
+                            <div class="option-icon">
+                                <i class="fas fa-sync-alt"></i>
+                            </div>
+                            <div class="option-title">Software Update</div>
+                            <div class="option-desc">Check for and install software updates</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
+            <!-- CUSTOMER MODULE -->
             <section id="customerContent" class="content-area">
-                <div class="container">
-                    <h3 class="mb-4"><i class="fas fa-users me-2"></i>Customer Management</h3>
-                    <p>Customer management section</p>
+                <div class="module-container">
+                    <div class="module-header">
+                        <h3 class="mb-2"><i class="fas fa-users me-2"></i>Customer Management</h3>
+                        <p class="text-muted mb-0">Manage customer information and relationships</p>
+                    </div>
+                    
+                    <div class="options-grid">
+                        <div class="option-card" onclick="showSubModule('customer-registration')">
+                            <div class="option-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="option-title">Customer Registration</div>
+                            <div class="option-desc">Register new customers</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('customer-list')">
+                            <div class="option-icon">
+                                <i class="fas fa-list-alt"></i>
+                            </div>
+                            <div class="option-title">Customer List / Customer Master</div>
+                            <div class="option-desc">View and manage all customers</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
+            <!-- SALES MODULE -->
             <section id="salesContent" class="content-area">
-                <div class="container">
-                    <h3 class="mb-4"><i class="fas fa-user-tie me-2"></i>Sales Management</h3>
-                    <p>Sales management section</p>
+                <div class="module-container">
+                    <div class="module-header">
+                        <h3 class="mb-2"><i class="fas fa-user-tie me-2"></i>Sales Management</h3>
+                        <p class="text-muted mb-0">Manage sales team and performance</p>
+                    </div>
+                    
+                    <div class="options-grid">
+                        <div class="option-card" onclick="showSubModule('salesperson-registration')">
+                            <div class="option-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="option-title">Salesperson Registration</div>
+                            <div class="option-desc">Register new sales team members</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('salesperson-list')">
+                            <div class="option-icon">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                            <div class="option-title">Salesperson List</div>
+                            <div class="option-desc">View and manage sales team</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
+            <!-- REPORTS MODULE -->
             <section id="reportsContent" class="content-area">
-                <div class="container">
-                    <h3 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Reports</h3>
-                    <p>Reports section</p>
+                <div class="module-container">
+                    <div class="module-header">
+                        <h3 class="mb-2"><i class="fas fa-chart-bar me-2"></i>Reports</h3>
+                        <p class="text-muted mb-0">Generate and view various business reports</p>
+                    </div>
+                    
+                    <div class="options-grid">
+                        <!-- Sales Reports -->
+                        <div class="option-card" onclick="showSubModule('proforma-report')">
+                            <div class="option-icon">
+                                <i class="fas fa-file-invoice"></i>
+                            </div>
+                            <div class="option-title">Proforma Report</div>
+                            <div class="option-desc">View proforma invoice reports</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('invoice-report')">
+                            <div class="option-icon">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <div class="option-title">Invoice Report</div>
+                            <div class="option-desc">View sales invoice reports</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('salesperson-performance')">
+                            <div class="option-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="option-title">Salesperson Performance</div>
+                            <div class="option-desc">View sales team performance reports</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('direct-invoice-report')">
+                            <div class="option-icon">
+                                <i class="fas fa-receipt"></i>
+                            </div>
+                            <div class="option-title">Direct Invoice Report</div>
+                            <div class="option-desc">View direct invoice reports</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('credit-note-report')">
+                            <div class="option-icon">
+                                <i class="fas fa-undo-alt"></i>
+                            </div>
+                            <div class="option-title">Credit Note Report</div>
+                            <div class="option-desc">View credit note reports</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('pending-billing')">
+                            <div class="option-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="option-title">Pending Billing Report</div>
+                            <div class="option-desc">View pending billing reports</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('billed-area')">
+                            <div class="option-icon">
+                                <i class="fas fa-ruler-combined"></i>
+                            </div>
+                            <div class="option-title">Billed Area Report</div>
+                            <div class="option-desc">View billed area reports (Sq.Mtr)</div>
+                        </div>
+                        
+                        <!-- Production Reports -->
+                        <div class="option-card" onclick="showSubModule('production-report')">
+                            <div class="option-icon">
+                                <i class="fas fa-industry"></i>
+                            </div>
+                            <div class="option-title">Production Report</div>
+                            <div class="option-desc">View production reports</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('work-order-report')">
+                            <div class="option-icon">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <div class="option-title">Work Order Report</div>
+                            <div class="option-desc">View work order reports</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('glass-inventory-report')">
+                            <div class="option-icon">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <div class="option-title">Glass Inventory Report</div>
+                            <div class="option-desc">View glass inventory reports</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('breakage-report')">
+                            <div class="option-icon">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <div class="option-title">Breakage Report</div>
+                            <div class="option-desc">View breakage reports</div>
+                        </div>
+                        
+                        <div class="option-card" onclick="showSubModule('rejection-report')">
+                            <div class="option-icon">
+                                <i class="fas fa-ban"></i>
+                            </div>
+                            <div class="option-title">Rejection Report</div>
+                            <div class="option-desc">View rejection reports</div>
+                        </div>
+                        
+                        <!-- System Reports -->
+                        <div class="option-card" onclick="showSubModule('tally-export')">
+                            <div class="option-icon">
+                                <i class="fas fa-file-export"></i>
+                            </div>
+                            <div class="option-title">Tally Export Report</div>
+                            <div class="option-desc">Export data to Tally format</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
+            <!-- USER MANAGEMENT MODULE -->
             <section id="userManagementContent" class="content-area">
-                <div class="container">
-                    <h3 class="mb-4"><i class="fas fa-user-cog me-2"></i>User Management</h3>
-                    <p>User management section</p>
+                <div class="module-container">
+                    <div class="module-header">
+                        <h3 class="mb-2"><i class="fas fa-user-cog me-2"></i>User Management</h3>
+                        <p class="text-muted mb-0">Manage system users and permissions</p>
+                    </div>
+                    
+                    <div class="options-grid">
+                        <div class="option-card" onclick="showSubModule('user-management')">
+                            <div class="option-icon">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                            <div class="option-title">User Management</div>
+                            <div class="option-desc">Create, edit, and manage system users</div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>
@@ -1118,7 +1639,7 @@
         
         // Show sub-module
         function showSubModule(subModule) {
-            alert(`Opening ${subModule.replace('-', ' ')}...`);
+            alert(`Opening ${subModule.replace(/-/g, ' ')}...`);
             // In actual implementation, load content dynamically
         }
         
