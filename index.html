@@ -3,194 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERP Login - Excel Style</title>
+    <title>ERP System - PI Mode</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Main Excel-style Grid Container -->
-    <div class="excel-container">
-        <!-- Grid Row & Column Headers -->
-        <div class="grid-lines">
-            <div class="row-numbers">
-                <div class="row-header">Row</div>
-                <div class="row-num">1</div>
-                <div class="row-num">2</div>
-                <div class="row-num">3</div>
-                <div class="row-num">4</div>
-                <div class="row-num">5</div>
-                <div class="row-num">6</div>
-                <div class="row-num">7</div>
-                <div class="row-num">8</div>
-                <div class="row-num">9</div>
-                <div class="row-num">10</div>
+    <!-- Normal ERP Interface (Default View) -->
+    <div class="erp-interface" id="normalInterface">
+        <!-- Header -->
+        <header class="erp-header">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+                <h1>ERP System</h1>
             </div>
-            
-            <div class="column-headers">
-                <div class="column-header">A</div>
-                <div class="column-header">B</div>
-                <div class="column-header">C</div>
-                <div class="column-header">D</div>
-                <div class="column-header">E</div>
-                <div class="column-header">F</div>
-                <div class="column-header">G</div>
-                <div class="column-header">H</div>
-                <div class="column-header">I</div>
-                <div class="column-header">J</div>
+            <div class="user-info">
+                <span>Welcome, Admin</span>
+                <button class="logout-btn">Logout</button>
             </div>
-            
-            <!-- Excel Cells Grid -->
-            <div class="cells-grid">
-                <!-- 10x10 Grid -->
-                <!-- Cells will be created dynamically -->
-            </div>
-        </div>
-        
-        <!-- Login Form (Fixed at center) -->
-        <div class="login-form-container" id="loginForm">
-            <div class="form-cell" style="grid-area: C3 / C3 / F5 / F5;">
-                <div class="cell-header">
-                    <div class="cell-ref">C3:F5</div>
-                    <div class="cell-type">Login Form</div>
-                </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="erp-nav">
+            <button class="nav-btn active">
+                <i class="fas fa-home"></i> Dashboard
+            </button>
+            <button class="nav-btn">
+                <i class="fas fa-users"></i> CRM
+            </button>
+            <button class="nav-btn">
+                <i class="fas fa-box"></i> Inventory
+            </button>
+            <button class="nav-btn" id="openPIMode">
+                <i class="fas fa-file-excel"></i> Create PI
+            </button>
+            <button class="nav-btn">
+                <i class="fas fa-chart-bar"></i> Reports
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="erp-main">
+            <div class="dashboard">
+                <h2>Dashboard</h2>
+                <p>Normal ERP interface. Click "Create PI" to open Excel grid mode.</p>
                 
-                <form class="login-form" id="loginFormElement">
-                    <h2 class="form-title">
-                        <i class="fas fa-sign-in-alt"></i>
-                        ERP System Login
-                    </h2>
-                    
-                    <div class="form-row">
-                        <label class="cell-label" for="username">Username:</label>
-                        <div class="input-cell">
-                            <input type="text" 
-                                   id="username" 
-                                   name="username" 
-                                   class="excel-input"
-                                   placeholder="Enter username"
-                                   required
-                                   autocomplete="username">
-                            <div class="input-hint">e.g., admin.user</div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <label class="cell-label" for="password">Password:</label>
-                        <div class="input-cell">
-                            <div class="password-input-wrapper">
-                                <input type="password" 
-                                       id="password" 
-                                       name="password" 
-                                       class="excel-input"
-                                       placeholder="Enter password"
-                                       required
-                                       autocomplete="current-password">
-                                <button type="button" class="toggle-password" id="togglePassword">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                            <div class="input-hint">Min. 8 characters</div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <label class="cell-label" for="company">Company:</label>
-                        <div class="input-cell">
-                            <select id="company" name="company" class="excel-input excel-select">
-                                <option value="">Select company</option>
-                                <option value="corp">Corporate HQ</option>
-                                <option value="branch1">Branch Office 1</option>
-                                <option value="branch2">Branch Office 2</option>
-                                <option value="remote">Remote Access</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="cell-label"></div>
-                        <div class="input-cell checkbox-cell">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="remember" name="remember">
-                                <span class="checkmark"></span>
-                                Remember this device
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row actions-row">
-                        <div class="cell-label"></div>
-                        <div class="input-cell actions-cell">
-                            <button type="submit" class="excel-btn excel-btn-primary">
-                                <i class="fas fa-key"></i>
-                                Login
-                            </button>
-                            <button type="button" class="excel-btn excel-btn-secondary" id="resetBtn">
-                                <i class="fas fa-redo"></i>
-                                Reset
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row links-row">
-                        <div class="cell-label"></div>
-                        <div class="input-cell links-cell">
-                            <a href="#" class="excel-link">
-                                <i class="fas fa-question-circle"></i>
-                                Forgot password?
-                            </a>
-                            <a href="#" class="excel-link">
-                                <i class="fas fa-user-plus"></i>
-                                Request access
-                            </a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            
-            <!-- Status Bar -->
-            <div class="status-bar" style="grid-area: J10 / A10 / J10 / J10;">
-                <div class="status-cell">
-                    <div class="status-content">
-                        <span class="status-indicator" id="connectionStatus">
-                            <i class="fas fa-circle"></i>
-                            Connected
-                        </span>
-                        <span class="status-text" id="currentTime">
-                            Loading time...
-                        </span>
-                        <span class="status-text">
-                            ERP System v2.4.1
-                        </span>
-                    </div>
+                <div class="actions">
+                    <button class="action-btn">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-file-invoice"></i> Create Invoice
+                    </button>
+                    <button class="action-btn" id="openPIMode2">
+                        <i class="fas fa-table"></i> Open PI Grid
+                    </button>
                 </div>
             </div>
-            
-            <!-- Instructions Cell -->
-            <div class="instruction-cell" style="grid-area: G2 / G2 / I4 / I4;">
-                <div class="cell-header">
-                    <div class="cell-ref">G2:I4</div>
-                    <div class="cell-type">Instructions</div>
+        </main>
+    </div>
+
+    <!-- Excel Grid Interface (Hidden by default) -->
+    <div class="excel-modal" id="excelModal">
+        <div class="modal-header">
+            <h2>
+                <i class="fas fa-file-excel"></i>
+                Product Information (PI) Creator
+            </h2>
+            <button class="close-modal" id="closeExcel">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Grid Size Configuration -->
+        <div class="grid-config">
+            <div class="config-row">
+                <div class="config-item">
+                    <label>Rows:</label>
+                    <input type="number" id="rowCount" min="1" max="50" value="10">
                 </div>
-                <div class="instruction-content">
-                    <h4><i class="fas fa-info-circle"></i> Quick Guide:</h4>
-                    <ul>
-                        <li>Use Tab key to navigate between fields</li>
-                        <li>Press Enter to submit form</li>
-                        <li>Press F1 for help</li>
-                        <li>Company field is required</li>
-                    </ul>
+                <div class="config-item">
+                    <label>Columns:</label>
+                    <input type="number" id="colCount" min="1" max="26" value="8">
                 </div>
+                <button class="generate-btn" id="generateGrid">
+                    <i class="fas fa-sync-alt"></i> Generate Grid
+                </button>
+                <button class="save-btn" id="saveData">
+                    <i class="fas fa-save"></i> Save PI
+                </button>
             </div>
         </div>
-        
-        <!-- Active Cell Indicator -->
-        <div class="active-cell-indicator" id="activeCellIndicator"></div>
-        
-        <!-- Formula Bar -->
-        <div class="formula-bar">
-            <div class="formula-label">Formula Bar</div>
-            <div class="formula-input" id="formulaInput">Select a cell to edit...</div>
+
+        <!-- Excel Grid Container -->
+        <div class="excel-container" id="excelContainer">
+            <!-- Grid will be generated here -->
+        </div>
+
+        <!-- Status Bar -->
+        <div class="excel-status">
+            <span>Ready</span>
+            <span id="cellCount">Cells: 0</span>
+            <span>Press F2 to edit cells</span>
         </div>
     </div>
 
