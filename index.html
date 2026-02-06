@@ -228,13 +228,18 @@
         }
         
         .nav-btn:hover {
-            color: var(--primary);
-            background: rgba(99, 102, 241, 0.08);
+            color: var(--text-primary);
+            background: rgba(0, 0, 0, 0.03);
         }
         
         .nav-btn.active {
             color: var(--primary);
             background: rgba(99, 102, 241, 0.12);
+        }
+        
+        .nav-btn.dropdown-active {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.08);
         }
         
         /* Arrow indicator for dropdown */
@@ -245,7 +250,7 @@
             border: none !important;
         }
         
-        /* DROPDOWN MENUS */
+        /* DROPDOWN MENUS - CLICK TO SHOW */
         .dropdown-menu {
             position: absolute;
             top: 100%;
@@ -262,8 +267,7 @@
             overflow-y: auto;
         }
         
-        /* Show dropdown on hover */
-        .nav-item:hover .dropdown-menu {
+        .dropdown-menu.show {
             display: block;
             animation: dropdownFade 0.2s ease-out;
         }
@@ -339,126 +343,12 @@
             gap: 1rem;
         }
         
-        /* MAIN CONTENT AREA - EMPTY BACKGROUND */
+        /* MAIN CONTENT AREA - BLANK WHITE SCREEN */
         .main-content {
             min-height: calc(100vh - 120px);
-            padding: 0;
-            background: var(--background);
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
-        
-        /* DASHBOARD STYLES */
-        .dashboard-container {
             padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-        }
-        
-        .dashboard-header {
-            margin-bottom: 2rem;
-        }
-        
-        .dashboard-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .dashboard-subtitle {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-        
-        /* WIDGETS */
-        .widget-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .widget {
             background: var(--surface);
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-        
-        .widget:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        }
-        
-        .widget-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .widget-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        
-        .widget-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-        }
-        
-        .widget-content {
-            margin-top: 1rem;
-        }
-        
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-        }
-        
-        .quick-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-        
-        .quick-link {
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            text-decoration: none;
-            transition: all 0.2s;
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        
-        .quick-link:hover {
-            background: var(--primary);
-            color: white;
+            width: 100%;
         }
         
         /* MODULE CONTENT AREAS */
@@ -562,14 +452,6 @@
                 right: 1rem;
                 max-height: 60vh;
             }
-            
-            .dashboard-container {
-                padding: 1rem;
-            }
-            
-            .widget-grid {
-                grid-template-columns: 1fr;
-            }
         }
         
         @media (max-width: 480px) {
@@ -624,7 +506,7 @@
     <div id="mainApp">
         <!-- FLOATING BUTTONS -->
         <div class="float-actions">
-            <button class="float-btn" onclick="showDashboard()" title="Dashboard">
+            <button class="float-btn" onclick="showHome()" title="Home">
                 <i class="fas fa-home"></i>
             </button>
             <button class="float-btn" onclick="handleSubModule('proforma')" title="Proforma">
@@ -635,16 +517,16 @@
             </button>
         </div>
 
-        <!-- HEADER - COMPACT MENU BAR -->
+        <!-- HEADER - COMPACT MENU BAR WITH CLICKABLE DROPDOWNS -->
         <header class="header-container">
             <nav class="main-nav">
                 <!-- 🧱 MASTERS -->
                 <div class="nav-item">
-                    <button class="nav-btn dropdown-toggle">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
                         <i class="fas fa-cubes"></i>
                         <span>Masters</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" data-dropdown="masters">
                         <div class="dropdown-header">
                             <i class="fas fa-box"></i> Product Masters
                         </div>
@@ -698,11 +580,11 @@
                 
                 <!-- 🔁 TRANSACTIONS -->
                 <div class="nav-item">
-                    <button class="nav-btn dropdown-toggle">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
                         <i class="fas fa-exchange-alt"></i>
                         <span>Transactions</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" data-dropdown="transactions">
                         <div class="dropdown-header">
                             <i class="fas fa-file-invoice-dollar"></i> Sales Transactions
                         </div>
@@ -738,11 +620,11 @@
                 
                 <!-- 📦 INVENTORY -->
                 <div class="nav-item">
-                    <button class="nav-btn dropdown-toggle">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
                         <i class="fas fa-warehouse"></i>
                         <span>Inventory</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" data-dropdown="inventory">
                         <div class="dropdown-header">
                             <i class="fas fa-boxes"></i> Stock Management
                         </div>
@@ -757,11 +639,11 @@
                 
                 <!-- ⚙️ SETTINGS -->
                 <div class="nav-item">
-                    <button class="nav-btn dropdown-toggle">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
                         <i class="fas fa-sliders-h"></i>
                         <span>Settings</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" data-dropdown="settings">
                         <div class="dropdown-header">
                             <i class="fas fa-tools"></i> Configuration
                         </div>
@@ -803,11 +685,11 @@
                 
                 <!-- 👥 CUSTOMER -->
                 <div class="nav-item">
-                    <button class="nav-btn dropdown-toggle">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
                         <i class="fas fa-users"></i>
                         <span>Customers</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" data-dropdown="customers">
                         <div class="dropdown-header">
                             <i class="fas fa-address-card"></i> Customer Management
                         </div>
@@ -822,11 +704,11 @@
                 
                 <!-- 🧑‍💼 SALES -->
                 <div class="nav-item">
-                    <button class="nav-btn dropdown-toggle">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
                         <i class="fas fa-user-tie"></i>
                         <span>Sales</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" data-dropdown="sales">
                         <div class="dropdown-header">
                             <i class="fas fa-chart-line"></i> Sales Team
                         </div>
@@ -841,11 +723,11 @@
                 
                 <!-- 📊 REPORTS -->
                 <div class="nav-item">
-                    <button class="nav-btn dropdown-toggle">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
                         <i class="fas fa-chart-bar"></i>
                         <span>Reports</span>
                     </button>
-                    <div class="dropdown-menu" style="max-height: 500px;">
+                    <div class="dropdown-menu" data-dropdown="reports" style="max-height: 500px;">
                         <div class="dropdown-header">
                             <i class="fas fa-file-invoice"></i> Sales Reports
                         </div>
@@ -927,133 +809,9 @@
             </div>
         </header>
 
-        <!-- DASHBOARD CONTENT -->
-        <main class="main-content" id="dashboardScreen">
-            <div class="dashboard-container">
-                <div class="dashboard-header">
-                    <h1 class="dashboard-title">Dashboard</h1>
-                    <p class="dashboard-subtitle">Welcome back, Admin! Here's what's happening today.</p>
-                </div>
-                
-                <!-- WIDGETS -->
-                <div class="widget-grid">
-                    <!-- Sales Summary -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Sales Summary</h3>
-                            <div class="widget-icon">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="stat-number">₹ 2,45,680</div>
-                            <div class="stat-label">Total Sales Today</div>
-                            <div class="quick-links">
-                                <button class="quick-link" onclick="handleSubModule('proforma')">Proforma</button>
-                                <button class="quick-link" onclick="handleSubModule('sales-invoice')">Invoice</button>
-                                <button class="quick-link" onclick="handleSubModule('work-order')">Work Order</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Inventory Status -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Inventory Status</h3>
-                            <div class="widget-icon">
-                                <i class="fas fa-warehouse"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="stat-number">342 Items</div>
-                            <div class="stat-label">Total Stock Available</div>
-                            <div class="quick-links">
-                                <button class="quick-link" onclick="handleSubModule('glass-inventory')">Glass</button>
-                                <button class="quick-link" onclick="handleSubModule('hardware-inventory')">Hardware</button>
-                                <button class="quick-link" onclick="handleSubModule('item-master')">View All</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Production Status -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Production</h3>
-                            <div class="widget-icon">
-                                <i class="fas fa-industry"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="stat-number">48 Orders</div>
-                            <div class="stat-label">In Production Today</div>
-                            <div class="quick-links">
-                                <button class="quick-link" onclick="handleSubModule('cutting-optimizer')">Cutting</button>
-                                <button class="quick-link" onclick="handleSubModule('label-generation')">Labels</button>
-                                <button class="quick-link" onclick="handleSubModule('work-order')">Work Orders</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Quick Actions -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Quick Actions</h3>
-                            <div class="widget-icon">
-                                <i class="fas fa-bolt"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="quick-links">
-                                <button class="quick-link" onclick="handleSubModule('customer-registration')">New Customer</button>
-                                <button class="quick-link" onclick="handleSubModule('proforma')">New Proforma</button>
-                                <button class="quick-link" onclick="handleSubModule('sales-invoice')">New Invoice</button>
-                                <button class="quick-link" onclick="handleSubModule('work-order')">New Work Order</button>
-                                <button class="quick-link" onclick="handleSubModule('item-master')">Add Product</button>
-                                <button class="quick-link" onclick="handleSubModule('glass-inventory')">Stock Update</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Recent Activities -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Recent Activities</h3>
-                            <div class="widget-icon">
-                                <i class="fas fa-history"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div style="font-size: 0.9rem; color: var(--text-secondary);">
-                                <p>✓ Proforma #PF-10025 created</p>
-                                <p>✓ Invoice #INV-10012 generated</p>
-                                <p>✓ 5 new customers registered</p>
-                                <p>✓ Glass inventory updated</p>
-                                <p>✓ Work order #WO-10045 completed</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Reports -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Quick Reports</h3>
-                            <div class="widget-icon">
-                                <i class="fas fa-chart-bar"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="quick-links">
-                                <button class="quick-link" onclick="handleSubModule('invoice-report')">Sales Report</button>
-                                <button class="quick-link" onclick="handleSubModule('production-report')">Production Report</button>
-                                <button class="quick-link" onclick="handleSubModule('glass-inventory-report')">Stock Report</button>
-                                <button class="quick-link" onclick="handleSubModule('pending-billing')">Pending Bills</button>
-                                <button class="quick-link" onclick="handleSubModule('salesperson-performance')">Performance</button>
-                                <button class="quick-link" onclick="handleSubModule('tally-export')">Tally Export</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- MAIN CONTENT - BLANK WHITE SCREEN -->
+        <main class="main-content" id="homeScreen">
+            <!-- Blank white screen - nothing here -->
         </main>
 
         <!-- MODULE CONTENT AREAS - HIDDEN BY DEFAULT -->
@@ -1064,6 +822,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        let currentDropdown = null;
+        
         // Initialize flow
         document.addEventListener('DOMContentLoaded', function() {
             // Start with splash screen
@@ -1092,8 +852,8 @@
                     // Show main application
                     document.getElementById('mainApp').style.display = 'block';
                     
-                    // Show dashboard
-                    showDashboard();
+                    // Show home screen
+                    showHome();
                 } else {
                     alert('Invalid credentials! Use admin / admin123');
                 }
@@ -1102,9 +862,7 @@
             // Close dropdowns when clicking outside
             document.addEventListener('click', function(event) {
                 if (!event.target.closest('.nav-item')) {
-                    document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
-                        dropdown.style.display = 'none';
-                    });
+                    closeAllDropdowns();
                 }
             });
         });
@@ -1127,10 +885,50 @@
                 `${dateStr} | ${timeStr}`;
         }
         
-        // Show dashboard
-        function showDashboard() {
-            // Show dashboard
-            document.getElementById('dashboardScreen').style.display = 'block';
+        // Toggle dropdown on click
+        function toggleDropdown(button) {
+            const dropdown = button.nextElementSibling;
+            
+            // Close all other dropdowns
+            closeAllDropdowns();
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('dropdown-active');
+            });
+            
+            // If this dropdown is not already open, open it
+            if (!dropdown.classList.contains('show')) {
+                dropdown.classList.add('show');
+                button.classList.add('dropdown-active');
+                currentDropdown = dropdown;
+            } else {
+                currentDropdown = null;
+            }
+            
+            event.stopPropagation();
+        }
+        
+        // Close all dropdowns
+        function closeAllDropdowns() {
+            document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
+                dropdown.classList.remove('show');
+            });
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('dropdown-active');
+            });
+            
+            currentDropdown = null;
+        }
+        
+        // Show home screen
+        function showHome() {
+            // Close all dropdowns
+            closeAllDropdowns();
+            
+            // Show home screen
+            document.getElementById('homeScreen').style.display = 'block';
             
             // Hide module content
             document.getElementById('moduleContent').style.display = 'none';
@@ -1144,13 +942,11 @@
         
         // Handle sub-module click
         function handleSubModule(subModule) {
-            // Hide all dropdowns
-            document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
-                dropdown.style.display = 'none';
-            });
+            // Close all dropdowns
+            closeAllDropdowns();
             
-            // Hide dashboard
-            document.getElementById('dashboardScreen').style.display = 'none';
+            // Hide home screen
+            document.getElementById('homeScreen').style.display = 'none';
             
             // Show module content
             const moduleContent = document.getElementById('moduleContent');
@@ -1175,8 +971,8 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Module Features</h5>
                                     <p class="card-text">All features related to ${moduleName.toLowerCase()} will be available here.</p>
-                                    <button class="btn btn-primary" onclick="showDashboard()">
-                                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                                    <button class="btn btn-primary" onclick="showHome()">
+                                        <i class="fas fa-arrow-left me-2"></i>Back to Home
                                     </button>
                                 </div>
                             </div>
@@ -1294,11 +1090,14 @@
         document.addEventListener('keydown', function(e) {
             if(e.ctrlKey && e.key === 'Home') {
                 e.preventDefault();
-                showDashboard();
+                showHome();
             }
             if(e.ctrlKey && e.key === 'p') {
                 e.preventDefault();
                 handleSubModule('proforma');
+            }
+            if(e.key === 'Escape') {
+                closeAllDropdowns();
             }
         });
     </script>
