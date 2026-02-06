@@ -176,15 +176,17 @@
         /* MAIN APPLICATION - NO DASHBOARD */
         #mainApp {
             display: none;
+            min-height: 100vh;
         }
         
-        /* HEADER - COMPACT MENU ONLY */
+        /* HEADER - COMPACT MENU ONLY - FIXED TO SHOW PROPERLY */
         .header-container {
             background: var(--surface);
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
             position: sticky;
             top: 0;
             z-index: 100;
+            width: 100%;
         }
         
         .main-nav {
@@ -194,6 +196,7 @@
             scrollbar-width: none;
             gap: 2px;
             background: linear-gradient(90deg, #f8fafc, #f1f5f9);
+            width: 100%;
         }
         
         .main-nav::-webkit-scrollbar {
@@ -326,6 +329,7 @@
             border-top: 1px solid var(--border);
             font-size: 0.8rem;
             color: var(--text-secondary);
+            width: 100%;
         }
         
         .user-info {
@@ -343,12 +347,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 100%;
         }
         
         .welcome-message {
             text-align: center;
             padding: 3rem;
-            max-width: 600px;
+            max-width: 800px;
         }
         
         .welcome-title {
@@ -464,6 +469,13 @@
             color: white;
         }
         
+        /* MENU VISIBILITY FIX */
+        .nav-btn span {
+            display: inline-block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .jp-logo {
@@ -482,6 +494,7 @@
             
             .main-nav {
                 padding: 0.5rem;
+                overflow-x: scroll;
             }
             
             .nav-btn {
@@ -504,11 +517,15 @@
         
         @media (max-width: 480px) {
             .nav-btn span {
-                display: none;
+                display: none !important;
             }
             
             .nav-btn {
                 padding: 0.75rem;
+            }
+            
+            .nav-btn i {
+                font-size: 1rem;
             }
             
             .welcome-message {
@@ -927,6 +944,13 @@
                     
                     // Show home screen
                     showHome();
+                    
+                    // Force display menu items
+                    document.querySelectorAll('.nav-btn span').forEach(span => {
+                        span.style.display = 'inline-block';
+                        span.style.visibility = 'visible';
+                        span.style.opacity = '1';
+                    });
                 } else {
                     alert('Invalid credentials! Use admin / admin123');
                 }
