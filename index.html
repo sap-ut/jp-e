@@ -233,13 +233,15 @@
             background: rgba(99, 102, 241, 0.12);
         }
         
-        .nav-btn.has-dropdown::after {
+        /* FIXED: Arrow indicator for dropdown */
+        .nav-btn.dropdown-toggle::after {
             content: '▾';
             margin-left: 0.25rem;
             font-size: 0.8rem;
+            border: none !important;
         }
         
-        /* DROPDOWN MENUS - LIST STYLE */
+        /* DROPDOWN MENUS - WORKING PROPERLY */
         .dropdown-menu {
             position: absolute;
             top: 100%;
@@ -256,6 +258,7 @@
             overflow-y: auto;
         }
         
+        /* FIXED: Show dropdown on hover */
         .nav-item:hover .dropdown-menu {
             display: block;
             animation: dropdownFade 0.2s ease-out;
@@ -294,6 +297,11 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
         }
         
         .dropdown-item:hover {
@@ -534,7 +542,7 @@
             <button class="float-btn" onclick="showDashboard()" title="Dashboard">
                 <i class="fas fa-home"></i>
             </button>
-            <button class="float-btn" onclick="showModule('proforma')" title="Proforma">
+            <button class="float-btn" onclick="handleProforma()" title="Proforma">
                 <i class="fas fa-file-invoice"></i>
             </button>
             <button class="float-btn" onclick="window.print()" title="Print">
@@ -542,277 +550,277 @@
             </button>
         </div>
 
-        <!-- HEADER - COMPACT MENU BAR WITH DROPDOWNS -->
+        <!-- HEADER - COMPACT MENU BAR WITH WORKING DROPDOWNS -->
         <header class="header-container">
             <nav class="main-nav">
                 <!-- 🧱 MASTERS -->
                 <div class="nav-item">
-                    <button class="nav-btn has-dropdown">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown('masters-dropdown')">
                         <i class="fas fa-cubes"></i>
                         <span>Masters</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" id="masters-dropdown">
                         <div class="dropdown-header">
                             <i class="fas fa-box"></i> Product Masters
                         </div>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('item-master')">
-                            Item Master
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('price-master')">
-                            Price Master
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('process-master')">
-                            Process Master
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('cutting-rule')">
-                            Cutting Rule (Z Rule)
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('glass-size')">
-                            Glass Size Master
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('glass-type')">
-                            Glass Type Master
-                        </a>
+                        <button class="dropdown-item" onclick="handleSubModule('item-master')">
+                            <i class="fas fa-circle fa-xs"></i> Item Master
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('price-master')">
+                            <i class="fas fa-circle fa-xs"></i> Price Master
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('process-master')">
+                            <i class="fas fa-circle fa-xs"></i> Process Master
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('cutting-rule')">
+                            <i class="fas fa-circle fa-xs"></i> Cutting Rule (Z Rule)
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('glass-size')">
+                            <i class="fas fa-circle fa-xs"></i> Glass Size Master
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('glass-type')">
+                            <i class="fas fa-circle fa-xs"></i> Glass Type Master
+                        </button>
                         
                         <div class="dropdown-divider"></div>
                         
                         <div class="dropdown-header">
                             <i class="fas fa-cog"></i> System Masters
                         </div>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('route-master')">
-                            Route Master
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('payment-terms')">
-                            Payment Terms Master
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('film-type')">
-                            Film Type Master
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('bank-master')">
-                            Bank Master
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('vehicle-master')">
-                            Vehicle Master
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('additional-charges')">
-                            Additional Charges Master
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('remarks-master')">
-                            Remarks Master
-                        </a>
+                        <button class="dropdown-item" onclick="handleSubModule('route-master')">
+                            <i class="fas fa-circle fa-xs"></i> Route Master
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('payment-terms')">
+                            <i class="fas fa-circle fa-xs"></i> Payment Terms Master
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('film-type')">
+                            <i class="fas fa-circle fa-xs"></i> Film Type Master
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('bank-master')">
+                            <i class="fas fa-circle fa-xs"></i> Bank Master
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('vehicle-master')">
+                            <i class="fas fa-circle fa-xs"></i> Vehicle Master
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('additional-charges')">
+                            <i class="fas fa-circle fa-xs"></i> Additional Charges Master
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('remarks-master')">
+                            <i class="fas fa-circle fa-xs"></i> Remarks Master
+                        </button>
                     </div>
                 </div>
                 
                 <!-- 🔁 TRANSACTIONS -->
                 <div class="nav-item">
-                    <button class="nav-btn has-dropdown">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown('transactions-dropdown')">
                         <i class="fas fa-exchange-alt"></i>
                         <span>Transactions</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" id="transactions-dropdown">
                         <div class="dropdown-header">
                             <i class="fas fa-file-invoice-dollar"></i> Sales Transactions
                         </div>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('proforma')">
-                            Proforma Invoice
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('work-order')">
-                            Work Order
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('sales-invoice')">
-                            Sales Invoice
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('direct-invoice')">
-                            Direct Invoice
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('credit-note')">
-                            Credit Note
-                        </a>
+                        <button class="dropdown-item" onclick="handleSubModule('proforma')">
+                            <i class="fas fa-circle fa-xs"></i> Proforma Invoice
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('work-order')">
+                            <i class="fas fa-circle fa-xs"></i> Work Order
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('sales-invoice')">
+                            <i class="fas fa-circle fa-xs"></i> Sales Invoice
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('direct-invoice')">
+                            <i class="fas fa-circle fa-xs"></i> Direct Invoice
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('credit-note')">
+                            <i class="fas fa-circle fa-xs"></i> Credit Note
+                        </button>
                         
                         <div class="dropdown-divider"></div>
                         
                         <div class="dropdown-header">
                             <i class="fas fa-cut"></i> Production
                         </div>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('cutting-optimizer')">
-                            Cutting Optimizer
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('label-generation')">
-                            Label / Sticker Generation
-                        </a>
+                        <button class="dropdown-item" onclick="handleSubModule('cutting-optimizer')">
+                            <i class="fas fa-circle fa-xs"></i> Cutting Optimizer
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('label-generation')">
+                            <i class="fas fa-circle fa-xs"></i> Label / Sticker Generation
+                        </button>
                     </div>
                 </div>
                 
                 <!-- 📦 INVENTORY -->
                 <div class="nav-item">
-                    <button class="nav-btn has-dropdown">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown('inventory-dropdown')">
                         <i class="fas fa-warehouse"></i>
                         <span>Inventory</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" id="inventory-dropdown">
                         <div class="dropdown-header">
                             <i class="fas fa-boxes"></i> Stock Management
                         </div>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('hardware-inventory')">
-                            Hardware Inventory
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('glass-inventory')">
-                            Glass Inventory
-                        </a>
+                        <button class="dropdown-item" onclick="handleSubModule('hardware-inventory')">
+                            <i class="fas fa-circle fa-xs"></i> Hardware Inventory
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('glass-inventory')">
+                            <i class="fas fa-circle fa-xs"></i> Glass Inventory
+                        </button>
                     </div>
                 </div>
                 
                 <!-- ⚙️ SETTINGS -->
                 <div class="nav-item">
-                    <button class="nav-btn has-dropdown">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown('settings-dropdown')">
                         <i class="fas fa-sliders-h"></i>
                         <span>Settings</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" id="settings-dropdown">
                         <div class="dropdown-header">
                             <i class="fas fa-tools"></i> Configuration
                         </div>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('default-config')">
-                            Default Configuration
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('file-storage')">
-                            File Storage Configuration
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('network-config')">
-                            Network Configuration
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('data-backup')">
-                            Data Backup & Restore
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('sms-email')">
-                            SMS / Email Configuration
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('billing-config')">
-                            Billing Configuration
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('print-config')">
-                            Print Configuration
-                        </a>
+                        <button class="dropdown-item" onclick="handleSubModule('default-config')">
+                            <i class="fas fa-circle fa-xs"></i> Default Configuration
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('file-storage')">
+                            <i class="fas fa-circle fa-xs"></i> File Storage Configuration
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('network-config')">
+                            <i class="fas fa-circle fa-xs"></i> Network Configuration
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('data-backup')">
+                            <i class="fas fa-circle fa-xs"></i> Data Backup & Restore
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('sms-email')">
+                            <i class="fas fa-circle fa-xs"></i> SMS / Email Configuration
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('billing-config')">
+                            <i class="fas fa-circle fa-xs"></i> Billing Configuration
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('print-config')">
+                            <i class="fas fa-circle fa-xs"></i> Print Configuration
+                        </button>
                         
                         <div class="dropdown-divider"></div>
                         
                         <div class="dropdown-header">
                             <i class="fas fa-user-shield"></i> Security & Updates
                         </div>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('user-access')">
-                            User Access Control
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('software-update')">
-                            Software Update
-                        </a>
+                        <button class="dropdown-item" onclick="handleSubModule('user-access')">
+                            <i class="fas fa-circle fa-xs"></i> User Access Control
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('software-update')">
+                            <i class="fas fa-circle fa-xs"></i> Software Update
+                        </button>
                     </div>
                 </div>
                 
                 <!-- 👥 CUSTOMER -->
                 <div class="nav-item">
-                    <button class="nav-btn has-dropdown">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown('customer-dropdown')">
                         <i class="fas fa-users"></i>
                         <span>Customers</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" id="customer-dropdown">
                         <div class="dropdown-header">
                             <i class="fas fa-address-card"></i> Customer Management
                         </div>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('customer-registration')">
-                            Customer Registration
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('customer-list')">
-                            Customer List / Master
-                        </a>
+                        <button class="dropdown-item" onclick="handleSubModule('customer-registration')">
+                            <i class="fas fa-circle fa-xs"></i> Customer Registration
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('customer-list')">
+                            <i class="fas fa-circle fa-xs"></i> Customer List / Master
+                        </button>
                     </div>
                 </div>
                 
                 <!-- 🧑‍💼 SALES -->
                 <div class="nav-item">
-                    <button class="nav-btn has-dropdown">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown('sales-dropdown')">
                         <i class="fas fa-user-tie"></i>
                         <span>Sales</span>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" id="sales-dropdown">
                         <div class="dropdown-header">
                             <i class="fas fa-chart-line"></i> Sales Team
                         </div>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('salesperson-registration')">
-                            Salesperson Registration
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('salesperson-list')">
-                            Salesperson List
-                        </a>
+                        <button class="dropdown-item" onclick="handleSubModule('salesperson-registration')">
+                            <i class="fas fa-circle fa-xs"></i> Salesperson Registration
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('salesperson-list')">
+                            <i class="fas fa-circle fa-xs"></i> Salesperson List
+                        </button>
                     </div>
                 </div>
                 
                 <!-- 📊 REPORTS -->
                 <div class="nav-item">
-                    <button class="nav-btn has-dropdown">
+                    <button class="nav-btn dropdown-toggle" onclick="toggleDropdown('reports-dropdown')">
                         <i class="fas fa-chart-bar"></i>
                         <span>Reports</span>
                     </button>
-                    <div class="dropdown-menu" style="max-height: 500px;">
+                    <div class="dropdown-menu" id="reports-dropdown" style="max-height: 500px;">
                         <div class="dropdown-header">
                             <i class="fas fa-file-invoice"></i> Sales Reports
                         </div>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('proforma-report')">
-                            Proforma Report
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('invoice-report')">
-                            Invoice Report
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('salesperson-performance')">
-                            Salesperson Performance
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('direct-invoice-report')">
-                            Direct Invoice Report
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('credit-note-report')">
-                            Credit Note Report
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('pending-billing')">
-                            Pending Billing Report
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('billed-area')">
-                            Billed Area Report
-                        </a>
+                        <button class="dropdown-item" onclick="handleSubModule('proforma-report')">
+                            <i class="fas fa-circle fa-xs"></i> Proforma Report
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('invoice-report')">
+                            <i class="fas fa-circle fa-xs"></i> Invoice Report
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('salesperson-performance')">
+                            <i class="fas fa-circle fa-xs"></i> Salesperson Performance
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('direct-invoice-report')">
+                            <i class="fas fa-circle fa-xs"></i> Direct Invoice Report
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('credit-note-report')">
+                            <i class="fas fa-circle fa-xs"></i> Credit Note Report
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('pending-billing')">
+                            <i class="fas fa-circle fa-xs"></i> Pending Billing Report
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('billed-area')">
+                            <i class="fas fa-circle fa-xs"></i> Billed Area Report
+                        </button>
                         
                         <div class="dropdown-divider"></div>
                         
                         <div class="dropdown-header">
                             <i class="fas fa-industry"></i> Production Reports
                         </div>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('production-report')">
-                            Production Report
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('work-order-report')">
-                            Work Order Report
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('glass-inventory-report')">
-                            Glass Inventory Report
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('breakage-report')">
-                            Breakage Report
-                        </a>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('rejection-report')">
-                            Rejection Report
-                        </a>
+                        <button class="dropdown-item" onclick="handleSubModule('production-report')">
+                            <i class="fas fa-circle fa-xs"></i> Production Report
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('work-order-report')">
+                            <i class="fas fa-circle fa-xs"></i> Work Order Report
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('glass-inventory-report')">
+                            <i class="fas fa-circle fa-xs"></i> Glass Inventory Report
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('breakage-report')">
+                            <i class="fas fa-circle fa-xs"></i> Breakage Report
+                        </button>
+                        <button class="dropdown-item" onclick="handleSubModule('rejection-report')">
+                            <i class="fas fa-circle fa-xs"></i> Rejection Report
+                        </button>
                         
                         <div class="dropdown-divider"></div>
                         
                         <div class="dropdown-header">
                             <i class="fas fa-database"></i> System Reports
                         </div>
-                        <a href="#" class="dropdown-item" onclick="showSubModule('tally-export')">
-                            Tally Export Report
-                        </a>
+                        <button class="dropdown-item" onclick="handleSubModule('tally-export')">
+                            <i class="fas fa-circle fa-xs"></i> Tally Export Report
+                        </button>
                     </div>
                 </div>
                 
                 <!-- 👤 USERS -->
                 <div class="nav-item">
-                    <button class="nav-btn" onclick="showModule('user-management')">
+                    <button class="nav-btn" onclick="handleSubModule('user-management')">
                         <i class="fas fa-user-cog"></i>
                         <span>Users</span>
                     </button>
@@ -848,10 +856,10 @@
                             Quickly access frequently used features and perform common tasks.
                         </div>
                         <div class="card-actions">
-                            <button class="card-action-btn" onclick="showSubModule('proforma')">
+                            <button class="card-action-btn" onclick="handleSubModule('proforma')">
                                 New Proforma
                             </button>
-                            <button class="card-action-btn" onclick="showSubModule('customer-registration')">
+                            <button class="card-action-btn" onclick="handleSubModule('customer-registration')">
                                 Add Customer
                             </button>
                             <button class="card-action-btn" onclick="showModule('reports')">
@@ -905,7 +913,7 @@
                             <button class="card-action-btn" onclick="showModule('inventory')">
                                 View Inventory
                             </button>
-                            <button class="card-action-btn" onclick="showSubModule('glass-inventory-report')">
+                            <button class="card-action-btn" onclick="handleSubModule('glass-inventory-report')">
                                 Reports
                             </button>
                         </div>
@@ -1008,15 +1016,6 @@
                     alert('Invalid credentials! Use admin / admin123');
                 }
             });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.nav-item')) {
-                    document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
-                        dropdown.style.display = 'none';
-                    });
-                }
-            });
         });
         
         // Update date and time
@@ -1079,17 +1078,36 @@
             });
         }
         
-        // Show sub-module
-        function showSubModule(subModule) {
-            // Hide dropdowns
+        // Toggle dropdown
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            const allDropdowns = document.querySelectorAll('.dropdown-menu');
+            
+            allDropdowns.forEach(d => {
+                if (d.id !== dropdownId) {
+                    d.style.display = 'none';
+                }
+            });
+            
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            } else {
+                dropdown.style.display = 'block';
+            }
+        }
+        
+        // Handle sub-module click
+        function handleSubModule(subModule) {
+            // Hide all dropdowns
             document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
                 dropdown.style.display = 'none';
             });
             
-            alert(`Opening ${subModule.replace(/-/g, ' ')}...`);
-            // In actual implementation, load content dynamically
+            // Show alert with module name
+            const moduleName = subModule.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            alert(`Opening ${moduleName}...`);
             
-            // Find which main module this belongs to and show it
+            // Map sub-module to main module
             const moduleMap = {
                 'item-master': 'masters',
                 'price-master': 'masters',
@@ -1144,8 +1162,13 @@
             
             const mainModule = moduleMap[subModule];
             if (mainModule) {
-                showModule(mainModule);
+                showModule(mainModule + 'Content');
             }
+        }
+        
+        // Handle proforma from floating button
+        function handleProforma() {
+            handleSubModule('proforma');
         }
         
         // Logout function
@@ -1164,6 +1187,15 @@
             }
         }
         
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.nav-item')) {
+                document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
+                    dropdown.style.display = 'none';
+                });
+            }
+        });
+        
         // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
             if(e.ctrlKey && e.key === 'Home') {
@@ -1172,7 +1204,7 @@
             }
             if(e.ctrlKey && e.key === 'p') {
                 e.preventDefault();
-                showSubModule('proforma');
+                handleSubModule('proforma');
             }
         });
     </script>
