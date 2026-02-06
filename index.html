@@ -36,7 +36,7 @@
             line-height: 1.6;
         }
         
-        /* SPLASH SCREEN WITH UNIQUE JP LOGO */
+        /* SPLASH SCREEN */
         #splashScreen {
             position: fixed;
             top: 0;
@@ -49,192 +49,36 @@
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            animation: splashFade 4s ease-in-out forwards;
+            animation: splashFade 3s ease-in-out forwards;
         }
         
         @keyframes splashFade {
             0% { opacity: 1; }
-            80% { opacity: 1; }
+            70% { opacity: 1; }
             100% { opacity: 0; visibility: hidden; }
         }
         
-        /* UNIQUE JP LOGO WITH SEPARATING LETTERS EFFECT */
-        .jp-logo-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        .jp-letter {
-            position: absolute;
+        .jp-logo {
             font-size: 120px;
             font-weight: 900;
             color: white;
-            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0;
+            letter-spacing: 20px;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+            margin-bottom: 20px;
         }
         
-        /* J Letter Styling */
-        .letter-j {
-            left: 50%;
-            transform: translateX(-50%) translateY(0) rotate(0deg);
-            animation: letterJEnter 2s forwards 0.5s, letterJFloat 3s infinite 2.5s;
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        @keyframes letterJEnter {
-            0% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(100px) rotate(-20deg);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0) rotate(0deg);
-            }
-        }
-        
-        @keyframes letterJFloat {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0) rotate(0deg);
-            }
-            50% {
-                transform: translateX(-50%) translateY(-15px) rotate(2deg);
-            }
-        }
-        
-        /* P Letter Styling */
-        .letter-p {
-            left: 50%;
-            transform: translateX(-50%) translateY(0) rotate(0deg);
-            animation: letterPEnter 2s forwards 0.8s, letterPFloat 3s infinite 2.8s;
-            background: linear-gradient(45deg, #f472b6, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        @keyframes letterPEnter {
-            0% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-100px) rotate(20deg);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0) rotate(0deg);
-            }
-        }
-        
-        @keyframes letterPFloat {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0) rotate(0deg);
-            }
-            50% {
-                transform: translateX(-50%) translateY(15px) rotate(-2deg);
-            }
-        }
-        
-        /* Letters Coming Together Initially */
-        .jp-logo-container.initial .letter-j {
-            left: 50%;
-            transform: translateX(-50%) translateY(0);
-        }
-        
-        .jp-logo-container.initial .letter-p {
-            left: 50%;
-            transform: translateX(-50%) translateY(0);
-        }
-        
-        /* Letters Separating Effect */
-        .jp-logo-container.separate .letter-j {
-            left: 30%;
-            transform: translateX(-50%) translateY(0) rotate(-5deg);
-        }
-        
-        .jp-logo-container.separate .letter-p {
-            left: 70%;
-            transform: translateX(-50%) translateY(0) rotate(5deg);
-        }
-        
-        /* Connecting Line Effect */
-        .connecting-line {
-            position: absolute;
-            width: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #3b82f6, #f472b6);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 2px;
-            opacity: 0;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
-        }
-        
-        .jp-logo-container.separate .connecting-line {
-            animation: lineDraw 1s forwards 1s;
-        }
-        
-        @keyframes lineDraw {
-            0% {
-                width: 0;
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                width: 200px;
-                opacity: 0.7;
-            }
-        }
-        
-        /* Glow Effect */
-        .logo-glow {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0) 70%);
-            animation: pulseGlow 4s infinite;
-            z-index: -1;
-        }
-        
-        @keyframes pulseGlow {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 0.3;
-            }
-            50% {
-                transform: scale(1.2);
-                opacity: 0.5;
-            }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         
         .powered-text {
-            margin-top: 120px;
             color: rgba(255, 255, 255, 0.8);
             font-size: 20px;
             letter-spacing: 8px;
             font-weight: 300;
-            animation: fadeInUp 1s ease-out 2s both;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
         
         /* LOGIN SCREEN */
@@ -270,45 +114,6 @@
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
-            }
-        }
-        
-        .login-logo-container {
-            margin-bottom: 2rem;
-        }
-        
-        .login-jp-logo {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 1.5rem;
-        }
-        
-        .login-letter {
-            font-size: 60px;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            animation: loginLogoFloat 3s ease-in-out infinite;
-        }
-        
-        .login-letter:nth-child(1) {
-            animation-delay: 0s;
-        }
-        
-        .login-letter:nth-child(2) {
-            animation-delay: 0.3s;
-        }
-        
-        @keyframes loginLogoFloat {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
             }
         }
         
@@ -387,7 +192,7 @@
             overflow-x: auto;
             padding: 0.5rem 1rem;
             scrollbar-width: none;
-            gap: 1px;
+            gap: 2px;
             background: linear-gradient(90deg, #f8fafc, #f1f5f9);
         }
         
@@ -410,51 +215,56 @@
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             gap: 0.5rem;
             white-space: nowrap;
+            position: relative;
         }
         
         .nav-btn:hover {
             color: var(--primary);
             background: rgba(99, 102, 241, 0.08);
-            transform: translateY(-1px);
         }
         
         .nav-btn.active {
             color: var(--primary);
             background: rgba(99, 102, 241, 0.12);
-            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.1);
         }
         
-        /* MEGA MENU */
-        .mega-dropdown {
+        .nav-btn.has-dropdown::after {
+            content: '▾';
+            margin-left: 0.25rem;
+            font-size: 0.8rem;
+        }
+        
+        /* DROPDOWN MENUS - LIST STYLE */
+        .dropdown-menu {
             position: absolute;
             top: 100%;
             left: 0;
             background: var(--surface);
-            min-width: 750px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
-            border-radius: 16px;
+            min-width: 250px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
             border: 1px solid var(--border);
             z-index: 1000;
             display: none;
-            padding: 1.5rem;
-            backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.98);
+            padding: 0.5rem 0;
+            max-height: 400px;
+            overflow-y: auto;
         }
         
-        .nav-item:hover .mega-dropdown {
+        .nav-item:hover .dropdown-menu {
             display: block;
-            animation: fadeIn 0.2s ease-out;
+            animation: dropdownFade 0.2s ease-out;
         }
         
-        @keyframes fadeIn {
+        @keyframes dropdownFade {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(-10px);
             }
             to {
                 opacity: 1;
@@ -462,46 +272,40 @@
             }
         }
         
-        .mega-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-        
-        .mega-section {
-            margin-bottom: 1rem;
-        }
-        
-        .mega-title {
+        .dropdown-header {
             color: var(--primary);
             font-weight: 600;
-            font-size: 0.85rem;
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+            font-size: 0.8rem;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
         
-        .mega-link {
+        .dropdown-item {
             display: block;
             color: var(--text-secondary);
-            padding: 0.5rem 0.75rem;
-            border-radius: 8px;
+            padding: 0.6rem 1rem;
             font-size: 0.8rem;
             text-decoration: none;
             transition: all 0.2s;
-            margin-bottom: 0.25rem;
+            border-left: 3px solid transparent;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
         
-        .mega-link:hover {
+        .dropdown-item:hover {
             color: var(--primary);
-            background: rgba(99, 102, 241, 0.08);
-            transform: translateX(3px);
+            background: rgba(99, 102, 241, 0.05);
+            border-left-color: var(--primary);
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0.25rem 0;
         }
         
         /* USER BAR */
@@ -522,7 +326,7 @@
             gap: 1rem;
         }
         
-        /* DASHBOARD - CLEAN, MINIMALISTIC, NO ICONS */
+        /* DASHBOARD */
         .dashboard-wrapper {
             min-height: calc(100vh - 120px);
             padding: 2rem;
@@ -616,67 +420,7 @@
             }
         }
         
-        .module-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .module-header {
-            background: var(--surface);
-            border-radius: 16px;
-            padding: 1.5rem 2rem;
-            margin-bottom: 2rem;
-            border-left: 4px solid var(--primary);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-        }
-        
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .option-card {
-            background: var(--surface);
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid var(--border);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-        }
-        
-        .option-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            border-color: var(--primary);
-        }
-        
-        .option-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background: rgba(99, 102, 241, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-            font-size: 1.25rem;
-            color: var(--primary);
-        }
-        
-        .option-title {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .option-desc {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            line-height: 1.5;
-        }
-        
-        /* FLOATING BUTTONS - SUBTLE */
+        /* FLOATING BUTTONS */
         .float-actions {
             position: fixed;
             bottom: 2rem;
@@ -712,13 +456,9 @@
         
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .jp-logo-container {
-                width: 200px;
-                height: 200px;
-            }
-            
-            .jp-letter {
+            .jp-logo {
                 font-size: 80px;
+                letter-spacing: 10px;
             }
             
             .login-container {
@@ -738,18 +478,17 @@
                 padding: 0.5rem 0.75rem;
                 font-size: 0.8rem;
             }
+            
+            .dropdown-menu {
+                position: fixed;
+                top: 60px;
+                left: 1rem;
+                right: 1rem;
+                max-height: 60vh;
+            }
         }
         
         @media (max-width: 480px) {
-            .jp-letter {
-                font-size: 60px;
-            }
-            
-            .powered-text {
-                font-size: 16px;
-                letter-spacing: 4px;
-            }
-            
             .nav-btn span {
                 display: none;
             }
@@ -761,28 +500,17 @@
     </style>
 </head>
 <body>
-    <!-- SPLASH SCREEN WITH UNIQUE JP LOGO -->
+    <!-- SPLASH SCREEN -->
     <div id="splashScreen">
-        <div class="jp-logo-container initial">
-            <div class="logo-glow"></div>
-            <div class="letter-j jp-letter">J</div>
-            <div class="letter-p jp-letter">P</div>
-            <div class="connecting-line"></div>
-        </div>
+        <div class="jp-logo">JP</div>
         <div class="powered-text">POWERED BY JP</div>
     </div>
 
     <!-- LOGIN SCREEN -->
     <div id="loginScreen">
         <div class="login-container">
-            <div class="login-logo-container">
-                <div class="login-jp-logo">
-                    <div class="login-letter">J</div>
-                    <div class="login-letter">P</div>
-                </div>
-                <div class="login-title">JP SOLUTIONS</div>
-                <div class="login-subtitle">Powered by JP</div>
-            </div>
+            <div class="login-title">JP SOLUTIONS</div>
+            <div class="login-subtitle">Powered by JP</div>
             
             <form id="loginForm">
                 <input type="text" class="login-input" placeholder="Username" id="username" required>
@@ -806,301 +534,279 @@
             <button class="float-btn" onclick="showDashboard()" title="Dashboard">
                 <i class="fas fa-home"></i>
             </button>
-            <button class="float-btn" onclick="showModule('masters')" title="Masters">
-                <i class="fas fa-cubes"></i>
+            <button class="float-btn" onclick="showModule('proforma')" title="Proforma">
+                <i class="fas fa-file-invoice"></i>
             </button>
             <button class="float-btn" onclick="window.print()" title="Print">
                 <i class="fas fa-print"></i>
             </button>
         </div>
 
-        <!-- HEADER - COMPACT MENU BAR -->
+        <!-- HEADER - COMPACT MENU BAR WITH DROPDOWNS -->
         <header class="header-container">
             <nav class="main-nav">
                 <!-- 🧱 MASTERS -->
                 <div class="nav-item">
-                    <button class="nav-btn" onclick="showModule('masters')">
+                    <button class="nav-btn has-dropdown">
                         <i class="fas fa-cubes"></i>
                         <span>Masters</span>
                     </button>
-                    <div class="mega-dropdown">
-                        <div class="mega-grid">
-                            <div class="mega-section">
-                                <div class="mega-title">
-                                    <i class="fas fa-box"></i> Product Masters
-                                </div>
-                                <a href="#" class="mega-link" onclick="showSubModule('item-master')">
-                                    Item Master
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('price-master')">
-                                    Price Master
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('process-master')">
-                                    Process Master
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('cutting-rule')">
-                                    Cutting Rule (Z Rule)
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('glass-size')">
-                                    Glass Size Master (Jumbo Size)
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('glass-type')">
-                                    Glass Type Master
-                                </a>
-                            </div>
-                            
-                            <div class="mega-section">
-                                <div class="mega-title">
-                                    <i class="fas fa-cog"></i> System Masters
-                                </div>
-                                <a href="#" class="mega-link" onclick="showSubModule('route-master')">
-                                    Route Master
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('payment-terms')">
-                                    Payment Terms Master
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('film-type')">
-                                    Film Type Master
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('bank-master')">
-                                    Bank Master
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('vehicle-master')">
-                                    Vehicle Master
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('additional-charges')">
-                                    Additional Charges Master
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('remarks-master')">
-                                    Remarks Master
-                                </a>
-                            </div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header">
+                            <i class="fas fa-box"></i> Product Masters
                         </div>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('item-master')">
+                            Item Master
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('price-master')">
+                            Price Master
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('process-master')">
+                            Process Master
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('cutting-rule')">
+                            Cutting Rule (Z Rule)
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('glass-size')">
+                            Glass Size Master
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('glass-type')">
+                            Glass Type Master
+                        </a>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <div class="dropdown-header">
+                            <i class="fas fa-cog"></i> System Masters
+                        </div>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('route-master')">
+                            Route Master
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('payment-terms')">
+                            Payment Terms Master
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('film-type')">
+                            Film Type Master
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('bank-master')">
+                            Bank Master
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('vehicle-master')">
+                            Vehicle Master
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('additional-charges')">
+                            Additional Charges Master
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('remarks-master')">
+                            Remarks Master
+                        </a>
                     </div>
                 </div>
                 
                 <!-- 🔁 TRANSACTIONS -->
                 <div class="nav-item">
-                    <button class="nav-btn" onclick="showModule('transactions')">
+                    <button class="nav-btn has-dropdown">
                         <i class="fas fa-exchange-alt"></i>
                         <span>Transactions</span>
                     </button>
-                    <div class="mega-dropdown">
-                        <div class="mega-grid">
-                            <div class="mega-section">
-                                <div class="mega-title">
-                                    <i class="fas fa-file-invoice-dollar"></i> Sales Transactions
-                                </div>
-                                <a href="#" class="mega-link" onclick="showSubModule('proforma')">
-                                    Proforma Invoice
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('work-order')">
-                                    Work Order
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('sales-invoice')">
-                                    Sales Invoice
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('direct-invoice')">
-                                    Direct Invoice
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('credit-note')">
-                                    Credit Note
-                                </a>
-                            </div>
-                            
-                            <div class="mega-section">
-                                <div class="mega-title">
-                                    <i class="fas fa-cut"></i> Production
-                                </div>
-                                <a href="#" class="mega-link" onclick="showSubModule('cutting-optimizer')">
-                                    Cutting Optimizer
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('label-generation')">
-                                    Label / Sticker Generation
-                                </a>
-                            </div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header">
+                            <i class="fas fa-file-invoice-dollar"></i> Sales Transactions
                         </div>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('proforma')">
+                            Proforma Invoice
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('work-order')">
+                            Work Order
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('sales-invoice')">
+                            Sales Invoice
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('direct-invoice')">
+                            Direct Invoice
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('credit-note')">
+                            Credit Note
+                        </a>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <div class="dropdown-header">
+                            <i class="fas fa-cut"></i> Production
+                        </div>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('cutting-optimizer')">
+                            Cutting Optimizer
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('label-generation')">
+                            Label / Sticker Generation
+                        </a>
                     </div>
                 </div>
                 
                 <!-- 📦 INVENTORY -->
                 <div class="nav-item">
-                    <button class="nav-btn" onclick="showModule('inventory')">
+                    <button class="nav-btn has-dropdown">
                         <i class="fas fa-warehouse"></i>
                         <span>Inventory</span>
                     </button>
-                    <div class="mega-dropdown">
-                        <div class="mega-section">
-                            <div class="mega-title">
-                                <i class="fas fa-boxes"></i> Stock Management
-                            </div>
-                            <a href="#" class="mega-link" onclick="showSubModule('hardware-inventory')">
-                                Hardware Inventory
-                            </a>
-                            <a href="#" class="mega-link" onclick="showSubModule('glass-inventory')">
-                                Glass Inventory
-                            </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header">
+                            <i class="fas fa-boxes"></i> Stock Management
                         </div>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('hardware-inventory')">
+                            Hardware Inventory
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('glass-inventory')">
+                            Glass Inventory
+                        </a>
                     </div>
                 </div>
                 
                 <!-- ⚙️ SETTINGS -->
                 <div class="nav-item">
-                    <button class="nav-btn" onclick="showModule('system-settings')">
+                    <button class="nav-btn has-dropdown">
                         <i class="fas fa-sliders-h"></i>
                         <span>Settings</span>
                     </button>
-                    <div class="mega-dropdown">
-                        <div class="mega-grid">
-                            <div class="mega-section">
-                                <div class="mega-title">
-                                    <i class="fas fa-tools"></i> Configuration
-                                </div>
-                                <a href="#" class="mega-link" onclick="showSubModule('default-config')">
-                                    Default Configuration
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('file-storage')">
-                                    File Storage Configuration
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('network-config')">
-                                    Network Configuration
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('data-backup')">
-                                    Data Backup & Restore
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('sms-email')">
-                                    SMS / Email Configuration
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('billing-config')">
-                                    Billing Configuration
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('print-config')">
-                                    Print Configuration
-                                </a>
-                            </div>
-                            
-                            <div class="mega-section">
-                                <div class="mega-title">
-                                    <i class="fas fa-user-shield"></i> Security & Updates
-                                </div>
-                                <a href="#" class="mega-link" onclick="showSubModule('user-access')">
-                                    User Access Control
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('software-update')">
-                                    Software Update
-                                </a>
-                            </div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header">
+                            <i class="fas fa-tools"></i> Configuration
                         </div>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('default-config')">
+                            Default Configuration
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('file-storage')">
+                            File Storage Configuration
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('network-config')">
+                            Network Configuration
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('data-backup')">
+                            Data Backup & Restore
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('sms-email')">
+                            SMS / Email Configuration
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('billing-config')">
+                            Billing Configuration
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('print-config')">
+                            Print Configuration
+                        </a>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <div class="dropdown-header">
+                            <i class="fas fa-user-shield"></i> Security & Updates
+                        </div>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('user-access')">
+                            User Access Control
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('software-update')">
+                            Software Update
+                        </a>
                     </div>
                 </div>
                 
                 <!-- 👥 CUSTOMER -->
                 <div class="nav-item">
-                    <button class="nav-btn" onclick="showModule('customer')">
+                    <button class="nav-btn has-dropdown">
                         <i class="fas fa-users"></i>
                         <span>Customers</span>
                     </button>
-                    <div class="mega-dropdown">
-                        <div class="mega-section">
-                            <div class="mega-title">
-                                <i class="fas fa-address-card"></i> Customer Management
-                            </div>
-                            <a href="#" class="mega-link" onclick="showSubModule('customer-registration')">
-                                Customer Registration
-                            </a>
-                            <a href="#" class="mega-link" onclick="showSubModule('customer-list')">
-                                Customer List / Customer Master
-                            </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header">
+                            <i class="fas fa-address-card"></i> Customer Management
                         </div>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('customer-registration')">
+                            Customer Registration
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('customer-list')">
+                            Customer List / Master
+                        </a>
                     </div>
                 </div>
                 
                 <!-- 🧑‍💼 SALES -->
                 <div class="nav-item">
-                    <button class="nav-btn" onclick="showModule('sales')">
+                    <button class="nav-btn has-dropdown">
                         <i class="fas fa-user-tie"></i>
                         <span>Sales</span>
                     </button>
-                    <div class="mega-dropdown">
-                        <div class="mega-section">
-                            <div class="mega-title">
-                                <i class="fas fa-chart-line"></i> Sales Team
-                            </div>
-                            <a href="#" class="mega-link" onclick="showSubModule('salesperson-registration')">
-                                Salesperson Registration
-                            </a>
-                            <a href="#" class="mega-link" onclick="showSubModule('salesperson-list')">
-                                Salesperson List
-                            </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header">
+                            <i class="fas fa-chart-line"></i> Sales Team
                         </div>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('salesperson-registration')">
+                            Salesperson Registration
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('salesperson-list')">
+                            Salesperson List
+                        </a>
                     </div>
                 </div>
                 
                 <!-- 📊 REPORTS -->
                 <div class="nav-item">
-                    <button class="nav-btn" onclick="showModule('reports')">
+                    <button class="nav-btn has-dropdown">
                         <i class="fas fa-chart-bar"></i>
                         <span>Reports</span>
                     </button>
-                    <div class="mega-dropdown">
-                        <div class="mega-grid">
-                            <div class="mega-section">
-                                <div class="mega-title">
-                                    <i class="fas fa-file-invoice"></i> Sales Reports
-                                </div>
-                                <a href="#" class="mega-link" onclick="showSubModule('proforma-report')">
-                                    Proforma Report
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('invoice-report')">
-                                    Invoice Report
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('salesperson-performance')">
-                                    Salesperson Performance Report
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('direct-invoice-report')">
-                                    Direct Invoice Report
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('credit-note-report')">
-                                    Credit Note Report
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('pending-billing')">
-                                    Pending Billing Report
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('billed-area')">
-                                    Billed Area Report (Sq.Mtr)
-                                </a>
-                            </div>
-                            
-                            <div class="mega-section">
-                                <div class="mega-title">
-                                    <i class="fas fa-industry"></i> Production Reports
-                                </div>
-                                <a href="#" class="mega-link" onclick="showSubModule('production-report')">
-                                    Production Report
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('work-order-report')">
-                                    Work Order Report
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('glass-inventory-report')">
-                                    Glass Inventory Report
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('breakage-report')">
-                                    Breakage Report
-                                </a>
-                                <a href="#" class="mega-link" onclick="showSubModule('rejection-report')">
-                                    Rejection Report
-                                </a>
-                            </div>
-                            
-                            <div class="mega-section">
-                                <div class="mega-title">
-                                    <i class="fas fa-database"></i> System Reports
-                                </div>
-                                <a href="#" class="mega-link" onclick="showSubModule('tally-export')">
-                                    Tally Export Report
-                                </a>
-                            </div>
+                    <div class="dropdown-menu" style="max-height: 500px;">
+                        <div class="dropdown-header">
+                            <i class="fas fa-file-invoice"></i> Sales Reports
                         </div>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('proforma-report')">
+                            Proforma Report
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('invoice-report')">
+                            Invoice Report
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('salesperson-performance')">
+                            Salesperson Performance
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('direct-invoice-report')">
+                            Direct Invoice Report
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('credit-note-report')">
+                            Credit Note Report
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('pending-billing')">
+                            Pending Billing Report
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('billed-area')">
+                            Billed Area Report
+                        </a>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <div class="dropdown-header">
+                            <i class="fas fa-industry"></i> Production Reports
+                        </div>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('production-report')">
+                            Production Report
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('work-order-report')">
+                            Work Order Report
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('glass-inventory-report')">
+                            Glass Inventory Report
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('breakage-report')">
+                            Breakage Report
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('rejection-report')">
+                            Rejection Report
+                        </a>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <div class="dropdown-header">
+                            <i class="fas fa-database"></i> System Reports
+                        </div>
+                        <a href="#" class="dropdown-item" onclick="showSubModule('tally-export')">
+                            Tally Export Report
+                        </a>
                     </div>
                 </div>
                 
@@ -1130,7 +836,7 @@
 
         <!-- MAIN CONTENT -->
         <main>
-            <!-- DASHBOARD - CLEAN, NO ICONS -->
+            <!-- DASHBOARD -->
             <section id="dashboard" class="dashboard-wrapper">
                 <div class="dashboard-grid">
                     <div class="dashboard-card">
@@ -1142,10 +848,10 @@
                             Quickly access frequently used features and perform common tasks.
                         </div>
                         <div class="card-actions">
-                            <button class="card-action-btn" onclick="showModule('proforma')">
+                            <button class="card-action-btn" onclick="showSubModule('proforma')">
                                 New Proforma
                             </button>
-                            <button class="card-action-btn" onclick="showModule('customer')">
+                            <button class="card-action-btn" onclick="showSubModule('customer-registration')">
                                 Add Customer
                             </button>
                             <button class="card-action-btn" onclick="showModule('reports')">
@@ -1209,19 +915,60 @@
 
             <!-- MODULE CONTENT AREAS -->
             <section id="mastersContent" class="content-area">
-                <div class="module-container">
-                    <div class="module-header">
-                        <h3 class="mb-2"><i class="fas fa-cubes me-2"></i>Masters Management</h3>
-                        <p class="text-muted mb-0">Manage all master data and system configurations</p>
-                    </div>
-                    <div class="options-grid">
-                        <!-- Options grid content here -->
-                    </div>
+                <div class="container">
+                    <h3 class="mb-4"><i class="fas fa-cubes me-2"></i>Masters Management</h3>
+                    <p>Master data management section</p>
                 </div>
             </section>
 
-            <!-- Other module sections... -->
-            
+            <section id="transactionsContent" class="content-area">
+                <div class="container">
+                    <h3 class="mb-4"><i class="fas fa-exchange-alt me-2"></i>Transactions</h3>
+                    <p>Transaction management section</p>
+                </div>
+            </section>
+
+            <section id="inventoryContent" class="content-area">
+                <div class="container">
+                    <h3 class="mb-4"><i class="fas fa-warehouse me-2"></i>Inventory</h3>
+                    <p>Inventory management section</p>
+                </div>
+            </section>
+
+            <section id="systemSettingsContent" class="content-area">
+                <div class="container">
+                    <h3 class="mb-4"><i class="fas fa-sliders-h me-2"></i>System Settings</h3>
+                    <p>System settings management section</p>
+                </div>
+            </section>
+
+            <section id="customerContent" class="content-area">
+                <div class="container">
+                    <h3 class="mb-4"><i class="fas fa-users me-2"></i>Customer Management</h3>
+                    <p>Customer management section</p>
+                </div>
+            </section>
+
+            <section id="salesContent" class="content-area">
+                <div class="container">
+                    <h3 class="mb-4"><i class="fas fa-user-tie me-2"></i>Sales Management</h3>
+                    <p>Sales management section</p>
+                </div>
+            </section>
+
+            <section id="reportsContent" class="content-area">
+                <div class="container">
+                    <h3 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Reports</h3>
+                    <p>Reports section</p>
+                </div>
+            </section>
+
+            <section id="userManagementContent" class="content-area">
+                <div class="container">
+                    <h3 class="mb-4"><i class="fas fa-user-cog me-2"></i>User Management</h3>
+                    <p>User management section</p>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -1229,21 +976,13 @@
     <script>
         // Initialize flow
         document.addEventListener('DOMContentLoaded', function() {
-            const splashLogo = document.querySelector('.jp-logo-container');
-            
             // Start with splash screen
             setTimeout(function() {
-                // Initial state - letters together
-                splashLogo.classList.remove('initial');
-                splashLogo.classList.add('separate');
-                
+                document.getElementById('splashScreen').style.animation = 'splashFade 3s ease-in-out forwards';
                 setTimeout(function() {
-                    document.getElementById('splashScreen').style.animation = 'splashFade 4s ease-in-out forwards';
-                    setTimeout(function() {
-                        document.getElementById('loginScreen').style.display = 'flex';
-                    }, 4000);
-                }, 2000);
-            }, 500);
+                    document.getElementById('loginScreen').style.display = 'flex';
+                }, 3000);
+            }, 100);
             
             // Update date time
             updateDateTime();
@@ -1267,6 +1006,15 @@
                     showDashboard();
                 } else {
                     alert('Invalid credentials! Use admin / admin123');
+                }
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.nav-item')) {
+                    document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
+                        dropdown.style.display = 'none';
+                    });
                 }
             });
         });
@@ -1333,8 +1081,71 @@
         
         // Show sub-module
         function showSubModule(subModule) {
+            // Hide dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
+                dropdown.style.display = 'none';
+            });
+            
             alert(`Opening ${subModule.replace(/-/g, ' ')}...`);
             // In actual implementation, load content dynamically
+            
+            // Find which main module this belongs to and show it
+            const moduleMap = {
+                'item-master': 'masters',
+                'price-master': 'masters',
+                'process-master': 'masters',
+                'cutting-rule': 'masters',
+                'glass-size': 'masters',
+                'glass-type': 'masters',
+                'route-master': 'masters',
+                'payment-terms': 'masters',
+                'film-type': 'masters',
+                'bank-master': 'masters',
+                'vehicle-master': 'masters',
+                'additional-charges': 'masters',
+                'remarks-master': 'masters',
+                'proforma': 'transactions',
+                'work-order': 'transactions',
+                'sales-invoice': 'transactions',
+                'direct-invoice': 'transactions',
+                'credit-note': 'transactions',
+                'cutting-optimizer': 'transactions',
+                'label-generation': 'transactions',
+                'hardware-inventory': 'inventory',
+                'glass-inventory': 'inventory',
+                'default-config': 'system-settings',
+                'file-storage': 'system-settings',
+                'network-config': 'system-settings',
+                'data-backup': 'system-settings',
+                'sms-email': 'system-settings',
+                'billing-config': 'system-settings',
+                'print-config': 'system-settings',
+                'user-access': 'system-settings',
+                'software-update': 'system-settings',
+                'customer-registration': 'customer',
+                'customer-list': 'customer',
+                'salesperson-registration': 'sales',
+                'salesperson-list': 'sales',
+                'proforma-report': 'reports',
+                'invoice-report': 'reports',
+                'salesperson-performance': 'reports',
+                'production-report': 'reports',
+                'work-order-report': 'reports',
+                'glass-inventory-report': 'reports',
+                'breakage-report': 'reports',
+                'rejection-report': 'reports',
+                'direct-invoice-report': 'reports',
+                'credit-note-report': 'reports',
+                'pending-billing': 'reports',
+                'billed-area': 'reports',
+                'tally-export': 'reports',
+                'user-management': 'user-management'
+            };
+            
+            const mainModule = moduleMap[subModule];
+            if (mainModule) {
+                showModule(mainModule);
+            }
         }
         
         // Logout function
@@ -1361,7 +1172,7 @@
             }
             if(e.ctrlKey && e.key === 'p') {
                 e.preventDefault();
-                showModule('proforma');
+                showSubModule('proforma');
             }
         });
     </script>
