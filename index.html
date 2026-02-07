@@ -9,39 +9,52 @@
 *{box-sizing:border-box;font-family:Segoe UI,Arial}
 body{margin:0;background:#f8fafc;color:#1e293b}
 
-/* ===== JP LOGO (PURE CSS) ===== */
-.jp-logo{
-  width:140px;height:140px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#16a34a,#22c55e);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-  font-size:48px;
-  font-weight:800;
-  letter-spacing:2px;
-  box-shadow:0 15px 30px rgba(0,0,0,.2);
+/* ===== EMBEDDED LOGO ===== */
+:root{
+  --jp-logo: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAADIB2NhQlgAAMgHanVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAANvRqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOjZkZTk4YjA3LWEyZTctNDRiYy05YWMwLTRkNGYy
+...TRUNCATED FOR CHAT DISPLAY...
+");
 }
 
 /* ===== SPLASH ===== */
 #splash{
   position:fixed;inset:0;
-  background:#ffffff;
+  background:
+    radial-gradient(circle at center, rgba(0,0,0,.15), rgba(0,0,0,.65)),
+    #ffffff;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   z-index:10;
 }
-#splash p{margin-top:14px;color:#64748b;font-size:14px}
+.logo-anim{
+  width:220px;height:220px;
+  background:var(--jp-logo) center/contain no-repeat;
+  animation:zoomIn 1.6s ease forwards;
+}
+#splash p{
+  margin-top:14px;
+  color:#64748b;
+  animation:fadeUp 1.8s ease;
+}
+
+@keyframes zoomIn{
+  from{transform:scale(.3);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:translateY(0)}
+}
 
 /* ===== LOGIN ===== */
 #login{
   display:none;
   height:100vh;
   background:
-    radial-gradient(circle at center, rgba(0,0,0,.15), rgba(0,0,0,.6)),
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
+    var(--jp-logo) center/420px no-repeat,
     linear-gradient(135deg,#e2e8f0,#f8fafc);
   display:flex;
   align-items:center;
@@ -49,80 +62,64 @@ body{margin:0;background:#f8fafc;color:#1e293b}
 }
 .login-wrap{
   width:380px;
-  background:rgba(255,255,255,.92);
+  background:rgba(255,255,255,.95);
   padding:30px;
   border-radius:18px;
   text-align:center;
-  box-shadow:0 20px 40px rgba(0,0,0,.25);
+  box-shadow:0 20px 40px rgba(0,0,0,.35);
 }
-.login-wrap h2{margin:16px 0 6px}
+.login-wrap h2{margin:10px 0 4px}
 .login-wrap p{font-size:13px;color:#64748b}
 .login-wrap input{
-  width:100%;
-  padding:11px;
-  margin:10px 0;
-  border-radius:10px;
-  border:1px solid #cbd5e1;
-  font-size:14px;
+  width:100%;padding:11px;margin:10px 0;
+  border-radius:10px;border:1px solid #cbd5e1;
 }
 .login-wrap button{
-  width:100%;
-  padding:12px;
-  margin-top:6px;
-  background:#16a34a;
-  border:none;
-  color:#fff;
-  border-radius:12px;
-  font-size:15px;
-  font-weight:600;
+  width:100%;padding:12px;
+  background:#16a34a;border:none;color:#fff;
+  border-radius:12px;font-weight:600;
   cursor:pointer;
 }
-#error{color:#dc2626;font-size:13px;margin-top:8px}
+#error{color:#dc2626;font-size:13px}
 
 /* ===== MENU PAGE ===== */
-#menuPage{display:none;min-height:100vh;background:#f1f5f9}
+#menuPage{display:none;min-height:100vh}
 
+/* NAVBAR */
 .navbar{
-  background:#16a34a;
+  background:linear-gradient(90deg,#15803d,#16a34a,#22c55e);
   padding:0 18px;
-  display:flex;
-  align-items:center;
+  display:flex;align-items:center;
 }
-.brand{
-  color:#fff;
-  font-size:18px;
-  font-weight:700;
-  margin-right:30px;
-}
-.menu{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap}
+.brand{color:#fff;font-size:18px;font-weight:700;margin-right:30px}
+
+/* MENU */
+.menu{list-style:none;margin:0;padding:0;display:flex}
 .menu>li{position:relative}
 .menu>li>a{
   padding:14px 16px;
-  color:#fff;
-  text-decoration:none;
-  display:block;
+  color:#fff;text-decoration:none;
+  display:flex;align-items:center;
+  gap:8px;font-size:14px;
+}
+.menu>li:hover{background:rgba(0,0,0,.15)}
+.icon{
+  width:22px;height:22px;
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.2);
   font-size:14px;
 }
-.menu>li:hover{background:#15803d}
-
 .dropdown{
-  display:none;
-  position:absolute;
-  top:100%;
-  left:0;
-  background:#fff;
-  min-width:300px;
-  max-height:70vh;
-  overflow:auto;
+  display:none;position:absolute;top:100%;left:0;
+  background:#fff;min-width:300px;
+  max-height:70vh;overflow:auto;
   box-shadow:0 10px 25px rgba(0,0,0,.15);
-  z-index:5;
 }
 .dropdown a{
-  display:block;
-  padding:10px 14px;
+  display:block;padding:10px 14px;
   border-bottom:1px solid #eef2f7;
-  font-size:13px;
-  color:#1e293b;
+  font-size:13px;color:#1e293b;
   text-decoration:none;
 }
 .dropdown a:hover{background:#f1f5f9}
@@ -136,20 +133,17 @@ body{margin:0;background:#f8fafc;color:#1e293b}
 
 <!-- SPLASH -->
 <div id="splash">
-  <div class="jp-logo">JP</div>
+  <div class="logo-anim"></div>
   <p>Powered by JP</p>
 </div>
 
 <!-- LOGIN -->
 <div id="login">
   <div class="login-wrap">
-    <div class="jp-logo" style="margin:0 auto;transform:scale(.7)">JP</div>
     <h2>JP Solution</h2>
     <p>ERP Secure Login</p>
-
     <input id="username" placeholder="Username">
     <input id="password" type="password" placeholder="Password">
-
     <button onclick="doLogin()">Login</button>
     <div id="error"></div>
   </div>
@@ -160,84 +154,19 @@ body{margin:0;background:#f8fafc;color:#1e293b}
   <div class="navbar">
     <div class="brand">JP Solution ERP</div>
     <ul class="menu">
-
-      <li><a>Masters</a><div class="dropdown">
-        <a>Item Master</a>
-        <a>Price Master</a>
-        <a>Process Master</a>
-        <a>Cutting Rule (Z Rule)</a>
-        <a>Glass Size Master (Jumbo)</a>
-        <a>Glass Type Master</a>
-        <a>Route Master</a>
-        <a>Payment Terms Master</a>
-        <a>Film Type Master</a>
-        <a>Bank Master</a>
-        <a>Vehicle Master</a>
-        <a>Additional Charges Master</a>
-        <a>Remarks Master</a>
-      </div></li>
-
-      <li><a>Transactions</a><div class="dropdown">
-        <a>Proforma Invoice</a>
-        <a>Work Order</a>
-        <a>Sales Invoice</a>
-        <a>Cutting Optimizer</a>
-        <a>Label / Sticker Generation</a>
-      </div></li>
-
-      <li><a>Inventory</a><div class="dropdown">
-        <a>Hardware Inventory</a>
-        <a>Glass Inventory</a>
-      </div></li>
-
-      <li><a>Customer</a><div class="dropdown">
-        <a>Customer Registration</a>
-        <a>Customer Master</a>
-      </div></li>
-
-      <li><a>Sales</a><div class="dropdown">
-        <a>Salesperson Registration</a>
-        <a>Salesperson List</a>
-      </div></li>
-
-      <li><a>Reports</a><div class="dropdown">
-        <a>Proforma Report</a>
-        <a>Invoice Report</a>
-        <a>Salesperson Performance</a>
-        <a>Production Report</a>
-        <a>Work Order Report</a>
-        <a>Glass Inventory Report</a>
-        <a>Breakage Report</a>
-        <a>Rejection Report</a>
-        <a>Pending Billing Report</a>
-        <a>Billed Area Report (Sq.Mtr)</a>
-        <a>Tally Export Report</a>
-        <a>Direct Invoice Report</a>
-        <a>Credit Note Report</a>
-      </div></li>
-
-      <li><a>System</a><div class="dropdown">
-        <a>Default Configuration</a>
-        <a>File Storage Configuration</a>
-        <a>Network Configuration</a>
-        <a>Data Backup & Restore</a>
-        <a>SMS / Email Configuration</a>
-        <a>Billing Configuration</a>
-        <a>Print Configuration</a>
-        <a>User Access Control</a>
-        <a>Software Update</a>
-      </div></li>
-
-      <li><a>User</a><div class="dropdown">
-        <a>User Management</a>
-      </div></li>
-
+      <li><a><span class="icon">🧱</span>Masters</a></li>
+      <li><a><span class="icon">🔁</span>Transactions</a></li>
+      <li><a><span class="icon">📦</span>Inventory</a></li>
+      <li><a><span class="icon">👥</span>Customer</a></li>
+      <li><a><span class="icon">🧑‍💼</span>Sales</a></li>
+      <li><a><span class="icon">📊</span>Reports</a></li>
+      <li><a><span class="icon">⚙️</span>System</a></li>
+      <li><a><span class="icon">👤</span>User</a></li>
     </ul>
   </div>
-
   <div class="content">
     <h2>Welcome 👋</h2>
-    <p>Login successful. ERP menu loaded.</p>
+    <p>ERP dashboard loaded successfully.</p>
   </div>
 </div>
 
@@ -249,28 +178,22 @@ const users=[
 ];
 
 setTimeout(()=>{
-  document.getElementById("splash").style.display="none";
-  document.getElementById("login").style.display="flex";
-},2000);
+  splash.style.display="none";
+  login.style.display="flex";
+},2200);
 
 function doLogin(){
-  const u=document.getElementById("username").value.trim().toLowerCase();
-  const p=document.getElementById("password").value.trim();
-  const err=document.getElementById("error");
-  err.innerText="";
-
+  const u=username.value.trim().toLowerCase();
+  const p=password.value.trim();
+  error.innerText="";
   const ok=users.find(x=>x.u===u && x.p===p);
   if(ok){
-    document.getElementById("login").style.display="none";
-    document.getElementById("menuPage").style.display="block";
+    login.style.display="none";
+    menuPage.style.display="block";
   }else{
-    err.innerText="Invalid username or password";
+    error.innerText="Invalid username or password";
   }
 }
-
-document.addEventListener("keydown",e=>{
-  if(e.key==="Enter") doLogin();
-});
 </script>
 
 </body>
