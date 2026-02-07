@@ -32,23 +32,24 @@
             line-height: 1.6;
         }
         
-        /* MENU BAR ONLY */
+        /* PURE MENU BAR - NO LOGOUT BAR */
         .menu-bar {
             background: var(--surface);
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
             width: 100%;
+            position: relative;
         }
         
-        /* TOP ROW - MENU ITEMS */
+        /* MENU ITEMS ONLY - NO USER INFO BELOW */
         .menu-row {
             display: flex;
             overflow-x: auto;
-            padding: 0.75rem 1rem;
+            padding: 1rem;
             scrollbar-width: none;
             gap: 2px;
             background: linear-gradient(90deg, #f8fafc, #f1f5f9);
             width: 100%;
-            border-bottom: 1px solid var(--border);
+            border-radius: 0 0 12px 12px;
         }
         
         .menu-row::-webkit-scrollbar {
@@ -85,24 +86,6 @@
         .nav-btn.dropdown-active {
             color: var(--primary);
             background: rgba(99, 102, 241, 0.08);
-        }
-        
-        /* BOTTOM ROW - USER INFO */
-        .user-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 1.5rem;
-            background: var(--surface);
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            width: 100%;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
         }
         
         /* DROPDOWN MENUS */
@@ -185,7 +168,7 @@
             padding: 2rem;
             background: var(--background);
             width: 100%;
-            min-height: calc(100vh - 120px);
+            min-height: calc(100vh - 80px);
         }
         
         .module-content.active {
@@ -216,7 +199,7 @@
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .menu-row {
-                padding: 0.5rem;
+                padding: 0.75rem;
             }
             
             .nav-btn {
@@ -226,7 +209,7 @@
             
             .dropdown-menu {
                 position: fixed;
-                top: 80px;
+                top: 70px;
                 left: 1rem;
                 right: 1rem;
                 max-height: 60vh;
@@ -234,6 +217,7 @@
             
             .module-content {
                 padding: 1rem;
+                min-height: calc(100vh - 70px);
             }
         }
         
@@ -246,17 +230,16 @@
                 padding: 0.75rem;
             }
             
-            .user-row {
-                padding: 0.75rem 1rem;
-                font-size: 0.75rem;
+            .nav-btn i {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- MENU BAR -->
+    <!-- PURE MENU BAR - NO LOGOUT, NO TIME -->
     <div class="menu-bar">
-        <!-- TOP ROW - MENU ITEMS -->
+        <!-- MENU ITEMS ONLY -->
         <div class="menu-row">
             <!-- 🧱 MASTERS -->
             <div class="nav-item">
@@ -532,19 +515,7 @@
             </div>
         </div>
         
-        <!-- BOTTOM ROW - USER INFO -->
-        <div class="user-row">
-            <div class="text-muted">
-                <i class="fas fa-calendar-alt me-1"></i>
-                <span id="currentDateTime"></span>
-            </div>
-            <div class="user-info">
-                <span class="badge bg-primary">Admin</span>
-                <button class="btn btn-sm btn-outline-danger" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </div>
-        </div>
+        <!-- NO USER ROW - NO LOGOUT, NO TIME -->
     </div>
     
     <!-- MODULE CONTENT - BELOW MENU BAR -->
@@ -556,10 +527,6 @@
         let currentDropdown = null;
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Update date time on load
-            updateDateTime();
-            setInterval(updateDateTime, 1000);
-            
             // Close dropdowns when clicking outside
             document.addEventListener('click', function(event) {
                 if (!event.target.closest('.nav-item')) {
@@ -567,23 +534,6 @@
                 }
             });
         });
-        
-        function updateDateTime() {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('en-IN', {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-            const timeStr = now.toLocaleTimeString('en-IN', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            document.getElementById('currentDateTime').textContent = 
-                `${dateStr} | ${timeStr}`;
-        }
         
         function toggleDropdown(button) {
             const dropdown = button.nextElementSibling;
@@ -653,13 +603,6 @@
                 'proforma': 'file-invoice-dollar', 'sales-invoice': 'file-invoice'
             };
             return iconMap[subModule] || 'cog';
-        }
-        
-        function logout() {
-            if(confirm('Are you sure you want to logout?')) {
-                closeModule();
-                alert('Logged out');
-            }
         }
         
         document.addEventListener('keydown', function(e) {
