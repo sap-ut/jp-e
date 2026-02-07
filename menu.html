@@ -3,45 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Only</title>
+    <title>JP Solutions Menu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* RESET */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: Arial, sans-serif;
-            background: #f5f5f5;
+            background: #f0f2f5;
+            color: #333;
         }
         
         /* MENU BAR */
-        .menu {
+        .menu-container {
             background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .menu-items {
             display: flex;
             overflow-x: auto;
             gap: 5px;
+            padding: 5px;
         }
         
         .menu-btn {
-            background: #f0f0f0;
-            border: none;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
             padding: 10px 15px;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
             white-space: nowrap;
             font-size: 14px;
-            color: #333;
+            color: #495057;
+            transition: all 0.2s;
         }
         
         .menu-btn:hover {
-            background: #e0e0e0;
+            background: #e9ecef;
+            border-color: #adb5bd;
         }
         
+        /* DROPDOWN */
         .dropdown {
             position: relative;
         }
@@ -50,131 +57,257 @@
             display: none;
             position: absolute;
             background: white;
-            min-width: 200px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border-radius: 5px;
-            padding: 10px 0;
-            z-index: 100;
+            min-width: 220px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            padding: 8px 0;
+            z-index: 1000;
             top: 100%;
             left: 0;
+            border: 1px solid #dee2e6;
         }
         
         .dropdown:hover .dropdown-content {
             display: block;
         }
         
-        .dropdown-item {
-            display: block;
+        .dropdown-header {
+            color: #4a6cf7;
+            font-weight: 600;
+            font-size: 12px;
             padding: 8px 15px;
-            text-decoration: none;
-            color: #333;
-            font-size: 13px;
+            border-bottom: 1px solid #dee2e6;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
+        .dropdown-item {
+            display: block;
+            padding: 8px 15px;
+            text-decoration: none;
+            color: #495057;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 3px solid transparent;
+        }
+        
         .dropdown-item:hover {
-            background: #f0f0f0;
-            color: #0066cc;
+            background: #f8f9fa;
+            color: #4a6cf7;
+            border-left-color: #4a6cf7;
+        }
+        
+        /* CONTENT */
+        .content {
+            padding: 20px;
+        }
+        
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-top: 20px;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .menu-items {
+                padding: 5px;
+            }
+            
+            .menu-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            
+            .menu-btn span {
+                display: none;
+            }
+            
+            .menu-btn i {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- SIMPLE MENU -->
-    <div class="menu">
-        <div class="dropdown">
-            <button class="menu-btn">
-                <i class="fas fa-cubes"></i>
-                <span>Masters</span>
-            </button>
-            <div class="dropdown-content">
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-circle fa-xs"></i> Item Master
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-circle fa-xs"></i> Price Master
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-circle fa-xs"></i> Process Master
-                </a>
+    <!-- MENU BAR - TOP OF PAGE -->
+    <div class="menu-container">
+        <div class="menu-items">
+            <!-- MASTERS -->
+            <div class="dropdown">
+                <button class="menu-btn">
+                    <i class="fas fa-cubes"></i>
+                    <span>Masters</span>
+                </button>
+                <div class="dropdown-content">
+                    <div class="dropdown-header">
+                        <i class="fas fa-box"></i> Product Masters
+                    </div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Item Master
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Price Master
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Process Master
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Cutting Rule
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Glass Size Master
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Glass Type Master
+                    </a>
+                </div>
             </div>
-        </div>
-        
-        <div class="dropdown">
-            <button class="menu-btn">
-                <i class="fas fa-exchange-alt"></i>
-                <span>Transactions</span>
-            </button>
-            <div class="dropdown-content">
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-circle fa-xs"></i> Proforma Invoice
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-circle fa-xs"></i> Sales Invoice
-                </a>
+            
+            <!-- TRANSACTIONS -->
+            <div class="dropdown">
+                <button class="menu-btn">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Transactions</span>
+                </button>
+                <div class="dropdown-content">
+                    <div class="dropdown-header">
+                        <i class="fas fa-file-invoice"></i> Sales
+                    </div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Proforma Invoice
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Work Order
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Sales Invoice
+                    </a>
+                </div>
             </div>
-        </div>
-        
-        <div class="dropdown">
-            <button class="menu-btn">
-                <i class="fas fa-warehouse"></i>
-                <span>Inventory</span>
-            </button>
-            <div class="dropdown-content">
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-circle fa-xs"></i> Hardware
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-circle fa-xs"></i> Glass
-                </a>
+            
+            <!-- INVENTORY -->
+            <div class="dropdown">
+                <button class="menu-btn">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Inventory</span>
+                </button>
+                <div class="dropdown-content">
+                    <div class="dropdown-header">
+                        <i class="fas fa-boxes"></i> Stock
+                    </div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Hardware Inventory
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Glass Inventory
+                    </a>
+                </div>
             </div>
-        </div>
-        
-        <div class="dropdown">
-            <button class="menu-btn">
-                <i class="fas fa-cog"></i>
-                <span>Settings</span>
-            </button>
-            <div class="dropdown-content">
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-circle fa-xs"></i> Configuration
-                </a>
+            
+            <!-- SETTINGS -->
+            <div class="dropdown">
+                <button class="menu-btn">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </button>
+                <div class="dropdown-content">
+                    <div class="dropdown-header">
+                        <i class="fas fa-tools"></i> Configuration
+                    </div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Default Config
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Network Config
+                    </a>
+                </div>
             </div>
-        </div>
-        
-        <div class="dropdown">
-            <button class="menu-btn">
-                <i class="fas fa-users"></i>
-                <span>Customers</span>
-            </button>
-        </div>
-        
-        <div class="dropdown">
-            <button class="menu-btn">
-                <i class="fas fa-chart-line"></i>
-                <span>Sales</span>
-            </button>
-        </div>
-        
-        <div class="dropdown">
-            <button class="menu-btn">
-                <i class="fas fa-chart-bar"></i>
-                <span>Reports</span>
-            </button>
-        </div>
-        
-        <div class="dropdown">
-            <button class="menu-btn">
-                <i class="fas fa-user-cog"></i>
-                <span>Users</span>
-            </button>
+            
+            <!-- CUSTOMERS -->
+            <div class="dropdown">
+                <button class="menu-btn">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Customer Registration
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-circle fa-xs"></i> Customer List
+                    </a>
+                </div>
+            </div>
+            
+            <!-- SALES -->
+            <div class="dropdown">
+                <button class="menu-btn">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Sales</span>
+                </button>
+            </div>
+            
+            <!-- REPORTS -->
+            <div class="dropdown">
+                <button class="menu-btn">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </button>
+            </div>
+            
+            <!-- USERS -->
+            <div class="dropdown">
+                <button class="menu-btn">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Users</span>
+                </button>
+            </div>
         </div>
     </div>
     
-    <div style="padding: 20px;">
-        <h2>Menu Bar Working</h2>
-        <p>This shows only the menu bar at top.</p>
+    <!-- PAGE CONTENT -->
+    <div class="content">
+        <h1>JP Solutions</h1>
+        <p>Menu bar is working at the top.</p>
+        
+        <div class="card">
+            <h3>Instructions:</h3>
+            <p>1. Hover over menu items to see dropdown</p>
+            <p>2. Click on options to navigate</p>
+            <p>3. Only menu bar shows - no login/logout</p>
+        </div>
     </div>
+
+    <script>
+        // Simple JavaScript for mobile touch
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdowns = document.querySelectorAll('.dropdown');
+            
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 768) {
+                        e.preventDefault();
+                        const content = this.querySelector('.dropdown-content');
+                        content.style.display = content.style.display === 'block' ? 'none' : 'block';
+                    }
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.dropdown')) {
+                    document.querySelectorAll('.dropdown-content').forEach(content => {
+                        content.style.display = 'none';
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
