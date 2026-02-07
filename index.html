@@ -2,195 +2,161 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>JP Solution | ERP Menu</title>
+<title>JP Solution ERP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 *{box-sizing:border-box;font-family:Segoe UI,Arial}
-body{margin:0;background:#f1f5f9}
+body{margin:0;height:100vh}
 
-/* TOP BAR */
+/* ===== SPLASH ===== */
+#splash{
+  position:fixed;inset:0;
+  background:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+#splash img{width:140px}
+#splash p{margin-top:12px;color:#555;font-size:14px}
+
+/* ===== LOGIN ===== */
+#login{
+  display:none;
+  height:100vh;
+  background:
+    url('data:image/png;base64,{{LOGO_BASE64}}') center/300px no-repeat,
+    linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.card{
+  width:360px;
+  background:rgba(255,255,255,.95);
+  padding:28px;
+  border-radius:14px;
+  text-align:center;
+}
+.card h2{margin:0;color:#1e293b}
+.card p{font-size:13px;color:#64748b}
+input{
+  width:100%;padding:10px;margin:10px 0;
+  border-radius:8px;border:1px solid #cbd5e1;
+}
+button{
+  width:100%;padding:11px;
+  background:#16a34a;color:#fff;
+  border:none;border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+}
+.error{color:#dc2626;font-size:13px}
+
+/* ===== MENU ===== */
+#menuPage{display:none;height:100vh;background:#f1f5f9}
 .navbar{
   background:#16a34a;
-  display:flex;
   padding:0 16px;
+  display:flex;
   align-items:center;
 }
-.brand{
-  color:#fff;
-  font-weight:700;
-  font-size:18px;
-  margin-right:30px;
-}
-
-/* MENU */
+.brand{color:#fff;font-weight:700;font-size:18px;margin-right:30px}
 .menu{list-style:none;margin:0;padding:0;display:flex}
-.menu>li{
-  position:relative;
-}
+.menu>li{position:relative}
 .menu>li>a{
-  display:block;
-  padding:14px 16px;
-  color:#fff;
-  text-decoration:none;
-  font-size:14px;
-  white-space:nowrap;
+  color:#fff;text-decoration:none;
+  padding:14px 16px;display:block;
 }
-.menu>li:hover{
-  background:#15803d;
-}
-
-/* DROPDOWN */
+.menu>li:hover{background:#15803d}
 .dropdown{
-  display:none;
-  position:absolute;
-  top:100%;
-  left:0;
-  background:#fff;
-  min-width:260px;
+  display:none;position:absolute;top:100%;left:0;
+  background:#fff;min-width:260px;
   box-shadow:0 10px 25px rgba(0,0,0,.15);
-  z-index:1000;
 }
 .dropdown a{
-  display:block;
-  padding:10px 14px;
-  color:#1e293b;
-  text-decoration:none;
+  display:block;padding:10px 14px;
+  border-bottom:1px solid #eee;
+  color:#1e293b;text-decoration:none;
   font-size:13px;
-  border-bottom:1px solid #e5e7eb;
 }
-.dropdown a:hover{
-  background:#f1f5f9;
-}
-
-.menu>li:hover .dropdown{
-  display:block;
-}
-
-/* PAGE */
-.content{
-  padding:30px;
-}
+.menu>li:hover .dropdown{display:block}
+.content{padding:30px}
 </style>
 </head>
 
 <body>
 
-<div class="navbar">
-  <div class="brand">JP Solution</div>
+<!-- SPLASH -->
+<div id="splash">
+  <img src="/mnt/data/35288.png">
+  <p>Powered by JP</p>
+</div>
 
-  <ul class="menu">
+<!-- LOGIN -->
+<div id="login">
+  <div class="card">
+    <h2>JP Solution</h2>
+    <p>Secure ERP Login</p>
+    <input id="u" placeholder="Username">
+    <input id="p" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <div class="error" id="err"></div>
+  </div>
+</div>
 
-    <!-- MASTERS -->
-    <li>
-      <a href="#">Masters</a>
-      <div class="dropdown">
-        <a>Item Master</a>
-        <a>Price Master</a>
-        <a>Process Master</a>
-        <a>Cutting Rule (Z Rule)</a>
-        <a>Glass Size Master (Jumbo Size)</a>
-        <a>Glass Type Master</a>
-        <a>Route Master</a>
-        <a>Payment Terms Master</a>
-        <a>Film Type Master</a>
-        <a>Bank Master</a>
-        <a>Vehicle Master</a>
-        <a>Additional Charges Master</a>
-        <a>Remarks Master</a>
-      </div>
-    </li>
+<!-- MENU PAGE -->
+<div id="menuPage">
+  <div class="navbar">
+    <div class="brand">JP Solution</div>
+    <ul class="menu">
+      <li><a>Masters</a><div class="dropdown">
+        <a>Item Master</a><a>Price Master</a><a>Process Master</a>
+        <a>Cutting Rule</a><a>Glass Size Master</a><a>Glass Type Master</a>
+        <a>Route Master</a><a>Payment Terms</a><a>Film Type</a>
+        <a>Bank Master</a><a>Vehicle Master</a>
+        <a>Additional Charges</a><a>Remarks</a>
+      </div></li>
 
-    <!-- TRANSACTIONS -->
-    <li>
-      <a href="#">Transactions</a>
-      <div class="dropdown">
-        <a>Proforma Invoice</a>
-        <a>Work Order</a>
-        <a>Sales Invoice</a>
-        <a>Cutting Optimizer</a>
-        <a>Label / Sticker Generation</a>
-      </div>
-    </li>
+      <li><a>Transactions</a><div class="dropdown">
+        <a>Proforma Invoice</a><a>Work Order</a>
+        <a>Sales Invoice</a><a>Cutting Optimizer</a>
+        <a>Sticker Generation</a>
+      </div></li>
 
-    <!-- INVENTORY -->
-    <li>
-      <a href="#">Inventory</a>
-      <div class="dropdown">
-        <a>Hardware Inventory</a>
-        <a>Glass Inventory</a>
-      </div>
-    </li>
+      <li><a>Inventory</a><div class="dropdown">
+        <a>Hardware Inventory</a><a>Glass Inventory</a>
+      </div></li>
 
-    <!-- SETTINGS -->
-    <li>
-      <a href="#">System Settings</a>
-      <div class="dropdown">
-        <a>Default Configuration</a>
-        <a>File Storage Configuration</a>
-        <a>Network Configuration</a>
-        <a>Data Backup & Restore</a>
-        <a>SMS / Email Configuration</a>
-        <a>Billing Configuration</a>
-        <a>Print Configuration</a>
-        <a>User Access Control</a>
-        <a>Software Update</a>
-      </div>
-    </li>
-
-    <!-- CUSTOMERS -->
-    <li>
-      <a href="#">Customers</a>
-      <div class="dropdown">
-        <a>Customer Registration</a>
-        <a>Customer List / Customer Master</a>
-      </div>
-    </li>
-
-    <!-- SALES -->
-    <li>
-      <a href="#">Sales</a>
-      <div class="dropdown">
-        <a>Salesperson Registration</a>
-        <a>Salesperson List</a>
-      </div>
-    </li>
-
-    <!-- REPORTS -->
-    <li>
-      <a href="#">Reports</a>
-      <div class="dropdown">
-        <a>Proforma Report</a>
-        <a>Invoice Report</a>
-        <a>Salesperson Performance Report</a>
-        <a>Production Report</a>
-        <a>Work Order Report</a>
+      <li><a>Reports</a><div class="dropdown">
+        <a>Invoice Report</a><a>Production Report</a>
         <a>Glass Inventory Report</a>
-        <a>Breakage Report</a>
-        <a>Rejection Report</a>
-        <a>Pending Billing Report</a>
-        <a>Billed Area Report (Sq.Mtr)</a>
-        <a>Tally Export Report</a>
-        <a>Direct Invoice Report</a>
-        <a>Credit Note Report</a>
-      </div>
-    </li>
+      </div></li>
+    </ul>
+  </div>
 
-    <!-- USERS -->
-    <li>
-      <a href="#">Users</a>
-      <div class="dropdown">
-        <a>User Management</a>
-      </div>
-    </li>
-
-  </ul>
+  <div class="content">
+    <h2>Welcome to JP Solution ERP</h2>
+    <p>Login successful.</p>
+  </div>
 </div>
 
-<div class="content">
-  <h2>Welcome to JP Solution ERP</h2>
-  <p>Menu dropdown hover karke sab options dekho.</p>
-</div>
+<script>
+setTimeout(()=>{
+  document.getElementById("splash").style.display="none";
+  document.getElementById("login").style.display="flex";
+},2000);
+
+function login(){
+  if(u.value==="jp" && p.value==="1234"){
+    login.style.display="none";
+    menuPage.style.display="block";
+  }else{
+    err.innerText="Invalid Login";
+  }
+}
+</script>
 
 </body>
 </html>
