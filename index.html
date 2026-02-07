@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JP Solutions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #374151;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* MENU BAR ONLY */
+        .menu-bar {
+            background: var(--surface);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            width: 100%;
+        }
+        
+        /* TOP ROW - MENU ITEMS */
+        .menu-row {
+            display: flex;
+            overflow-x: auto;
+            padding: 0.75rem 1rem;
+            scrollbar-width: none;
+            gap: 2px;
+            background: linear-gradient(90deg, #f8fafc, #f1f5f9);
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .menu-row::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-item {
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.75rem 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+        
+        .nav-btn:hover {
+            color: var(--text-primary);
+            background: rgba(0, 0, 0, 0.03);
+        }
+        
+        .nav-btn.dropdown-active {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.08);
+        }
+        
+        /* BOTTOM ROW - USER INFO */
+        .user-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--surface);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            width: 100%;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        /* DROPDOWN MENUS */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--surface);
+            min-width: 250px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            z-index: 1000;
+            display: none;
+            padding: 0.5rem 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .dropdown-menu.show {
+            display: block;
+            animation: dropdownFade 0.2s ease-out;
+        }
+        
+        @keyframes dropdownFade {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .dropdown-header {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .dropdown-item {
+            display: block;
+            color: var(--text-secondary);
+            padding: 0.6rem 1rem;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+        
+        .dropdown-item:hover {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+            border-left-color: var(--primary);
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0.25rem 0;
+        }
+        
+        /* MODULE CONTENT - BELOW MENU BAR */
+        .module-content {
+            display: none;
+            padding: 2rem;
+            background: var(--background);
+            width: 100%;
+            min-height: calc(100vh - 120px);
+        }
+        
+        .module-content.active {
+            display: block;
+            animation: contentFade 0.3s ease-out;
+        }
+        
+        @keyframes contentFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .module-header {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .menu-row {
+                padding: 0.5rem;
+            }
+            
+            .nav-btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+            
+            .dropdown-menu {
+                position: fixed;
+                top: 80px;
+                left: 1rem;
+                right: 1rem;
+                max-height: 60vh;
+            }
+            
+            .module-content {
+                padding: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-btn span {
+                display: none;
+            }
+            
+            .nav-btn {
+                padding: 0.75rem;
+            }
+            
+            .user-row {
+                padding: 0.75rem 1rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- MENU BAR -->
+    <div class="menu-bar">
+        <!-- TOP ROW - MENU ITEMS -->
+        <div class="menu-row">
+            <!-- 🧱 MASTERS -->
+            <div class="nav-item">
+                <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
+                    <i class="fas fa-cubes"></i>
+                    <span>Masters</span>
+                </button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">
+                        <i class="fas fa-box"></i> Product Masters
+                    </div>
+                    <button class="dropdown-item" onclick="handleSubModule('item-master')">
+                        <i class="fas fa-circle fa-xs"></i> Item Master
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('price-master')">
+                        <i class="fas fa-circle fa-xs"></i> Price Master
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('process-master')">
+                        <i class="fas fa-circle fa-xs"></i> Process Master
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('cutting-rule')">
+                        <i class="fas fa-circle fa-xs"></i> Cutting Rule (Z Rule)
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('glass-size')">
+                        <i class="fas fa-circle fa-xs"></i> Glass Size Master
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('glass-type')">
+                        <i class="fas fa-circle fa-xs"></i> Glass Type Master
+                    </button>
+                    
+                    <div class="dropdown-divider"></div>
+                    
+                    <div class="dropdown-header">
+                        <i class="fas fa-cog"></i> System Masters
+                    </div>
+                    <button class="dropdown-item" onclick="handleSubModule('route-master')">
+                        <i class="fas fa-circle fa-xs"></i> Route Master
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('payment-terms')">
+                        <i class="fas fa-circle fa-xs"></i> Payment Terms Master
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('film-type')">
+                        <i class="fas fa-circle fa-xs"></i> Film Type Master
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('bank-master')">
+                        <i class="fas fa-circle fa-xs"></i> Bank Master
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('vehicle-master')">
+                        <i class="fas fa-circle fa-xs"></i> Vehicle Master
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('additional-charges')">
+                        <i class="fas fa-circle fa-xs"></i> Additional Charges Master
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('remarks-master')">
+                        <i class="fas fa-circle fa-xs"></i> Remarks Master
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 🔁 TRANSACTIONS -->
+            <div class="nav-item">
+                <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Transactions</span>
+                </button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">
+                        <i class="fas fa-file-invoice-dollar"></i> Sales Transactions
+                    </div>
+                    <button class="dropdown-item" onclick="handleSubModule('proforma')">
+                        <i class="fas fa-circle fa-xs"></i> Proforma Invoice
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('work-order')">
+                        <i class="fas fa-circle fa-xs"></i> Work Order
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('sales-invoice')">
+                        <i class="fas fa-circle fa-xs"></i> Sales Invoice
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('direct-invoice')">
+                        <i class="fas fa-circle fa-xs"></i> Direct Invoice
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('credit-note')">
+                        <i class="fas fa-circle fa-xs"></i> Credit Note
+                    </button>
+                    
+                    <div class="dropdown-divider"></div>
+                    
+                    <div class="dropdown-header">
+                        <i class="fas fa-cut"></i> Production
+                    </div>
+                    <button class="dropdown-item" onclick="handleSubModule('cutting-optimizer')">
+                        <i class="fas fa-circle fa-xs"></i> Cutting Optimizer
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('label-generation')">
+                        <i class="fas fa-circle fa-xs"></i> Label / Sticker Generation
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 📦 INVENTORY -->
+            <div class="nav-item">
+                <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Inventory</span>
+                </button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">
+                        <i class="fas fa-boxes"></i> Stock Management
+                    </div>
+                    <button class="dropdown-item" onclick="handleSubModule('hardware-inventory')">
+                        <i class="fas fa-circle fa-xs"></i> Hardware Inventory
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('glass-inventory')">
+                        <i class="fas fa-circle fa-xs"></i> Glass Inventory
+                    </button>
+                </div>
+            </div>
+            
+            <!-- ⚙️ SETTINGS -->
+            <div class="nav-item">
+                <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>Settings</span>
+                </button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">
+                        <i class="fas fa-tools"></i> Configuration
+                    </div>
+                    <button class="dropdown-item" onclick="handleSubModule('default-config')">
+                        <i class="fas fa-circle fa-xs"></i> Default Configuration
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('file-storage')">
+                        <i class="fas fa-circle fa-xs"></i> File Storage Configuration
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('network-config')">
+                        <i class="fas fa-circle fa-xs"></i> Network Configuration
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('data-backup')">
+                        <i class="fas fa-circle fa-xs"></i> Data Backup & Restore
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('sms-email')">
+                        <i class="fas fa-circle fa-xs"></i> SMS / Email Configuration
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('billing-config')">
+                        <i class="fas fa-circle fa-xs"></i> Billing Configuration
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('print-config')">
+                        <i class="fas fa-circle fa-xs"></i> Print Configuration
+                    </button>
+                    
+                    <div class="dropdown-divider"></div>
+                    
+                    <div class="dropdown-header">
+                        <i class="fas fa-user-shield"></i> Security & Updates
+                    </div>
+                    <button class="dropdown-item" onclick="handleSubModule('user-access')">
+                        <i class="fas fa-circle fa-xs"></i> User Access Control
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('software-update')">
+                        <i class="fas fa-circle fa-xs"></i> Software Update
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 👥 CUSTOMER -->
+            <div class="nav-item">
+                <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">
+                        <i class="fas fa-address-card"></i> Customer Management
+                    </div>
+                    <button class="dropdown-item" onclick="handleSubModule('customer-registration')">
+                        <i class="fas fa-circle fa-xs"></i> Customer Registration
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('customer-list')">
+                        <i class="fas fa-circle fa-xs"></i> Customer List / Master
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 🧑‍💼 SALES -->
+            <div class="nav-item">
+                <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Sales</span>
+                </button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">
+                        <i class="fas fa-chart-line"></i> Sales Team
+                    </div>
+                    <button class="dropdown-item" onclick="handleSubModule('salesperson-registration')">
+                        <i class="fas fa-circle fa-xs"></i> Salesperson Registration
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('salesperson-list')">
+                        <i class="fas fa-circle fa-xs"></i> Salesperson List
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 📊 REPORTS -->
+            <div class="nav-item">
+                <button class="nav-btn dropdown-toggle" onclick="toggleDropdown(this)">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </button>
+                <div class="dropdown-menu" style="max-height: 500px;">
+                    <div class="dropdown-header">
+                        <i class="fas fa-file-invoice"></i> Sales Reports
+                    </div>
+                    <button class="dropdown-item" onclick="handleSubModule('proforma-report')">
+                        <i class="fas fa-circle fa-xs"></i> Proforma Report
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('invoice-report')">
+                        <i class="fas fa-circle fa-xs"></i> Invoice Report
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('salesperson-performance')">
+                        <i class="fas fa-circle fa-xs"></i> Salesperson Performance
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('direct-invoice-report')">
+                        <i class="fas fa-circle fa-xs"></i> Direct Invoice Report
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('credit-note-report')">
+                        <i class="fas fa-circle fa-xs"></i> Credit Note Report
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('pending-billing')">
+                        <i class="fas fa-circle fa-xs"></i> Pending Billing Report
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('billed-area')">
+                        <i class="fas fa-circle fa-xs"></i> Billed Area Report
+                    </button>
+                    
+                    <div class="dropdown-divider"></div>
+                    
+                    <div class="dropdown-header">
+                        <i class="fas fa-industry"></i> Production Reports
+                    </div>
+                    <button class="dropdown-item" onclick="handleSubModule('production-report')">
+                        <i class="fas fa-circle fa-xs"></i> Production Report
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('work-order-report')">
+                        <i class="fas fa-circle fa-xs"></i> Work Order Report
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('glass-inventory-report')">
+                        <i class="fas fa-circle fa-xs"></i> Glass Inventory Report
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('breakage-report')">
+                        <i class="fas fa-circle fa-xs"></i> Breakage Report
+                    </button>
+                    <button class="dropdown-item" onclick="handleSubModule('rejection-report')">
+                        <i class="fas fa-circle fa-xs"></i> Rejection Report
+                    </button>
+                    
+                    <div class="dropdown-divider"></div>
+                    
+                    <div class="dropdown-header">
+                        <i class="fas fa-database"></i> System Reports
+                    </div>
+                    <button class="dropdown-item" onclick="handleSubModule('tally-export')">
+                        <i class="fas fa-circle fa-xs"></i> Tally Export Report
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 👤 USERS -->
+            <div class="nav-item">
+                <button class="nav-btn" onclick="handleSubModule('user-management')">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Users</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- BOTTOM ROW - USER INFO -->
+        <div class="user-row">
+            <div class="text-muted">
+                <i class="fas fa-calendar-alt me-1"></i>
+                <span id="currentDateTime"></span>
+            </div>
+            <div class="user-info">
+                <span class="badge bg-primary">Admin</span>
+                <button class="btn btn-sm btn-outline-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODULE CONTENT - BELOW MENU BAR -->
+    <div class="module-content" id="moduleContent">
+        <!-- Content loads here -->
+    </div>
+
+    <script>
+        let currentDropdown = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update date time on load
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.nav-item')) {
+                    closeAllDropdowns();
+                }
+            });
+        });
+        
+        function updateDateTime() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-IN', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+            const timeStr = now.toLocaleTimeString('en-IN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('currentDateTime').textContent = 
+                `${dateStr} | ${timeStr}`;
+        }
+        
+        function toggleDropdown(button) {
+            const dropdown = button.nextElementSibling;
+            
+            closeAllDropdowns();
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('dropdown-active');
+            });
+            
+            if (!dropdown.classList.contains('show')) {
+                dropdown.classList.add('show');
+                button.classList.add('dropdown-active');
+                currentDropdown = dropdown;
+            } else {
+                currentDropdown = null;
+            }
+            
+            event.stopPropagation();
+        }
+        
+        function closeAllDropdowns() {
+            document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
+                dropdown.classList.remove('show');
+            });
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('dropdown-active');
+            });
+            
+            currentDropdown = null;
+        }
+        
+        function handleSubModule(subModule) {
+            closeAllDropdowns();
+            
+            const moduleContent = document.getElementById('moduleContent');
+            moduleContent.style.display = 'block';
+            moduleContent.classList.add('active');
+            
+            const moduleName = subModule.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            moduleContent.innerHTML = `
+                <div class="module-header">
+                    <h3><i class="fas fa-${getModuleIcon(subModule)} me-2"></i>${moduleName}</h3>
+                    <p class="text-muted mb-0">Module content will be loaded here.</p>
+                </div>
+                <div class="container">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        This is the <strong>${moduleName}</strong> module.
+                    </div>
+                    <button class="btn btn-primary" onclick="closeModule()">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Menu
+                    </button>
+                </div>
+            `;
+        }
+        
+        function closeModule() {
+            document.getElementById('moduleContent').style.display = 'none';
+            document.getElementById('moduleContent').classList.remove('active');
+        }
+        
+        function getModuleIcon(subModule) {
+            const iconMap = {
+                'item-master': 'box', 'price-master': 'tag', 'process-master': 'cogs',
+                'proforma': 'file-invoice-dollar', 'sales-invoice': 'file-invoice'
+            };
+            return iconMap[subModule] || 'cog';
+        }
+        
+        function logout() {
+            if(confirm('Are you sure you want to logout?')) {
+                closeModule();
+                alert('Logged out');
+            }
+        }
+        
+        document.addEventListener('keydown', function(e) {
+            if(e.key === 'Escape') {
+                closeAllDropdowns();
+                closeModule();
+            }
+        });
+    </script>
+</body>
+</html>
