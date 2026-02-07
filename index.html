@@ -30,20 +30,15 @@
             color: var(--text-primary);
             overflow-x: hidden;
             line-height: 1.6;
-            height: 100vh;
         }
         
-        /* ONLY MENU BAR - NO LOGIN, NO SPLASH */
+        /* MENU BAR ONLY - NO OTHER SCREENS */
         .menu-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            position: relative;
             background: var(--surface);
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
             z-index: 100;
-            display: flex;
-            flex-direction: column;
+            width: 100%;
         }
         
         /* TOP ROW - MENU ITEMS */
@@ -186,13 +181,13 @@
             margin: 0.25rem 0;
         }
         
-        /* MODULE CONTENT - ONLY SHOWS WHEN SELECTED */
+        /* MODULE CONTENT - BELOW MENU BAR */
         .module-content {
             display: none;
             padding: 2rem;
-            margin-top: 100px;
             background: var(--background);
-            min-height: calc(100vh - 100px);
+            width: 100%;
+            min-height: calc(100vh - 120px);
         }
         
         .module-content.active {
@@ -240,7 +235,6 @@
             }
             
             .module-content {
-                margin-top: 80px;
                 padding: 1rem;
             }
         }
@@ -262,7 +256,7 @@
     </style>
 </head>
 <body>
-    <!-- DIRECTLY MENU BAR - NO LOGIN -->
+    <!-- DIRECT MENU BAR - NOTHING ABOVE IT -->
     <div class="menu-bar">
         <!-- TOP ROW - MENU ITEMS -->
         <div class="menu-row">
@@ -555,7 +549,7 @@
         </div>
     </div>
     
-    <!-- MODULE CONTENT - HIDDEN BY DEFAULT -->
+    <!-- MODULE CONTENT - BELOW MENU BAR -->
     <div class="module-content" id="moduleContent">
         <!-- Content loads here -->
     </div>
@@ -641,33 +635,11 @@
                 <div class="container">
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle me-2"></i>
-                        This is the <strong>${moduleName}</strong> module. Actual functionality will be implemented here.
+                        This is the <strong>${moduleName}</strong> module.
                     </div>
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Module Features</h5>
-                                    <p>All features related to ${moduleName.toLowerCase()} will be available here.</p>
-                                    <button class="btn btn-primary" onclick="closeModule()">
-                                        <i class="fas fa-arrow-left me-2"></i>Back to Menu
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Quick Actions</h5>
-                                    <div class="d-grid gap-2">
-                                        <button class="btn btn-outline-primary">Add New</button>
-                                        <button class="btn btn-outline-success">View List</button>
-                                        <button class="btn btn-outline-info">Generate Report</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <button class="btn btn-primary" onclick="closeModule()">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Menu
+                    </button>
                 </div>
             `;
         }
@@ -679,64 +651,16 @@
         
         function getModuleIcon(subModule) {
             const iconMap = {
-                'item-master': 'box',
-                'price-master': 'tag',
-                'process-master': 'cogs',
-                'cutting-rule': 'cut',
-                'glass-size': 'expand-alt',
-                'glass-type': 'glass-whiskey',
-                'route-master': 'route',
-                'payment-terms': 'handshake',
-                'film-type': 'film',
-                'bank-master': 'university',
-                'vehicle-master': 'truck',
-                'additional-charges': 'coins',
-                'remarks-master': 'comment-alt',
-                'proforma': 'file-invoice-dollar',
-                'work-order': 'clipboard-list',
-                'sales-invoice': 'file-invoice',
-                'direct-invoice': 'receipt',
-                'credit-note': 'undo-alt',
-                'cutting-optimizer': 'cut',
-                'label-generation': 'tags',
-                'hardware-inventory': 'tools',
-                'glass-inventory': 'glass-whiskey',
-                'default-config': 'cog',
-                'file-storage': 'hdd',
-                'network-config': 'network-wired',
-                'data-backup': 'database',
-                'sms-email': 'envelope',
-                'billing-config': 'file-invoice-dollar',
-                'print-config': 'print',
-                'user-access': 'user-shield',
-                'software-update': 'sync-alt',
-                'customer-registration': 'user-plus',
-                'customer-list': 'list-alt',
-                'salesperson-registration': 'user-plus',
-                'salesperson-list': 'users-cog',
-                'proforma-report': 'file-invoice',
-                'invoice-report': 'file-invoice-dollar',
-                'salesperson-performance': 'chart-line',
-                'production-report': 'industry',
-                'work-order-report': 'clipboard-check',
-                'glass-inventory-report': 'boxes',
-                'breakage-report': 'times-circle',
-                'rejection-report': 'ban',
-                'direct-invoice-report': 'receipt',
-                'credit-note-report': 'undo-alt',
-                'pending-billing': 'clock',
-                'billed-area': 'ruler-combined',
-                'tally-export': 'file-export',
-                'user-management': 'users-cog'
+                'item-master': 'box', 'price-master': 'tag', 'process-master': 'cogs',
+                'proforma': 'file-invoice-dollar', 'sales-invoice': 'file-invoice'
             };
-            
             return iconMap[subModule] || 'cog';
         }
         
         function logout() {
             if(confirm('Are you sure you want to logout?')) {
                 closeModule();
-                alert('Logged out (Page would normally redirect to login)');
+                alert('Logged out');
             }
         }
         
