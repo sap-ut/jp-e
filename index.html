@@ -5,19 +5,16 @@
 <title>JP Solution ERP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- ICONS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial}
 body{background:#e8f2ff;color:#0f172a}
 
-/* COLORS */
 :root{
   --blue-dark:#0b3c6d;
   --blue:#1e88e5;
   --blue-soft:#e3f2fd;
-  --white:#fff;
 }
 
 /* SPLASH */
@@ -35,15 +32,12 @@ body{background:#e8f2ff;color:#0f172a}
   background:linear-gradient(135deg,#1e88e5,#64b5f6);
   display:flex;align-items:center;justify-content:center;
   font-size:60px;font-weight:800;
-  animation:zoom 2s ease;
+  animation:zoom 1.5s ease;
 }
-@keyframes zoom{
-  from{transform:scale(0)}
-  to{transform:scale(1)}
-}
+@keyframes zoom{from{transform:scale(0)}to{transform:scale(1)}}
 
 /* LOGIN */
-#login{
+#loginPage{
   display:none;
   height:100vh;
   justify-content:center;
@@ -73,7 +67,6 @@ body{background:#e8f2ff;color:#0f172a}
   background:var(--blue);
   color:#fff;
   font-weight:600;
-  cursor:pointer;
 }
 #error{text-align:center;color:red;margin-top:6px}
 
@@ -86,13 +79,8 @@ body{background:#e8f2ff;color:#0f172a}
   color:#fff;
   padding:12px 16px;
   display:flex;
-  align-items:center;
-  gap:14px;
+  gap:12px;
   overflow-x:auto;
-}
-.topbar span{
-  font-weight:700;
-  margin-right:20px;
 }
 .menu-btn{
   background:transparent;
@@ -102,15 +90,12 @@ body{background:#e8f2ff;color:#0f172a}
   border-radius:8px;
   cursor:pointer;
   white-space:nowrap;
-  font-size:14px;
 }
 .menu-btn i{margin-right:6px;font-size:13px}
 .menu-btn:hover{background:#1565c0}
 
 /* CONTENT */
-.content{
-  padding:24px;
-}
+.content{padding:24px}
 .card{
   background:#fff;
   padding:22px;
@@ -129,12 +114,12 @@ body{background:#e8f2ff;color:#0f172a}
 </div>
 
 <!-- LOGIN -->
-<div id="login">
+<div id="loginPage">
   <div class="login-box">
     <h2>Login</h2>
     <input id="username" placeholder="Username">
     <input id="password" type="password" placeholder="Password">
-    <button onclick="login()">Login</button>
+    <button onclick="doLogin()">Login</button>
     <div id="error"></div>
   </div>
 </div>
@@ -142,56 +127,59 @@ body{background:#e8f2ff;color:#0f172a}
 <!-- DASHBOARD -->
 <div id="dashboard">
 
-  <!-- TOP MENU -->
   <div class="topbar">
-    <span>JP ERP</span>
-
     <button class="menu-btn"><i class="fa-solid fa-database"></i>Masters</button>
     <button class="menu-btn"><i class="fa-solid fa-repeat"></i>Transactions</button>
     <button class="menu-btn"><i class="fa-solid fa-boxes-stacked"></i>Inventory</button>
     <button class="menu-btn"><i class="fa-solid fa-cart-shopping"></i>Sales</button>
     <button class="menu-btn"><i class="fa-solid fa-truck"></i>Purchase</button>
     <button class="menu-btn"><i class="fa-solid fa-user"></i>Customers</button>
-    <button class="menu-btn"><i class="fa-solid fa-building"></i>Vendors</button>
     <button class="menu-btn"><i class="fa-solid fa-chart-line"></i>Reports</button>
-    <button class="menu-btn"><i class="fa-solid fa-users"></i>Users</button>
-    <button class="menu-btn"><i class="fa-solid fa-gear"></i>Settings</button>
-    <button class="menu-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i>Logout</button>
+    <button class="menu-btn" onclick="logout()">
+      <i class="fa-solid fa-right-from-bracket"></i>Logout
+    </button>
   </div>
 
-  <!-- CONTENT -->
   <div class="content">
     <div class="card">
       <h2>Welcome to JP Solution ERP</h2>
-      <p>Menu bar upar fixed hai. Next step: forms, GST, reports.</p>
+      <p>Top menu stable hai. Ab modules build kar sakte hain.</p>
     </div>
   </div>
 
 </div>
 
 <script>
+const splash = document.getElementById("splash");
+const loginPage = document.getElementById("loginPage");
+const dashboard = document.getElementById("dashboard");
+
 setTimeout(()=>{
   splash.style.display="none";
-  login.style.display="flex";
+  loginPage.style.display="flex";
 },2000);
 
-var users={
+const users = {
   admin:"admin",
   jp:"1234",
   user:"user"
 };
 
-function login(){
-  if(users[username.value]===password.value){
-    login.style.display="none";
+function doLogin(){
+  const u = username.value.trim();
+  const p = password.value.trim();
+
+  if(users[u] && users[u]===p){
+    loginPage.style.display="none";
     dashboard.style.display="block";
   }else{
     error.innerText="Invalid username or password";
   }
 }
+
 function logout(){
   dashboard.style.display="none";
-  login.style.display="flex";
+  loginPage.style.display="flex";
 }
 </script>
 
