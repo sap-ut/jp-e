@@ -2,116 +2,121 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>JP ERP</title>
+<title>JP Solutions ERP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
-
-/* ===== LOGIN ===== */
-#loginPage{
-  height:100vh;
-  background:linear-gradient(135deg,#0d47a1,#1976d2);
-  display:flex;
-  justify-content:center;
-  align-items:center;
+:root{
+  --blue:#0d6efd;
+  --light:#e9f2ff;
+  --dark:#0a2a43;
 }
-.login-box{
-  background:#fff;
+*{box-sizing:border-box;font-family:Segoe UI,Arial}
+body{
+  margin:0;
+  background:linear-gradient(135deg,#e6f0ff,#f9fcff);
+  min-height:100vh;
+}
+
+/* LOGIN */
+#loginBox{
+  width:100%;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.login-card{
+  background:white;
+  padding:30px;
   width:320px;
-  padding:25px;
-  border-radius:10px;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
   text-align:center;
 }
-.login-box h2{
-  margin-bottom:15px;
-  color:#0d47a1;
+.login-card h2{
+  color:var(--dark);
+  margin-bottom:10px;
 }
-.login-box input{
+.login-card input{
   width:100%;
   padding:10px;
   margin:8px 0;
+  border-radius:6px;
   border:1px solid #ccc;
-  border-radius:5px;
 }
-.login-box button{
+.login-card button{
   width:100%;
   padding:10px;
-  background:#0d47a1;
-  color:#fff;
+  background:var(--blue);
+  color:white;
   border:none;
-  border-radius:5px;
+  border-radius:6px;
   cursor:pointer;
-  margin-top:10px;
 }
-.login-box button:hover{background:#08306b}
+.error{color:red;font-size:13px}
 
-/* ===== APP ===== */
-#app{display:none}
+/* APP */
+#app{
+  display:none;
+}
 
-/* ===== TOP MENU BAR ===== */
-.topbar{
-  background:#0d47a1;
-  color:#fff;
+/* TOP MENU */
+.navbar{
   display:flex;
   align-items:center;
-  padding:0 10px;
-  height:48px;
+  background:var(--blue);
+  padding:10px;
+  color:white;
+  overflow-x:auto;
 }
-.logo{
-  font-weight:bold;
+.brand{
+  font-weight:600;
   margin-right:20px;
-  letter-spacing:1px;
+  white-space:nowrap;
 }
 .menu{
   display:flex;
   gap:15px;
 }
-
-/* ===== MENU ITEM ===== */
 .menu-item{
   position:relative;
   cursor:pointer;
-  font-size:14px;
-  padding:6px 4px;
   white-space:nowrap;
 }
-
-/* ===== DROPDOWN ===== */
+.menu-item:hover .dropdown{
+  display:block;
+}
 .dropdown{
   display:none;
   position:absolute;
-  top:100%;
+  top:28px;
   left:0;
-  background:#fff;
-  width:max-content;
-  min-width:220px;
-  border-radius:8px;
-  box-shadow:0 12px 30px rgba(0,0,0,.3);
-  z-index:9999;
-  padding:6px 0;
+  background:white;
+  min-width:max-content;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+  border-radius:6px;
+  z-index:99;
 }
-.dropdown.show{display:block}
 .dropdown div{
-  padding:8px 16px;
-  font-size:13px;
-  color:#333;
+  padding:8px 14px;
+  color:#000;
+  cursor:pointer;
   white-space:nowrap;
 }
 .dropdown div:hover{
-  background:#e3f2fd;
+  background:var(--light);
 }
 
-/* ===== CONTENT ===== */
+/* CONTENT */
 .content{
   padding:20px;
 }
 .box{
-  background:#f5f7fa;
+  background:white;
   padding:20px;
-  border-radius:10px;
-  box-shadow:0 4px 10px rgba(0,0,0,.1);
+  border-radius:12px;
+  box-shadow:0 6px 20px rgba(0,0,0,.1);
 }
 </style>
 </head>
@@ -119,96 +124,115 @@
 <body>
 
 <!-- LOGIN -->
-<div id="loginPage">
-  <div class="login-box">
-    <h2>JP ERP Login</h2>
-    <input type="text" placeholder="Username">
-    <input type="password" placeholder="Password">
+<div id="loginBox">
+  <div class="login-card">
+    <h2>JP Solutions ERP</h2>
+    <p style="font-size:13px;color:#555">Powered by JP</p>
+    <input id="user" placeholder="Username">
+    <input id="pass" type="password" placeholder="Password">
     <button onclick="login()">Login</button>
+    <div class="error" id="err"></div>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app">
-  <div class="topbar">
-    <div class="logo">JP ERP</div>
+  <div class="navbar">
+    <div class="brand">JP ERP</div>
 
     <div class="menu">
-      <div class="menu-item" onclick="toggleMenu(this,event)">
-        Masters
+
+      <div class="menu-item">Masters
         <div class="dropdown">
-          <div>Customer Master</div>
-          <div>Supplier Master</div>
           <div>Item Master</div>
+          <div>Price Master</div>
+          <div>Process Master</div>
+          <div>Cutting Rule</div>
+          <div>Glass Size Master</div>
+          <div>Glass Type Master</div>
+          <div>Route Master</div>
+          <div>Payment Terms</div>
+          <div>Film Type</div>
+          <div>Bank Master</div>
+          <div>Vehicle Master</div>
+          <div>Additional Charges</div>
+          <div>Remarks Master</div>
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggleMenu(this,event)">
-        Sales
+      <div class="menu-item">Transactions
         <div class="dropdown">
-          <div>Quotation</div>
-          <div>Sales Order</div>
-          <div>Invoice</div>
+          <div>Proforma Invoice</div>
+          <div>Work Order</div>
+          <div>Sales Invoice</div>
+          <div>Cutting Optimizer</div>
+          <div>Label / Sticker</div>
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggleMenu(this,event)">
-        Purchase
+      <div class="menu-item">Inventory
         <div class="dropdown">
-          <div>Purchase Order</div>
-          <div>Purchase Entry</div>
+          <div>Glass Inventory</div>
+          <div>Hardware Inventory</div>
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggleMenu(this,event)">
-        Accounts
+      <div class="menu-item">Customers
         <div class="dropdown">
-          <div>Receipt</div>
-          <div>Payment</div>
-          <div>Ledger</div>
+          <div>Customer Registration</div>
+          <div>Customer Master</div>
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggleMenu(this,event)">
-        Reports
+      <div class="menu-item">Sales
         <div class="dropdown">
-          <div>Sales Report</div>
-          <div>Purchase Report</div>
-          <div>GST Report</div>
+          <div>Salesperson Registration</div>
+          <div>Salesperson List</div>
         </div>
       </div>
+
+      <div class="menu-item">Reports
+        <div class="dropdown">
+          <div>Invoice Report</div>
+          <div>Production Report</div>
+          <div>Inventory Report</div>
+          <div>Pending Billing</div>
+          <div>Billed Area Report</div>
+          <div>Tally Export</div>
+        </div>
+      </div>
+
+      <div class="menu-item">System
+        <div class="dropdown">
+          <div>Configuration</div>
+          <div>Backup & Restore</div>
+          <div>User Access</div>
+          <div>Print Settings</div>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <div class="content">
     <div class="box">
       <h3>Dashboard</h3>
-      <p>Select any menu option from top bar.</p>
+      <p>Select any menu option to continue.</p>
     </div>
   </div>
 </div>
 
 <script>
 function login(){
-  document.getElementById('loginPage').style.display='none';
-  document.getElementById('app').style.display='block';
+  const u=document.getElementById("user").value;
+  const p=document.getElementById("pass").value;
+  if(u==="admin" && p==="admin123"){
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("app").style.display="block";
+  }else{
+    document.getElementById("err").innerText="Invalid username or password";
+  }
 }
-
-/* ===== MENU CONTROL ===== */
-function toggleMenu(el,e){
-  e.stopPropagation();
-  closeAll();
-  el.querySelector('.dropdown').classList.toggle('show');
-}
-
-function closeAll(){
-  document.querySelectorAll('.dropdown')
-    .forEach(d=>d.classList.remove('show'));
-}
-
-document.body.addEventListener('click',closeAll);
-document.querySelectorAll('.dropdown')
-  .forEach(d=>d.addEventListener('click',e=>e.stopPropagation()));
 </script>
 
 </body>
