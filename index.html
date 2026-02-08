@@ -4,54 +4,43 @@
 <meta charset="UTF-8">
 <title>JP Solution ERP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial}
-body{background:#e8f2ff;color:#0f172a}
+body{background:#0b3c6d}
 
-:root{
-  --blue-dark:#0b3c6d;
-  --blue:#1e88e5;
-  --blue-soft:#e3f2fd;
-}
-
-/* SPLASH */
+/* ===== SPLASH ===== */
 #splash{
   height:100vh;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
-  background:var(--blue-dark);
+  align-items:center;
+  background:#0b3c6d;
   color:#fff;
 }
-.logo{
-  width:140px;height:140px;border-radius:50%;
-  background:linear-gradient(135deg,#1e88e5,#64b5f6);
-  display:flex;align-items:center;justify-content:center;
-  font-size:60px;font-weight:800;
-  animation:zoom 1.5s ease;
-}
-@keyframes zoom{from{transform:scale(0)}to{transform:scale(1)}}
+#splash svg{width:140px}
 
-/* LOGIN */
-#loginPage{
+/* ===== LOGIN ===== */
+#login{
   display:none;
   height:100vh;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(120deg,#bbdefb,#e3f2fd);
+  background:#0b3c6d;
+  position:relative;
 }
 .login-box{
   background:#fff;
-  padding:28px;
   width:360px;
-  border-radius:18px;
-  box-shadow:0 20px 40px rgba(0,0,0,.2);
+  padding:28px;
+  border-radius:16px;
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
 }
-.login-box h2{text-align:center;color:var(--blue);margin-bottom:14px}
+.login-box h2{text-align:center;color:#1e88e5;margin-bottom:10px}
+.login-box svg{display:block;margin:0 auto 10px;width:80px;opacity:.9}
 .login-box input{
   width:100%;
   padding:12px;
@@ -64,44 +53,51 @@ body{background:#e8f2ff;color:#0f172a}
   padding:12px;
   border:none;
   border-radius:10px;
-  background:var(--blue);
+  background:#1e88e5;
   color:#fff;
   font-weight:600;
 }
-#error{text-align:center;color:red;margin-top:6px}
+#error{color:red;text-align:center}
 
-/* DASHBOARD */
-#dashboard{display:none}
+/* ===== DASHBOARD ===== */
+#dash{display:none;background:#e3f2fd;min-height:100vh}
 
-/* TOP MENU */
+/* ===== TOP MENU ===== */
 .topbar{
-  background:var(--blue-dark);
-  color:#fff;
-  padding:12px 16px;
+  background:#0b3c6d;
   display:flex;
-  gap:12px;
-  overflow-x:auto;
+  align-items:center;
+  gap:10px;
+  padding:10px;
 }
-.menu-btn{
-  background:transparent;
+.topbar svg{width:34px}
+
+.menu{position:relative}
+.menu button{
+  background:none;
   border:none;
   color:#fff;
   padding:8px 12px;
-  border-radius:8px;
   cursor:pointer;
-  white-space:nowrap;
 }
-.menu-btn i{margin-right:6px;font-size:13px}
-.menu-btn:hover{background:#1565c0}
-
-/* CONTENT */
-.content{padding:24px}
-.card{
+.menu i{margin-right:6px}
+.dropdown{
+  display:none;
+  position:absolute;
+  top:100%;
+  left:0;
   background:#fff;
-  padding:22px;
-  border-radius:16px;
-  box-shadow:0 10px 20px rgba(0,0,0,.1);
+  min-width:220px;
+  box-shadow:0 10px 20px rgba(0,0,0,.2);
 }
+.dropdown a{
+  display:block;
+  padding:10px;
+  text-decoration:none;
+  color:#000;
+}
+.dropdown a:hover{background:#e3f2fd}
+.menu:hover .dropdown{display:block}
 </style>
 </head>
 
@@ -109,77 +105,89 @@ body{background:#e8f2ff;color:#0f172a}
 
 <!-- SPLASH -->
 <div id="splash">
-  <div class="logo">JP</div>
-  <h3 style="margin-top:10px">Powered by JP</h3>
+  <!-- JP LOGO INLINE -->
+  <svg viewBox="0 0 200 200">
+    <circle cx="100" cy="100" r="95" fill="#1e88e5"/>
+    <text x="50%" y="55%" text-anchor="middle" font-size="80" fill="#fff" font-weight="bold">JP</text>
+    <text x="50%" y="78%" text-anchor="middle" font-size="18" fill="#e3f2fd">Solutions</text>
+  </svg>
+  <h3>Loading ERP...</h3>
 </div>
 
 <!-- LOGIN -->
-<div id="loginPage">
+<div id="login">
   <div class="login-box">
+    <svg viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="95" fill="#1e88e5"/>
+      <text x="50%" y="55%" text-anchor="middle" font-size="70" fill="#fff" font-weight="bold">JP</text>
+    </svg>
     <h2>Login</h2>
-    <input id="username" placeholder="Username">
-    <input id="password" type="password" placeholder="Password">
-    <button onclick="doLogin()">Login</button>
+    <input id="u" placeholder="Username">
+    <input id="p" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
     <div id="error"></div>
   </div>
 </div>
 
 <!-- DASHBOARD -->
-<div id="dashboard">
-
+<div id="dash">
   <div class="topbar">
-    <button class="menu-btn"><i class="fa-solid fa-database"></i>Masters</button>
-    <button class="menu-btn"><i class="fa-solid fa-repeat"></i>Transactions</button>
-    <button class="menu-btn"><i class="fa-solid fa-boxes-stacked"></i>Inventory</button>
-    <button class="menu-btn"><i class="fa-solid fa-cart-shopping"></i>Sales</button>
-    <button class="menu-btn"><i class="fa-solid fa-truck"></i>Purchase</button>
-    <button class="menu-btn"><i class="fa-solid fa-user"></i>Customers</button>
-    <button class="menu-btn"><i class="fa-solid fa-chart-line"></i>Reports</button>
-    <button class="menu-btn" onclick="logout()">
-      <i class="fa-solid fa-right-from-bracket"></i>Logout
-    </button>
-  </div>
+    <svg viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="95" fill="#1e88e5"/>
+      <text x="50%" y="60%" text-anchor="middle" font-size="60" fill="#fff" font-weight="bold">JP</text>
+    </svg>
 
-  <div class="content">
-    <div class="card">
-      <h2>Welcome to JP Solution ERP</h2>
-      <p>Top menu stable hai. Ab modules build kar sakte hain.</p>
+    <div class="menu">
+      <button><i class="fa fa-database"></i>Masters</button>
+      <div class="dropdown">
+        <a>Item Master</a>
+        <a>Price Master</a>
+        <a>Process Master</a>
+      </div>
+    </div>
+
+    <div class="menu">
+      <button><i class="fa fa-repeat"></i>Transactions</button>
+      <div class="dropdown">
+        <a>Proforma</a>
+        <a>Work Order</a>
+        <a>Invoice</a>
+      </div>
+    </div>
+
+    <div class="menu">
+      <button><i class="fa fa-chart-line"></i>Reports</button>
+      <div class="dropdown">
+        <a>Sales</a>
+        <a>Production</a>
+      </div>
+    </div>
+
+    <div class="menu">
+      <button onclick="logout()"><i class="fa fa-sign-out"></i>Logout</button>
     </div>
   </div>
-
 </div>
 
 <script>
-const splash = document.getElementById("splash");
-const loginPage = document.getElementById("loginPage");
-const dashboard = document.getElementById("dashboard");
-
 setTimeout(()=>{
   splash.style.display="none";
-  loginPage.style.display="flex";
+  login.style.display="block";
 },2000);
 
-const users = {
-  admin:"admin",
-  jp:"1234",
-  user:"user"
-};
+const users={admin:"admin",jp:"1234"};
 
-function doLogin(){
-  const u = username.value.trim();
-  const p = password.value.trim();
-
-  if(users[u] && users[u]===p){
-    loginPage.style.display="none";
-    dashboard.style.display="block";
+function login(){
+  if(users[u.value]===p.value){
+    login.style.display="none";
+    dash.style.display="block";
   }else{
-    error.innerText="Invalid username or password";
+    error.innerText="Invalid login";
   }
 }
-
 function logout(){
-  dashboard.style.display="none";
-  loginPage.style.display="flex";
+  dash.style.display="none";
+  login.style.display="block";
 }
 </script>
 
