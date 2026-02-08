@@ -9,114 +9,70 @@
 :root{
   --blue:#0d6efd;
   --light:#e9f2ff;
-  --dark:#0a2a43;
 }
 *{box-sizing:border-box;font-family:Segoe UI,Arial}
-body{
-  margin:0;
-  background:linear-gradient(135deg,#e6f0ff,#f9fcff);
-  min-height:100vh;
-}
+body{margin:0;background:#f4f8ff}
 
 /* LOGIN */
 #loginBox{
-  width:100%;
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  height:100vh;display:flex;align-items:center;justify-content:center;
 }
-.login-card{
-  background:white;
-  padding:30px;
-  width:320px;
-  border-radius:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,.15);
-  text-align:center;
+.login{
+  background:#fff;padding:30px;width:320px;border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);text-align:center
 }
-.login-card h2{
-  color:var(--dark);
-  margin-bottom:10px;
+.login h2{margin:0;color:#0a2a43}
+.login input{
+  width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid #ccc
 }
-.login-card input{
-  width:100%;
-  padding:10px;
-  margin:8px 0;
-  border-radius:6px;
-  border:1px solid #ccc;
-}
-.login-card button{
-  width:100%;
-  padding:10px;
-  background:var(--blue);
-  color:white;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
+.login button{
+  width:100%;padding:10px;border:none;border-radius:6px;
+  background:var(--blue);color:#fff;cursor:pointer
 }
 .error{color:red;font-size:13px}
 
 /* APP */
-#app{
-  display:none;
-}
+#app{display:none}
 
-/* TOP MENU */
+/* NAVBAR */
 .navbar{
+  background:var(--blue);
   display:flex;
   align-items:center;
-  background:var(--blue);
   padding:10px;
-  color:white;
+  color:#fff;
   overflow-x:auto;
 }
-.brand{
-  font-weight:600;
-  margin-right:20px;
-  white-space:nowrap;
-}
-.menu{
-  display:flex;
-  gap:15px;
-}
-.menu-item{
-  position:relative;
-  cursor:pointer;
-  white-space:nowrap;
-}
-.menu-item:hover .dropdown{
-  display:block;
-}
+.brand{font-weight:600;margin-right:20px;white-space:nowrap}
+.menu{display:flex;gap:14px}
+.menu-item{position:relative;cursor:pointer;white-space:nowrap}
+.menu-item span{padding:6px 10px;display:block}
+
+/* DROPDOWN */
 .dropdown{
   display:none;
   position:absolute;
-  top:28px;
+  top:36px;
   left:0;
-  background:white;
-  min-width:max-content;
-  box-shadow:0 6px 20px rgba(0,0,0,.15);
-  border-radius:6px;
-  z-index:99;
+  background:#fff;
+  color:#000;
+  min-width:220px;
+  border-radius:8px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  z-index:999;
 }
 .dropdown div{
   padding:8px 14px;
-  color:#000;
   cursor:pointer;
   white-space:nowrap;
 }
-.dropdown div:hover{
-  background:var(--light);
-}
+.dropdown div:hover{background:var(--light)}
 
 /* CONTENT */
-.content{
-  padding:20px;
-}
+.content{padding:20px}
 .box{
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 6px 20px rgba(0,0,0,.1);
+  background:#fff;padding:20px;border-radius:12px;
+  box-shadow:0 6px 20px rgba(0,0,0,.1)
 }
 </style>
 </head>
@@ -125,11 +81,11 @@ body{
 
 <!-- LOGIN -->
 <div id="loginBox">
-  <div class="login-card">
+  <div class="login">
     <h2>JP Solutions ERP</h2>
     <p style="font-size:13px;color:#555">Powered by JP</p>
-    <input id="user" placeholder="Username">
-    <input id="pass" type="password" placeholder="Password">
+    <input id="u" placeholder="Username">
+    <input id="p" type="password" placeholder="Password">
     <button onclick="login()">Login</button>
     <div class="error" id="err"></div>
   </div>
@@ -139,15 +95,15 @@ body{
 <div id="app">
   <div class="navbar">
     <div class="brand">JP ERP</div>
-
     <div class="menu">
 
-      <div class="menu-item">Masters
+      <div class="menu-item" onclick="toggle(this)">
+        <span>Masters</span>
         <div class="dropdown">
           <div>Item Master</div>
           <div>Price Master</div>
           <div>Process Master</div>
-          <div>Cutting Rule</div>
+          <div>Cutting Rule (Z Rule)</div>
           <div>Glass Size Master</div>
           <div>Glass Type Master</div>
           <div>Route Master</div>
@@ -160,54 +116,72 @@ body{
         </div>
       </div>
 
-      <div class="menu-item">Transactions
+      <div class="menu-item" onclick="toggle(this)">
+        <span>Transactions</span>
         <div class="dropdown">
           <div>Proforma Invoice</div>
           <div>Work Order</div>
           <div>Sales Invoice</div>
           <div>Cutting Optimizer</div>
-          <div>Label / Sticker</div>
+          <div>Label / Sticker Generation</div>
         </div>
       </div>
 
-      <div class="menu-item">Inventory
+      <div class="menu-item" onclick="toggle(this)">
+        <span>Inventory</span>
         <div class="dropdown">
           <div>Glass Inventory</div>
           <div>Hardware Inventory</div>
         </div>
       </div>
 
-      <div class="menu-item">Customers
+      <div class="menu-item" onclick="toggle(this)">
+        <span>Customers</span>
         <div class="dropdown">
           <div>Customer Registration</div>
           <div>Customer Master</div>
         </div>
       </div>
 
-      <div class="menu-item">Sales
+      <div class="menu-item" onclick="toggle(this)">
+        <span>Sales</span>
         <div class="dropdown">
           <div>Salesperson Registration</div>
           <div>Salesperson List</div>
         </div>
       </div>
 
-      <div class="menu-item">Reports
+      <div class="menu-item" onclick="toggle(this)">
+        <span>Reports</span>
         <div class="dropdown">
+          <div>Proforma Report</div>
           <div>Invoice Report</div>
+          <div>Salesperson Performance</div>
           <div>Production Report</div>
-          <div>Inventory Report</div>
+          <div>Work Order Report</div>
+          <div>Glass Inventory Report</div>
+          <div>Breakage Report</div>
+          <div>Rejection Report</div>
           <div>Pending Billing</div>
           <div>Billed Area Report</div>
           <div>Tally Export</div>
+          <div>Direct Invoice</div>
+          <div>Credit Note</div>
         </div>
       </div>
 
-      <div class="menu-item">System
+      <div class="menu-item" onclick="toggle(this)">
+        <span>System</span>
         <div class="dropdown">
-          <div>Configuration</div>
+          <div>Default Configuration</div>
+          <div>File Storage</div>
+          <div>Network</div>
           <div>Backup & Restore</div>
+          <div>SMS / Email</div>
+          <div>Billing</div>
+          <div>Print</div>
           <div>User Access</div>
-          <div>Print Settings</div>
+          <div>Software Update</div>
         </div>
       </div>
 
@@ -217,20 +191,32 @@ body{
   <div class="content">
     <div class="box">
       <h3>Dashboard</h3>
-      <p>Select any menu option to continue.</p>
+      <p>Menu pe click karke module open karo.</p>
     </div>
   </div>
 </div>
 
 <script>
 function login(){
-  const u=document.getElementById("user").value;
-  const p=document.getElementById("pass").value;
-  if(u==="admin" && p==="admin123"){
-    document.getElementById("loginBox").style.display="none";
-    document.getElementById("app").style.display="block";
+  if(u.value==="admin" && p.value==="admin123"){
+    loginBox.style.display="none";
+    app.style.display="block";
   }else{
-    document.getElementById("err").innerText="Invalid username or password";
+    err.innerText="Invalid username or password";
+  }
+}
+
+function toggle(el){
+  document.querySelectorAll('.dropdown').forEach(d=>{
+    if(d!==el.querySelector('.dropdown')) d.style.display="none";
+  });
+  const d=el.querySelector('.dropdown');
+  d.style.display = d.style.display==="block" ? "none":"block";
+}
+
+document.body.onclick=function(e){
+  if(!e.target.closest('.menu-item')){
+    document.querySelectorAll('.dropdown').forEach(d=>d.style.display="none");
   }
 }
 </script>
