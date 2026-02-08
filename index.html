@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>JP Solutions ERP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
 :root{
   --blue:#0d6efd;
@@ -55,19 +54,17 @@ body{margin:0;background:#f4f8ff}
 .menu-item{position:relative;cursor:pointer;flex-shrink:0}
 .menu-item span{padding:6px 10px;display:block;}
 
-/* DROPDOWN */
+/* DROPDOWN - FIXED so always visible */
 .dropdown{
   display:none;
-  position:absolute;
-  top:100%;
-  left:0;
+  position:fixed;
   background:#fff;
   color:#000;
   border-radius:8px;
   box-shadow:0 6px 20px rgba(0,0,0,.2);
   z-index:9999;
-  min-width:auto;
   padding:4px 0;
+  min-width:auto;
 }
 .dropdown div{
   padding:6px 12px;
@@ -76,7 +73,6 @@ body{margin:0;background:#f4f8ff}
 }
 .dropdown div:hover{background:var(--light)}
 
-/* CONTENT */
 .content{
   padding:20px;
   position:relative;
@@ -84,7 +80,6 @@ body{margin:0;background:#f4f8ff}
 }
 </style>
 </head>
-
 <body>
 
 <!-- LOGIN -->
@@ -105,7 +100,7 @@ body{margin:0;background:#f4f8ff}
     <div class="brand">JP ERP</div>
     <div class="menu">
 
-      <div class="menu-item" onclick="toggle(this)">
+      <div class="menu-item" onclick="toggleDropdown(event,this)">
         <span>🧱 Masters</span>
         <div class="dropdown">
           <div>Item Master</div>
@@ -124,7 +119,7 @@ body{margin:0;background:#f4f8ff}
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggle(this)">
+      <div class="menu-item" onclick="toggleDropdown(event,this)">
         <span>🔁 Transactions</span>
         <div class="dropdown">
           <div>Proforma Invoice</div>
@@ -135,7 +130,7 @@ body{margin:0;background:#f4f8ff}
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggle(this)">
+      <div class="menu-item" onclick="toggleDropdown(event,this)">
         <span>📦 Inventory / Stock</span>
         <div class="dropdown">
           <div>Hardware Inventory</div>
@@ -143,7 +138,7 @@ body{margin:0;background:#f4f8ff}
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggle(this)">
+      <div class="menu-item" onclick="toggleDropdown(event,this)">
         <span>⚙️ System Settings</span>
         <div class="dropdown">
           <div>Default Configuration</div>
@@ -158,7 +153,7 @@ body{margin:0;background:#f4f8ff}
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggle(this)">
+      <div class="menu-item" onclick="toggleDropdown(event,this)">
         <span>👥 Customer Management</span>
         <div class="dropdown">
           <div>Customer Registration</div>
@@ -166,7 +161,7 @@ body{margin:0;background:#f4f8ff}
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggle(this)">
+      <div class="menu-item" onclick="toggleDropdown(event,this)">
         <span>🧑‍💼 Sales Management</span>
         <div class="dropdown">
           <div>Salesperson Registration</div>
@@ -174,7 +169,7 @@ body{margin:0;background:#f4f8ff}
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggle(this)">
+      <div class="menu-item" onclick="toggleDropdown(event,this)">
         <span>📊 Reports</span>
         <div class="dropdown">
           <div>Proforma Report</div>
@@ -193,7 +188,7 @@ body{margin:0;background:#f4f8ff}
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggle(this)">
+      <div class="menu-item" onclick="toggleDropdown(event,this)">
         <span>👤 User Management</span>
         <div class="dropdown">
           <div>User Management</div>
@@ -218,18 +213,22 @@ function login(){
   }
 }
 
-function toggle(el){
-  document.querySelectorAll('.dropdown').forEach(d=>{
-    if(d!==el.querySelector('.dropdown')) d.style.display="none";
+function toggleDropdown(event,el){
+  event.stopPropagation(); // prevent body click
+  const d = el.querySelector('.dropdown');
+  const rect = el.getBoundingClientRect();
+  d.style.top = rect.bottom + "px";
+  d.style.left = rect.left + "px";
+
+  document.querySelectorAll('.dropdown').forEach(drop=>{
+    if(drop!==d) drop.style.display="none";
   });
-  const d=el.querySelector('.dropdown');
+
   d.style.display = d.style.display==="block" ? "none":"block";
 }
 
-document.body.onclick=function(e){
-  if(!e.target.closest('.menu-item')){
-    document.querySelectorAll('.dropdown').forEach(d=>d.style.display="none");
-  }
+document.body.onclick=function(){
+  document.querySelectorAll('.dropdown').forEach(d=>d.style.display="none");
 }
 </script>
 
