@@ -6,24 +6,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-*{box-sizing:border-box;font-family:Segoe UI,Arial;margin:0;padding:0}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial}
 body{background:#0f172a;color:#fff}
 
-/* ===== JP LOGO ===== */
+/* ===== LOGO ===== */
 .jp-logo{
-  width:150px;height:150px;
-  border-radius:50%;
+  width:150px;height:150px;border-radius:50%;
   background:linear-gradient(135deg,#22c55e,#0ea5e9);
   display:flex;align-items:center;justify-content:center;
   font-size:64px;font-weight:800;
   position:relative;
-  box-shadow:0 25px 50px rgba(0,0,0,.4);
 }
 .jp-logo::after{
-  content:"★";
-  position:absolute;
-  top:-10px;right:18px;
-  color:#fde047;font-size:28px;
+  content:"★";position:absolute;top:-10px;right:18px;
+  font-size:28px;color:#fde047;
 }
 
 /* ===== SPLASH ===== */
@@ -31,8 +27,8 @@ body{background:#0f172a;color:#fff}
   height:100vh;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   gap:14px;
 }
 
@@ -40,7 +36,6 @@ body{background:#0f172a;color:#fff}
 #login{
   display:none;
   height:100vh;
-  display:flex;
   align-items:center;
   justify-content:center;
   background:
@@ -54,32 +49,18 @@ body{background:#0f172a;color:#fff}
   border-radius:18px;
   padding:28px;
   box-shadow:0 30px 60px rgba(0,0,0,.4);
-  position:relative;
 }
-.login-box::before{
-  content:"JP";
-  position:absolute;
-  inset:0;
-  font-size:200px;
-  font-weight:900;
-  color:rgba(0,0,0,.04);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.login-box h2{text-align:center;margin-bottom:16px;position:relative}
+.login-box h2{text-align:center;margin-bottom:16px}
 .login-box input{
   width:100%;
   padding:12px;
   margin:8px 0;
   border-radius:10px;
   border:1px solid #cbd5e1;
-  position:relative;
 }
 .login-box button{
   width:100%;
   padding:12px;
-  margin-top:10px;
   border:none;
   border-radius:10px;
   background:#16a34a;
@@ -87,7 +68,7 @@ body{background:#0f172a;color:#fff}
   font-weight:600;
   cursor:pointer;
 }
-#error{color:#dc2626;text-align:center;margin-top:8px}
+#error{text-align:center;color:#dc2626;margin-top:8px}
 
 /* ===== DASHBOARD ===== */
 #dashboard{display:none}
@@ -98,43 +79,23 @@ body{background:#0f172a;color:#fff}
   align-items:center;
   gap:12px;
 }
-.mini-logo{
-  width:42px;height:42px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#22c55e,#0ea5e9);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:800;
-}
 .menu{
   background:#020617;
   padding:12px;
   display:flex;
   gap:10px;
-  flex-wrap:nowrap;
   overflow-x:auto;
 }
 .menu button{
-  display:flex;
-  align-items:center;
-  gap:8px;
   padding:10px 14px;
   background:#0f172a;
   border:1px solid #1e293b;
   border-radius:10px;
   color:#fff;
   cursor:pointer;
-  white-space:nowrap;
 }
 .menu button:hover{background:#16a34a}
-.icon{
-  width:18px;height:18px;
-  border-radius:4px;
-  background:#22c55e;
-}
-.content{
-  padding:24px;
-  color:#e5e7eb;
-}
+.content{padding:24px}
 </style>
 </head>
 
@@ -152,37 +113,32 @@ body{background:#0f172a;color:#fff}
     <h2>Login</h2>
     <input id="username" placeholder="Username">
     <input id="password" type="password" placeholder="Password">
-    <button onclick="login()">Login</button>
+    <button onclick="doLogin()">Login</button>
     <div id="error"></div>
   </div>
 </div>
 
 <!-- DASHBOARD -->
 <div id="dashboard">
-  <div class="topbar">
-    <div class="mini-logo">JP</div>
-    <div>JP Solution ERP</div>
-  </div>
-
+  <div class="topbar">JP Solution ERP</div>
   <div class="menu">
-    <button><div class="icon"></div>Masters</button>
-    <button><div class="icon"></div>Transactions</button>
-    <button><div class="icon"></div>Inventory</button>
-    <button><div class="icon"></div>System</button>
-    <button><div class="icon"></div>Customers</button>
-    <button><div class="icon"></div>Sales</button>
-    <button><div class="icon"></div>Reports</button>
-    <button><div class="icon"></div>Users</button>
+    <button>Masters</button>
+    <button>Transactions</button>
+    <button>Inventory</button>
+    <button>System</button>
+    <button>Customers</button>
+    <button>Sales</button>
+    <button>Reports</button>
+    <button>Users</button>
   </div>
-
   <div class="content">
-    <h2>Welcome to JP ERP</h2>
-    <p>Select a menu to continue.</p>
+    <h2>Welcome</h2>
+    <p>Login successful.</p>
   </div>
 </div>
 
 <script>
-/* splash 2 sec */
+/* splash exactly 2 sec */
 setTimeout(function(){
   document.getElementById("splash").style.display="none";
   document.getElementById("login").style.display="flex";
@@ -195,9 +151,9 @@ var users = {
   user:"user"
 };
 
-function login(){
-  var u = document.getElementById("username").value;
-  var p = document.getElementById("password").value;
+function doLogin(){
+  var u = document.getElementById("username").value.trim();
+  var p = document.getElementById("password").value.trim();
 
   if(users[u] && users[u] === p){
     document.getElementById("login").style.display="none";
