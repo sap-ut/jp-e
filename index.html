@@ -6,86 +6,134 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{
-  margin:0;
-  font-family:Segoe UI,Arial;
-  background:#0f172a;
-  color:#fff;
+*{box-sizing:border-box;font-family:Segoe UI,Arial;margin:0;padding:0}
+body{background:#0f172a;color:#fff}
+
+/* ===== JP LOGO ===== */
+.jp-logo{
+  width:150px;height:150px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#22c55e,#0ea5e9);
+  display:flex;align-items:center;justify-content:center;
+  font-size:64px;font-weight:800;
+  position:relative;
+  box-shadow:0 25px 50px rgba(0,0,0,.4);
+}
+.jp-logo::after{
+  content:"★";
+  position:absolute;
+  top:-10px;right:18px;
+  color:#fde047;font-size:28px;
 }
 
-/* splash */
+/* ===== SPLASH ===== */
 #splash{
   height:100vh;
   display:flex;
   flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
-.logo{
-  width:140px;height:140px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#22c55e,#0ea5e9);
-  display:flex;
   align-items:center;
   justify-content:center;
-  font-size:60px;
-  font-weight:800;
-  position:relative;
-}
-.logo::after{
-  content:"★";
-  position:absolute;
-  top:-8px;right:18px;
-  color:#fde047;font-size:26px;
+  gap:14px;
 }
 
-/* login */
+/* ===== LOGIN ===== */
 #login{
   display:none;
   height:100vh;
-  justify-content:center;
+  display:flex;
   align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(circle at center,rgba(34,197,94,.25),transparent 60%),
+    #020617;
 }
-.box{
+.login-box{
+  width:360px;
   background:#fff;
   color:#000;
-  padding:24px;
-  width:300px;
-  border-radius:12px;
+  border-radius:18px;
+  padding:28px;
+  box-shadow:0 30px 60px rgba(0,0,0,.4);
+  position:relative;
 }
-.box input,.box button{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-}
-.box button{
-  background:#16a34a;
-  color:#fff;
-  border:none;
-}
-
-/* dashboard */
-#dash{
-  display:none;
-}
-.top{
-  padding:14px;
-  background:#020617;
+.login-box::before{
+  content:"JP";
+  position:absolute;
+  inset:0;
+  font-size:200px;
+  font-weight:900;
+  color:rgba(0,0,0,.04);
   display:flex;
   align-items:center;
-  gap:10px;
+  justify-content:center;
+}
+.login-box h2{text-align:center;margin-bottom:16px;position:relative}
+.login-box input{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:10px;
+  border:1px solid #cbd5e1;
+  position:relative;
+}
+.login-box button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  background:#16a34a;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+}
+#error{color:#dc2626;text-align:center;margin-top:8px}
+
+/* ===== DASHBOARD ===== */
+#dashboard{display:none}
+.topbar{
+  background:#020617;
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.mini-logo{
+  width:42px;height:42px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#22c55e,#0ea5e9);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;
 }
 .menu{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  padding:10px;
   background:#020617;
+  padding:12px;
+  display:flex;
+  gap:10px;
+  flex-wrap:nowrap;
+  overflow-x:auto;
 }
-.menu div{
-  padding:8px 12px;
+.menu button{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
   background:#0f172a;
-  border-radius:8px;
+  border:1px solid #1e293b;
+  border-radius:10px;
+  color:#fff;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.menu button:hover{background:#16a34a}
+.icon{
+  width:18px;height:18px;
+  border-radius:4px;
+  background:#22c55e;
+}
+.content{
+  padding:24px;
+  color:#e5e7eb;
 }
 </style>
 </head>
@@ -94,54 +142,68 @@ body{
 
 <!-- SPLASH -->
 <div id="splash">
-  <div class="logo">JP</div>
-  <p>Powered by JP</p>
+  <div class="jp-logo">JP</div>
+  <div>Powered by JP</div>
 </div>
 
 <!-- LOGIN -->
 <div id="login">
-  <div class="box">
-    <h3>Login</h3>
-    <input id="u" placeholder="Username">
-    <input id="p" type="password" placeholder="Password">
-    <button onclick="doLogin()">Login</button>
-    <div id="msg" style="color:red"></div>
+  <div class="login-box">
+    <h2>Login</h2>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <div id="error"></div>
   </div>
 </div>
 
 <!-- DASHBOARD -->
-<div id="dash">
-  <div class="top">JP Solution ERP</div>
+<div id="dashboard">
+  <div class="topbar">
+    <div class="mini-logo">JP</div>
+    <div>JP Solution ERP</div>
+  </div>
+
   <div class="menu">
-    <div>Masters</div>
-    <div>Transactions</div>
-    <div>Inventory</div>
-    <div>Settings</div>
-    <div>Customers</div>
-    <div>Sales</div>
-    <div>Reports</div>
-    <div>Users</div>
+    <button><div class="icon"></div>Masters</button>
+    <button><div class="icon"></div>Transactions</button>
+    <button><div class="icon"></div>Inventory</button>
+    <button><div class="icon"></div>System</button>
+    <button><div class="icon"></div>Customers</button>
+    <button><div class="icon"></div>Sales</button>
+    <button><div class="icon"></div>Reports</button>
+    <button><div class="icon"></div>Users</button>
+  </div>
+
+  <div class="content">
+    <h2>Welcome to JP ERP</h2>
+    <p>Select a menu to continue.</p>
   </div>
 </div>
 
 <script>
+/* splash 2 sec */
 setTimeout(function(){
   document.getElementById("splash").style.display="none";
   document.getElementById("login").style.display="flex";
 },2000);
 
-function doLogin(){
-  var u=document.getElementById("u").value;
-  var p=document.getElementById("p").value;
+/* users */
+var users = {
+  admin:"admin",
+  jp:"1234",
+  user:"user"
+};
 
-  if(
-    (u==="admin" && p==="admin") ||
-    (u==="jp" && p==="1234")
-  ){
+function login(){
+  var u = document.getElementById("username").value;
+  var p = document.getElementById("password").value;
+
+  if(users[u] && users[u] === p){
     document.getElementById("login").style.display="none";
-    document.getElementById("dash").style.display="block";
+    document.getElementById("dashboard").style.display="block";
   }else{
-    document.getElementById("msg").innerText="Invalid login";
+    document.getElementById("error").innerText="Invalid username or password";
   }
 }
 </script>
