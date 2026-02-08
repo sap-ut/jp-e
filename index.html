@@ -36,15 +36,17 @@ body{margin:0;background:#f4f8ff}
 
 /* NAVBAR */
 .navbar{
+  position:sticky;
+  top:0;
+  z-index:1000;
   background:var(--blue);
   display:flex;
   align-items:center;
   padding:10px;
   color:#fff;
-  overflow-x:auto;
 }
 .brand{font-weight:600;margin-right:20px;white-space:nowrap}
-.menu{display:flex;gap:14px}
+.menu{display:flex;gap:14px;flex-wrap:wrap}
 .menu-item{position:relative;cursor:pointer;white-space:nowrap}
 .menu-item span{padding:6px 10px;display:block}
 
@@ -56,10 +58,10 @@ body{margin:0;background:#f4f8ff}
   left:0;
   background:#fff;
   color:#000;
-  min-width:220px;
+  min-width:240px;
   border-radius:8px;
   box-shadow:0 10px 30px rgba(0,0,0,.2);
-  z-index:999;
+  z-index:2000;
 }
 .dropdown div{
   padding:8px 14px;
@@ -69,7 +71,11 @@ body{margin:0;background:#f4f8ff}
 .dropdown div:hover{background:var(--light)}
 
 /* CONTENT */
-.content{padding:20px}
+.content{
+  padding:20px;
+  position:relative;
+  z-index:1;
+}
 .box{
   background:#fff;padding:20px;border-radius:12px;
   box-shadow:0 6px 20px rgba(0,0,0,.1)
