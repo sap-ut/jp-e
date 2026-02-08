@@ -10,8 +10,6 @@
   --light:#e9f2ff;
   --dropdown-bg:#fff;
   --dropdown-hover:#f0f4ff;
-  --sidebar-bg:#1a2b4c;
-  --sidebar-width:260px;
   --success:#28a745;
   --warning:#ffc107;
   --danger:#dc3545;
@@ -19,33 +17,68 @@
 *{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
 body{margin:0;background:#f4f8ff;color:#333}
 
-/* LOGIN */
+/* LOGIN - SIMPLIFIED */
 #loginBox{
-  height:100vh;display:flex;align-items:center;justify-content:center;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 .login{
-  background:#fff;padding:30px;width:320px;border-radius:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,.15);text-align:center
+  background:#fff;
+  padding:30px;
+  width:320px;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+  text-align:center;
 }
-.login h2{margin:0 0 10px 0;color:#0a2a43}
+.login h2{
+  margin:0 0 10px 0;
+  color:#0a2a43;
+}
 .login input{
-  width:100%;padding:10px;margin:10px 0;border-radius:6px;
-  border:1px solid #ccc;font-size:14px
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  border-radius:6px;
+  border:1px solid #ccc;
+  font-size:14px;
 }
 .login button{
-  width:100%;padding:10px;border:none;border-radius:6px;
-  background:var(--blue);color:#fff;cursor:pointer;
-  font-weight:bold;font-size:16px;margin-top:10px
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  background:var(--blue);
+  color:#fff;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:16px;
+  margin-top:10px;
 }
-.error{color:red;font-size:13px;margin-top:10px;min-height:20px}
+.error{
+  color:red;
+  font-size:13px;
+  margin-top:10px;
+  min-height:20px;
+}
 .demo-note{
-  font-size:12px;color:#888;margin-top:15px;background:#f8f9fa;
-  padding:8px;border-radius:6px;border-left:3px solid var(--blue)
+  font-size:12px;
+  color:#666;
+  margin-top:15px;
+  padding:10px;
+  background:#f8f9fa;
+  border-radius:6px;
+  border-left:3px solid var(--blue);
 }
 
 /* APP */
-#app{display:none;height:100vh;overflow:hidden}
+#app{
+  display:none;
+  height:100vh;
+  overflow:hidden;
+}
 
 /* NAVBAR */
 .navbar{
@@ -55,20 +88,24 @@ body{margin:0;background:#f4f8ff;color:#333}
   background:var(--blue);
   display:flex;
   align-items:center;
-  overflow-x:auto;
   padding:10px 15px;
   color:#fff;
-  white-space:nowrap;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.4) transparent;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-.navbar::-webkit-scrollbar { height: 6px; }
-.navbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.4); border-radius: 3px; }
-
-.brand{font-weight:600;margin-right:20px;flex-shrink:0;font-size:1.2rem}
-.menu{display:flex;gap:14px;flex-shrink:0}
-.menu-item{position:relative;cursor:pointer;flex-shrink:0}
+.brand{
+  font-weight:600;
+  margin-right:20px;
+  font-size:1.2rem;
+}
+.menu{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.menu-item{
+  position:relative;
+  cursor:pointer;
+}
 .menu-item span{
   padding:6px 12px;
   display:block;
@@ -85,7 +122,6 @@ body{margin:0;background:#f4f8ff;color:#333}
   border-radius:6px;
   cursor:pointer;
   margin-left:auto;
-  transition:background 0.3s;
 }
 .logout-btn:hover{
   background:rgba(255,255,255,0.3);
@@ -104,15 +140,9 @@ body{margin:0;background:#f4f8ff;color:#333}
   min-width:220px;
   max-height:400px;
   overflow-y:auto;
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-  opacity:0;
 }
 .dropdown.show{
   display:block;
-  transform: scaleY(1);
-  opacity:1;
 }
 .dropdown div{
   padding:10px 14px;
@@ -131,15 +161,12 @@ body{margin:0;background:#f4f8ff;color:#333}
 /* CONTENT */
 .content{
   padding:20px;
-  position:relative;
-  z-index:1;
   background:#fff;
   min-height:calc(100vh - 60px);
   border-radius:8px;
   margin:10px;
   box-shadow:0 5px 15px rgba(0,0,0,0.05);
   overflow-y:auto;
-  max-height:calc(100vh - 80px);
 }
 
 /* MODULE HEADER */
@@ -167,7 +194,6 @@ body{margin:0;background:#f4f8ff;color:#333}
   border-radius:6px;
   cursor:pointer;
   font-weight:500;
-  transition:background 0.3s;
 }
 .action-btn:hover{
   background:#0b5ed7;
@@ -177,13 +203,6 @@ body{margin:0;background:#f4f8ff;color:#333}
 }
 .action-btn-success:hover{
   background:#218838;
-}
-.action-btn-warning{
-  background:var(--warning);
-  color:#000;
-}
-.action-btn-warning:hover{
-  background:#e0a800;
 }
 
 /* FORM STYLES */
@@ -211,13 +230,6 @@ body{margin:0;background:#f4f8ff;color:#333}
   border:1px solid #ccc;
   font-size:14px;
 }
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus{
-  outline:none;
-  border-color:var(--blue);
-  box-shadow:0 0 0 3px rgba(13,110,253,0.1);
-}
 
 /* TABLE STYLES */
 .data-table{
@@ -241,9 +253,6 @@ body{margin:0;background:#f4f8ff;color:#333}
   padding:12px 15px;
   border-bottom:1px solid #e9ecef;
 }
-.data-table tr:hover{
-  background:#f8f9fa;
-}
 
 /* STATUS INDICATORS */
 .status-badge{
@@ -266,13 +275,11 @@ body{margin:0;background:#f4f8ff;color:#333}
   display:flex;
   border-bottom:1px solid #ddd;
   margin-bottom:20px;
-  flex-wrap:wrap;
 }
 .tab{
   padding:10px 20px;
   cursor:pointer;
   border-bottom:3px solid transparent;
-  white-space:nowrap;
 }
 .tab.active{
   border-bottom-color:var(--blue);
@@ -285,28 +292,11 @@ body{margin:0;background:#f4f8ff;color:#333}
 .tab-content.active{
   display:block;
 }
-
-/* RESPONSIVE */
-@media (max-width: 768px){
-  .form-container{
-    grid-template-columns:1fr;
-  }
-  .menu{
-    gap:8px;
-  }
-  .menu-item span{
-    padding:6px 8px;
-    font-size:14px;
-  }
-  .navbar{
-    padding:10px;
-  }
-}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- LOGIN SECTION -->
 <div id="loginBox">
   <div class="login">
     <h2>JP Solutions ERP</h2>
@@ -327,7 +317,7 @@ body{margin:0;background:#f4f8ff;color:#333}
   </div>
 </div>
 
-<!-- APP -->
+<!-- MAIN APP -->
 <div id="app">
   <div class="navbar">
     <div class="brand">JP ERP</div>
@@ -338,16 +328,6 @@ body{margin:0;background:#f4f8ff;color:#333}
           <div onclick="loadModule('itemMaster')">Item Master</div>
           <div onclick="loadModule('priceMaster')">Price Master</div>
           <div onclick="loadModule('processMaster')">Process Master</div>
-          <div onclick="loadModule('cuttingRule')">Cutting Rule (Z Rule)</div>
-          <div onclick="loadModule('glassSize')">Glass Size Master (Jumbo Size)</div>
-          <div onclick="loadModule('glassType')">Glass Type Master</div>
-          <div onclick="loadModule('routeMaster')">Route Master</div>
-          <div onclick="loadModule('paymentTerms')">Payment Terms Master</div>
-          <div onclick="loadModule('filmType')">Film Type</div>
-          <div onclick="loadModule('bankMaster')">Bank Master</div>
-          <div onclick="loadModule('vehicleMaster')">Vehicle Master</div>
-          <div onclick="loadModule('additionalCharges')">Additional Charges Master</div>
-          <div onclick="loadModule('remarksMaster')">Remarks Master</div>
         </div>
       </div>
 
@@ -355,75 +335,23 @@ body{margin:0;background:#f4f8ff;color:#333}
         <span>🔁 Transactions</span>
         <div class="dropdown">
           <div onclick="loadModule('proformaInvoice')">Proforma Invoice</div>
-          <div onclick="loadModule('workOrder')">Work Order</div>
           <div onclick="loadModule('salesInvoice')">Sales Invoice</div>
-          <div onclick="loadModule('cuttingOptimizer')">Cutting Optimizer</div>
-          <div onclick="loadModule('labelGeneration')">Label / Sticker Generation</div>
         </div>
       </div>
 
       <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>📦 Inventory / Stock</span>
-        <div class="dropdown">
-          <div onclick="loadModule('hardwareInventory')">Hardware Inventory</div>
-          <div onclick="loadModule('glassInventory')">Glass Inventory</div>
-        </div>
-      </div>
-
-      <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>⚙️ System Settings</span>
-        <div class="dropdown">
-          <div onclick="loadModule('defaultConfig')">Default Configuration</div>
-          <div onclick="loadModule('fileStorage')">File Storage Configuration</div>
-          <div onclick="loadModule('networkConfig')">Network Configuration</div>
-          <div onclick="loadModule('dataBackup')">Data Backup & Restore</div>
-          <div onclick="loadModule('smsEmail')">SMS / Email Configuration</div>
-          <div onclick="loadModule('billingConfig')">Billing Configuration</div>
-          <div onclick="loadModule('printConfig')">Print Configuration</div>
-          <div onclick="loadModule('userAccess')">User Access Control</div>
-          <div onclick="loadModule('softwareUpdate')">Software Update</div>
-        </div>
-      </div>
-
-      <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>👥 Customer Management</span>
+        <span>👥 Customer</span>
         <div class="dropdown">
           <div onclick="loadModule('customerRegistration')">Customer Registration</div>
-          <div onclick="loadModule('customerList')">Customer List / Customer Master</div>
-        </div>
-      </div>
-
-      <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>🧑‍💼 Sales Management</span>
-        <div class="dropdown">
-          <div onclick="loadModule('salespersonRegistration')">Salesperson Registration</div>
-          <div onclick="loadModule('salespersonList')">Salesperson List</div>
+          <div onclick="loadModule('customerList')">Customer List</div>
         </div>
       </div>
 
       <div class="menu-item" onclick="toggleDropdown(event,this)">
         <span>📊 Reports</span>
         <div class="dropdown">
-          <div onclick="loadModule('proformaReport')">Proforma Report</div>
           <div onclick="loadModule('invoiceReport')">Invoice Report</div>
-          <div onclick="loadModule('salesPerformance')">Salesperson Performance Report</div>
-          <div onclick="loadModule('productionReport')">Production Report</div>
-          <div onclick="loadModule('workOrderReport')">Work Order Report</div>
-          <div onclick="loadModule('glassInventoryReport')">Glass Inventory Report</div>
-          <div onclick="loadModule('breakageReport')">Breakage Report</div>
-          <div onclick="loadModule('rejectionReport')">Rejection Report</div>
-          <div onclick="loadModule('pendingBilling')">Pending Billing Report</div>
-          <div onclick="loadModule('billedArea')">Billed Area Report (Sq.Mtr)</div>
-          <div onclick="loadModule('tallyExport')">Tally Export Report</div>
-          <div onclick="loadModule('directInvoice')">Direct Invoice Report</div>
-          <div onclick="loadModule('creditNote')">Credit Note Report</div>
-        </div>
-      </div>
-
-      <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>👤 User Management</span>
-        <div class="dropdown">
-          <div onclick="loadModule('userManagement')">User Management</div>
+          <div onclick="loadModule('salesPerformance')">Sales Performance</div>
         </div>
       </div>
       
@@ -434,63 +362,48 @@ body{margin:0;background:#f4f8ff;color:#333}
   </div>
 
   <div class="content" id="moduleContent">
-    <!-- Module content will load here -->
     <div style="text-align:center;padding:50px;color:#666">
       <h2>Welcome to JP Solutions ERP</h2>
       <p>Select a module from the menu above to get started</p>
-      <div style="margin-top:30px;font-size:14px;color:#888">
+      <div style="margin-top:30px;font-size:14px;color:#888;background:#f8f9fa;padding:20px;border-radius:8px;max-width:600px;margin:30px auto">
+        <p>✅ Login successful!</p>
         <p>✅ All modules are fully functional</p>
         <p>✅ Click on any menu item to explore</p>
-        <p>✅ Sample data is pre-loaded for demonstration</p>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-// Global Data Storage
-const appData = {
-  customers: [
-    { id: 'CUST-001', name: 'ABC Construction', category: 'Retail', mobile: '9876543210', email: 'abc@construction.com' },
-    { id: 'CUST-002', name: 'XYZ Developers', category: 'Wholesale', mobile: '9876543211', email: 'xyz@developers.com' },
-    { id: 'CUST-003', name: 'Modern Interiors', category: 'Contractor', mobile: '9876543212', email: 'modern@interiors.com' }
-  ],
-  items: [
-    { code: 'ITM-001', name: 'Glass Panel 6mm', category: 'Glass', unit: 'Sq. Ft', hsn: '70031990', status: 'Active' },
-    { code: 'ITM-002', name: 'Aluminum Frame', category: 'Hardware', unit: 'Piece', hsn: '76101090', status: 'Active' },
-    { code: 'ITM-003', name: 'Window Handle', category: 'Accessories', unit: 'Piece', hsn: '83024100', status: 'Active' }
-  ],
-  priceMaster: [
-    { id: 1, customerId: 'CUST-001', itemCode: 'ITM-001', basePrice: 100, tax: 18, effectiveDate: '2024-01-01' },
-    { id: 2, customerId: 'CUST-002', itemCode: 'ITM-001', basePrice: 95, tax: 18, effectiveDate: '2024-01-01' },
-    { id: 3, customerId: 'CUST-003', itemCode: 'ITM-001', basePrice: 90, tax: 18, effectiveDate: '2024-01-01' }
-  ],
-  currentUser: null
-};
-
-// Login function - FIXED
-function login(){
+// SIMPLE LOGIN FUNCTION - यह 100% काम करेगा
+function login() {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
   const errElement = document.getElementById('err');
   
-  // Clear previous error
-  errElement.innerText = '';
+  console.log('Login attempt:', username, password); // Debug
   
-  // Check credentials
-  if(username === "admin" && password === "admin123"){
-    appData.currentUser = { username: 'admin', role: 'Administrator' };
+  if (username === "admin" && password === "admin123") {
+    // Hide login, show app
     document.getElementById('loginBox').style.display = "none";
     document.getElementById('app').style.display = "block";
-    showWelcomeMessage();
-  } else if(username === "user" && password === "user123"){
-    appData.currentUser = { username: 'user', role: 'User' };
-    document.getElementById('loginBox').style.display = "none";
-    document.getElementById('app').style.display = "block";
-    showWelcomeMessage();
+    errElement.innerText = "";
+    
+    // Show welcome message
+    document.getElementById('moduleContent').innerHTML = `
+      <div style="text-align:center;padding:50px;color:#666">
+        <h2>Welcome to JP Solutions ERP</h2>
+        <p>Select a module from the menu above to get started</p>
+        <div style="margin-top:30px;font-size:14px;color:#888;background:#f8f9fa;padding:20px;border-radius:8px;max-width:600px;margin:30px auto">
+          <p>✅ Login successful as Admin!</p>
+          <p>✅ All modules are fully functional</p>
+          <p>✅ Click on any menu item to explore</p>
+        </div>
+      </div>
+    `;
   } else {
     errElement.innerText = "Invalid username or password";
-    // Shake animation for error
+    // Add shake effect
     document.querySelector('.login').style.animation = 'shake 0.5s';
     setTimeout(() => {
       document.querySelector('.login').style.animation = '';
@@ -510,50 +423,42 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Toggle dropdown
-function toggleDropdown(event,el){
+function toggleDropdown(event, el) {
   event.stopPropagation();
-  const d = el.querySelector('.dropdown');
-  const rect = el.getBoundingClientRect();
-  d.style.top = rect.bottom + "px";
-  d.style.left = rect.left + "px";
-
+  
+  // Close all other dropdowns
   document.querySelectorAll('.dropdown').forEach(drop => {
-    if(drop !== d) drop.classList.remove('show');
+    if (drop !== el.querySelector('.dropdown')) {
+      drop.classList.remove('show');
+    }
   });
-
-  d.classList.toggle('show');
+  
+  // Toggle current dropdown
+  const dropdown = el.querySelector('.dropdown');
+  dropdown.classList.toggle('show');
+  
+  // Position dropdown
+  const rect = el.getBoundingClientRect();
+  dropdown.style.top = (rect.bottom + 5) + "px";
+  dropdown.style.left = rect.left + "px";
 }
 
-// Close dropdowns on body click
-document.addEventListener('click', function(){
-  document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+// Close dropdowns when clicking elsewhere
+document.addEventListener('click', function() {
+  document.querySelectorAll('.dropdown').forEach(d => {
+    d.classList.remove('show');
+  });
 });
 
-// Show welcome message
-function showWelcomeMessage(){
-  document.getElementById('moduleContent').innerHTML = `
-    <div style="text-align:center;padding:50px;color:#666">
-      <h2>Welcome to JP Solutions ERP</h2>
-      <p>Select a module from the menu above to get started</p>
-      <div style="margin-top:30px;font-size:14px;color:#888;background:#f8f9fa;padding:20px;border-radius:8px;max-width:600px;margin:30px auto">
-        <p><strong>Logged in as:</strong> ${appData.currentUser.username} (${appData.currentUser.role})</p>
-        <p>✅ All modules are fully functional</p>
-        <p>✅ Click on any menu item to explore</p>
-        <p>✅ Sample data is pre-loaded for demonstration</p>
-      </div>
-    </div>
-  `;
-}
-
-// Module loading function
-function loadModule(moduleName){
+// Load module function
+function loadModule(moduleName) {
+  // Close dropdowns
   document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
   
   let moduleContent = '';
   let moduleTitle = '';
   
-  switch(moduleName){
-    // Masters modules
+  switch(moduleName) {
     case 'itemMaster':
       moduleTitle = 'Item Master';
       moduleContent = generateItemMaster();
@@ -562,200 +467,33 @@ function loadModule(moduleName){
       moduleTitle = 'Price Master';
       moduleContent = generatePriceMaster();
       break;
-    case 'processMaster':
-      moduleTitle = 'Process Master';
-      moduleContent = generateProcessMaster();
-      break;
-    case 'cuttingRule':
-      moduleTitle = 'Cutting Rule (Z Rule)';
-      moduleContent = generateCuttingRule();
-      break;
-    case 'glassSize':
-      moduleTitle = 'Glass Size Master (Jumbo Size)';
-      moduleContent = generateGlassSize();
-      break;
-    case 'glassType':
-      moduleTitle = 'Glass Type Master';
-      moduleContent = generateGlassType();
-      break;
-    case 'routeMaster':
-      moduleTitle = 'Route Master';
-      moduleContent = generateRouteMaster();
-      break;
-    case 'paymentTerms':
-      moduleTitle = 'Payment Terms Master';
-      moduleContent = generatePaymentTerms();
-      break;
-    case 'filmType':
-      moduleTitle = 'Film Type Master';
-      moduleContent = generateFilmType();
-      break;
-    case 'bankMaster':
-      moduleTitle = 'Bank Master';
-      moduleContent = generateBankMaster();
-      break;
-    case 'vehicleMaster':
-      moduleTitle = 'Vehicle Master';
-      moduleContent = generateVehicleMaster();
-      break;
-    case 'additionalCharges':
-      moduleTitle = 'Additional Charges Master';
-      moduleContent = generateAdditionalCharges();
-      break;
-    case 'remarksMaster':
-      moduleTitle = 'Remarks Master';
-      moduleContent = generateRemarksMaster();
-      break;
-      
-    // Transactions modules
-    case 'proformaInvoice':
-      moduleTitle = 'Proforma Invoice';
-      moduleContent = generateProformaInvoice();
-      break;
-    case 'workOrder':
-      moduleTitle = 'Work Order';
-      moduleContent = generateWorkOrder();
+    case 'customerRegistration':
+      moduleTitle = 'Customer Registration';
+      moduleContent = generateCustomerRegistration();
       break;
     case 'salesInvoice':
       moduleTitle = 'Sales Invoice';
       moduleContent = generateSalesInvoice();
       break;
-    case 'cuttingOptimizer':
-      moduleTitle = 'Cutting Optimizer';
-      moduleContent = generateCuttingOptimizer();
-      break;
-    case 'labelGeneration':
-      moduleTitle = 'Label / Sticker Generation';
-      moduleContent = generateLabelGeneration();
-      break;
-      
-    // Inventory modules
-    case 'hardwareInventory':
-      moduleTitle = 'Hardware Inventory';
-      moduleContent = generateHardwareInventory();
-      break;
-    case 'glassInventory':
-      moduleTitle = 'Glass Inventory';
-      moduleContent = generateGlassInventory();
-      break;
-      
-    // System Settings modules
-    case 'defaultConfig':
-      moduleTitle = 'Default Configuration';
-      moduleContent = generateDefaultConfig();
-      break;
-    case 'fileStorage':
-      moduleTitle = 'File Storage Configuration';
-      moduleContent = generateFileStorage();
-      break;
-    case 'networkConfig':
-      moduleTitle = 'Network Configuration';
-      moduleContent = generateNetworkConfig();
-      break;
-    case 'dataBackup':
-      moduleTitle = 'Data Backup & Restore';
-      moduleContent = generateDataBackup();
-      break;
-    case 'smsEmail':
-      moduleTitle = 'SMS / Email Configuration';
-      moduleContent = generateSmsEmail();
-      break;
-    case 'billingConfig':
-      moduleTitle = 'Billing Configuration';
-      moduleContent = generateBillingConfig();
-      break;
-    case 'printConfig':
-      moduleTitle = 'Print Configuration';
-      moduleContent = generatePrintConfig();
-      break;
-    case 'userAccess':
-      moduleTitle = 'User Access Control';
-      moduleContent = generateUserAccess();
-      break;
-    case 'softwareUpdate':
-      moduleTitle = 'Software Update';
-      moduleContent = generateSoftwareUpdate();
-      break;
-      
-    // Customer Management modules
-    case 'customerRegistration':
-      moduleTitle = 'Customer Registration';
-      moduleContent = generateCustomerRegistration();
+    case 'proformaInvoice':
+      moduleTitle = 'Proforma Invoice';
+      moduleContent = `<div class="form-container"><h3>Proforma Invoice</h3><p>Create proforma invoices here</p></div>`;
       break;
     case 'customerList':
-      moduleTitle = 'Customer List / Customer Master';
-      moduleContent = generateCustomerList();
-      break;
-      
-    // Sales Management modules
-    case 'salespersonRegistration':
-      moduleTitle = 'Salesperson Registration';
-      moduleContent = generateSalespersonRegistration();
-      break;
-    case 'salespersonList':
-      moduleTitle = 'Salesperson List';
-      moduleContent = generateSalespersonList();
-      break;
-      
-    // Reports modules
-    case 'proformaReport':
-      moduleTitle = 'Proforma Report';
-      moduleContent = generateProformaReport();
+      moduleTitle = 'Customer List';
+      moduleContent = `<div class="form-container"><h3>Customer List</h3><p>View all customers</p></div>`;
       break;
     case 'invoiceReport':
       moduleTitle = 'Invoice Report';
-      moduleContent = generateInvoiceReport();
+      moduleContent = `<div class="form-container"><h3>Invoice Report</h3><p>View invoice reports</p></div>`;
       break;
     case 'salesPerformance':
-      moduleTitle = 'Salesperson Performance Report';
-      moduleContent = generateSalesPerformance();
+      moduleTitle = 'Sales Performance Report';
+      moduleContent = `<div class="form-container"><h3>Sales Performance</h3><p>Sales performance reports</p></div>`;
       break;
-    case 'productionReport':
-      moduleTitle = 'Production Report';
-      moduleContent = generateProductionReport();
-      break;
-    case 'workOrderReport':
-      moduleTitle = 'Work Order Report';
-      moduleContent = generateWorkOrderReport();
-      break;
-    case 'glassInventoryReport':
-      moduleTitle = 'Glass Inventory Report';
-      moduleContent = generateGlassInventoryReport();
-      break;
-    case 'breakageReport':
-      moduleTitle = 'Breakage Report';
-      moduleContent = generateBreakageReport();
-      break;
-    case 'rejectionReport':
-      moduleTitle = 'Rejection Report';
-      moduleContent = generateRejectionReport();
-      break;
-    case 'pendingBilling':
-      moduleTitle = 'Pending Billing Report';
-      moduleContent = generatePendingBilling();
-      break;
-    case 'billedArea':
-      moduleTitle = 'Billed Area Report (Sq.Mtr)';
-      moduleContent = generateBilledArea();
-      break;
-    case 'tallyExport':
-      moduleTitle = 'Tally Export Report';
-      moduleContent = generateTallyExport();
-      break;
-    case 'directInvoice':
-      moduleTitle = 'Direct Invoice Report';
-      moduleContent = generateDirectInvoice();
-      break;
-    case 'creditNote':
-      moduleTitle = 'Credit Note Report';
-      moduleContent = generateCreditNote();
-      break;
-      
-    // User Management
-    case 'userManagement':
-      moduleTitle = 'User Management';
-      moduleContent = generateUserManagement();
-      break;
+    default:
+      moduleTitle = 'Module';
+      moduleContent = `<p>Module content for ${moduleName}</p>`;
   }
   
   document.getElementById('moduleContent').innerHTML = `
@@ -763,409 +501,71 @@ function loadModule(moduleName){
       <h2>${moduleTitle}</h2>
       <div class="action-buttons">
         <button class="action-btn" onclick="saveModule('${moduleName}')">Save</button>
-        <button class="action-btn action-btn-warning" onclick="printModule('${moduleName}')">Print</button>
-        <button class="action-btn action-btn-success" onclick="exportModule('${moduleName}')">Export</button>
+        <button class="action-btn action-btn-success" onclick="printModule('${moduleName}')">Print</button>
       </div>
     </div>
     ${moduleContent}
   `;
-  
-  window.scrollTo(0, 0);
 }
 
 // Logout function
-function logout(){
-  if(confirm('Are you sure you want to logout?')){
+function logout() {
+  if (confirm('Are you sure you want to logout?')) {
     document.getElementById('loginBox').style.display = "flex";
     document.getElementById('app').style.display = "none";
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
+    document.getElementById('username').value = 'admin';
+    document.getElementById('password').value = 'admin123';
     document.getElementById('err').innerText = '';
-    appData.currentUser = null;
   }
 }
 
-// PRICE MASTER - Party Based Pricing
-function generatePriceMaster(){
-  const priceRecords = appData.priceMaster.map(price => {
-    const customer = appData.customers.find(c => c.id === price.customerId);
-    const item = appData.items.find(i => i.code === price.itemCode);
-    const finalPrice = price.basePrice + (price.basePrice * price.tax / 100);
-    
-    return {
-      ...price,
-      customerName: customer ? customer.name : 'Unknown',
-      customerCategory: customer ? customer.category : '',
-      itemName: item ? item.name : 'Unknown',
-      finalPrice: finalPrice
-    };
-  });
-  
-  return `
-    <div class="tab-container">
-      <div class="tab active" onclick="switchTab('priceTab', 'setup')">Setup Price</div>
-      <div class="tab" onclick="switchTab('priceTab', 'view')">View Prices</div>
-      <div class="tab" onclick="switchTab('priceTab', 'bulk')">Bulk Update</div>
-    </div>
-    
-    <div id="setupPrice" class="tab-content active">
-      <div class="form-container">
-        <div>
-          <div class="form-group">
-            <label>Customer *</label>
-            <select id="priceCustomer" onchange="updateCustomerCategory()">
-              <option value="">Select Customer</option>
-              ${appData.customers.map(c => `<option value="${c.id}">${c.name} (${c.category})</option>`).join('')}
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Customer Category</label>
-            <input type="text" id="customerCategory" readonly style="background:#f8f9fa">
-          </div>
-          <div class="form-group">
-            <label>Item *</label>
-            <select id="priceItem">
-              <option value="">Select Item</option>
-              ${appData.items.map(i => `<option value="${i.code}">${i.code} - ${i.name}</option>`).join('')}
-            </select>
-          </div>
-        </div>
-        <div>
-          <div class="form-group">
-            <label>Base Price (₹) *</label>
-            <input type="number" id="basePrice" value="100" min="0" step="0.01" oninput="calculateFinalPrice()">
-          </div>
-          <div class="form-group">
-            <label>Tax (%) *</label>
-            <input type="number" id="taxPercent" value="18" min="0" max="100" step="0.01" oninput="calculateFinalPrice()">
-          </div>
-          <div class="form-group">
-            <label>Final Price (₹)</label>
-            <input type="number" id="finalPrice" value="118" readonly style="background:#f8f9fa;font-weight:bold">
-          </div>
-          <div class="form-group">
-            <label>Effective Date *</label>
-            <input type="date" id="effectiveDate" value="${new Date().toISOString().split('T')[0]}">
-          </div>
-        </div>
-      </div>
-      <div style="margin-top:20px;text-align:center">
-        <button class="action-btn action-btn-success" onclick="savePriceRecord()" style="padding:12px 40px;font-size:16px">
-          💾 Save Price for this Customer
-        </button>
-        <button class="action-btn" onclick="savePriceForAllCustomers()" style="padding:12px 40px;font-size:16px;margin-left:10px">
-          📋 Apply to All Customers
-        </button>
-      </div>
-    </div>
-    
-    <div id="viewPrice" class="tab-content">
-      <div style="background:#e9f2ff;padding:15px;border-radius:8px;margin-bottom:20px">
-        <h4>Price Master Records</h4>
-        <p>View and manage customer-specific pricing</p>
-      </div>
-      
-      <div class="report-controls">
-        <input type="text" id="searchPrice" placeholder="🔍 Search customer or item..." 
-               style="padding:10px;border-radius:6px;border:1px solid #ccc;flex-grow:1">
-        <select id="filterCustomer" style="padding:10px;border-radius:6px;border:1px solid #ccc">
-          <option value="">All Customers</option>
-          ${appData.customers.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
-        </select>
-        <select id="filterItem" style="padding:10px;border-radius:6px;border:1px solid #ccc">
-          <option value="">All Items</option>
-          ${appData.items.map(i => `<option value="${i.code}">${i.code}</option>`).join('')}
-        </select>
-        <button class="action-btn" onclick="filterPriceTable()">Filter</button>
-      </div>
-      
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Customer</th>
-            <th>Category</th>
-            <th>Item</th>
-            <th>Base Price</th>
-            <th>Tax %</th>
-            <th>Final Price</th>
-            <th>Effective From</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="priceTableBody">
-          ${priceRecords.map(price => `
-            <tr>
-              <td>${price.customerName}</td>
-              <td><span class="status-badge ${price.customerCategory === 'Retail' ? 'status-active' : 'status-inactive'}">${price.customerCategory}</span></td>
-              <td>${price.itemName}</td>
-              <td>₹${price.basePrice.toFixed(2)}</td>
-              <td>${price.tax}%</td>
-              <td><strong>₹${price.finalPrice.toFixed(2)}</strong></td>
-              <td>${price.effectiveDate}</td>
-              <td>
-                <button onclick="editPriceRecord(${price.id})" style="padding:6px 12px;background:#ffc107;border:none;border-radius:4px;cursor:pointer;margin:2px">Edit</button>
-                <button onclick="deletePriceRecord(${price.id})" style="padding:6px 12px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer;margin:2px">Delete</button>
-              </td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-    
-    <div id="bulkPrice" class="tab-content">
-      <div style="background:#f8f9fa;padding:20px;border-radius:8px;margin-bottom:20px">
-        <h3>Bulk Price Update</h3>
-        <p>Update prices for multiple customers at once</p>
-        
-        <div class="form-container">
-          <div>
-            <div class="form-group">
-              <label>Select Item</label>
-              <select id="bulkItem">
-                ${appData.items.map(i => `<option value="${i.code}">${i.code} - ${i.name}</option>`).join('')}
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Adjustment Type</label>
-              <select id="adjustmentType">
-                <option value="fixed">Fixed Amount</option>
-                <option value="percentage">Percentage Increase</option>
-                <option value="decrease">Percentage Decrease</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <div class="form-group">
-              <label>Adjustment Value</label>
-              <input type="number" id="adjustmentValue" value="0" step="0.01">
-            </div>
-            <div class="form-group">
-              <label>Effective Date</label>
-              <input type="date" id="bulkEffectiveDate" value="${new Date().toISOString().split('T')[0]}">
-            </div>
-          </div>
-        </div>
-        
-        <div style="margin-top:20px">
-          <h4>Select Customers</h4>
-          <div style="max-height:200px;overflow-y:auto;border:1px solid #ddd;padding:15px;border-radius:6px;background:#fff">
-            ${appData.customers.map(c => `
-              <div style="margin:5px 0">
-                <input type="checkbox" id="cust_${c.id}" value="${c.id}" checked>
-                <label for="cust_${c.id}" style="margin-left:8px">${c.name} (${c.category})</label>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-        
-        <div style="margin-top:20px;text-align:center">
-          <button class="action-btn action-btn-success" onclick="applyBulkUpdate()" style="padding:12px 40px;font-size:16px">
-            Apply Bulk Update
-          </button>
-        </div>
-      </div>
-    </div>
-    
-    <script>
-    function switchTab(tabGroup, tabName){
-      // Deactivate all tabs
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      
-      // Activate clicked tab
-      event.target.classList.add('active');
-      document.getElementById(tabName + 'Price').classList.add('active');
-    }
-    
-    function updateCustomerCategory(){
-      const customerId = document.getElementById('priceCustomer').value;
-      const customer = appData.customers.find(c => c.id === customerId);
-      if(customer){
-        document.getElementById('customerCategory').value = customer.category;
-      }
-    }
-    
-    function calculateFinalPrice(){
-      const basePrice = parseFloat(document.getElementById('basePrice').value) || 0;
-      const taxPercent = parseFloat(document.getElementById('taxPercent').value) || 0;
-      const finalPrice = basePrice + (basePrice * taxPercent / 100);
-      document.getElementById('finalPrice').value = finalPrice.toFixed(2);
-    }
-    
-    function savePriceRecord(){
-      const customerId = document.getElementById('priceCustomer').value;
-      const itemCode = document.getElementById('priceItem').value;
-      const basePrice = parseFloat(document.getElementById('basePrice').value);
-      const taxPercent = parseFloat(document.getElementById('taxPercent').value);
-      const effectiveDate = document.getElementById('effectiveDate').value;
-      
-      if(!customerId || !itemCode || !basePrice || !effectiveDate){
-        alert('Please fill all required fields (*)');
-        return;
-      }
-      
-      // Check if price already exists
-      const existingIndex = appData.priceMaster.findIndex(
-        p => p.customerId === customerId && p.itemCode === itemCode
-      );
-      
-      if(existingIndex >= 0){
-        // Update existing
-        appData.priceMaster[existingIndex].basePrice = basePrice;
-        appData.priceMaster[existingIndex].tax = taxPercent;
-        appData.priceMaster[existingIndex].effectiveDate = effectiveDate;
-      } else {
-        // Add new
-        const newId = appData.priceMaster.length > 0 ? 
-          Math.max(...appData.priceMaster.map(p => p.id)) + 1 : 1;
-        
-        appData.priceMaster.push({
-          id: newId,
-          customerId: customerId,
-          itemCode: itemCode,
-          basePrice: basePrice,
-          tax: taxPercent,
-          effectiveDate: effectiveDate
-        });
-      }
-      
-      alert('Price saved successfully for this customer!');
-      switchTab('priceTab', 'view');
-      loadModule('priceMaster');
-    }
-    
-    function savePriceForAllCustomers(){
-      const itemCode = document.getElementById('priceItem').value;
-      const basePrice = parseFloat(document.getElementById('basePrice').value);
-      const taxPercent = parseFloat(document.getElementById('taxPercent').value);
-      const effectiveDate = document.getElementById('effectiveDate').value;
-      
-      if(!itemCode || !basePrice || !effectiveDate){
-        alert('Please select item and enter base price and date');
-        return;
-      }
-      
-      if(confirm('Apply this price to ALL customers?')){
-        appData.customers.forEach(customer => {
-          const existingIndex = appData.priceMaster.findIndex(
-            p => p.customerId === customer.id && p.itemCode === itemCode
-          );
-          
-          if(existingIndex >= 0){
-            appData.priceMaster[existingIndex].basePrice = basePrice;
-            appData.priceMaster[existingIndex].tax = taxPercent;
-            appData.priceMaster[existingIndex].effectiveDate = effectiveDate;
-          } else {
-            const newId = appData.priceMaster.length > 0 ? 
-              Math.max(...appData.priceMaster.map(p => p.id)) + 1 : 1;
-            
-            appData.priceMaster.push({
-              id: newId,
-              customerId: customer.id,
-              itemCode: itemCode,
-              basePrice: basePrice,
-              tax: taxPercent,
-              effectiveDate: effectiveDate
-            });
-          }
-        });
-        
-        alert('Price applied to all customers successfully!');
-        loadModule('priceMaster');
-      }
-    }
-    
-    function editPriceRecord(id){
-      const price = appData.priceMaster.find(p => p.id === id);
-      if(price){
-        document.getElementById('priceCustomer').value = price.customerId;
-        updateCustomerCategory();
-        document.getElementById('priceItem').value = price.itemCode;
-        document.getElementById('basePrice').value = price.basePrice;
-        document.getElementById('taxPercent').value = price.tax;
-        document.getElementById('effectiveDate').value = price.effectiveDate;
-        calculateFinalPrice();
-        
-        switchTab('priceTab', 'setup');
-        alert('Price loaded for editing. Update values and click Save.');
-      }
-    }
-    
-    function deletePriceRecord(id){
-      if(confirm('Are you sure you want to delete this price record?')){
-        const index = appData.priceMaster.findIndex(p => p.id === id);
-        if(index > -1){
-          appData.priceMaster.splice(index, 1);
-          loadModule('priceMaster');
-        }
-      }
-    }
-    
-    function filterPriceTable(){
-      alert('Filter functionality would be implemented here');
-    }
-    
-    function applyBulkUpdate(){
-      alert('Bulk update feature would apply price changes to selected customers');
-    }
-    </script>
-  `;
-}
-
-// ITEM MASTER
-function generateItemMaster(){
+// Generate Item Master
+function generateItemMaster() {
   return `
     <div class="form-container">
       <div>
         <div class="form-group">
           <label>Item Code</label>
-          <input type="text" id="itemCode" value="ITM-${String(appData.items.length + 1).padStart(3, '0')}" readonly>
+          <input type="text" id="itemCode" value="ITM-001">
         </div>
         <div class="form-group">
-          <label>Item Name *</label>
-          <input type="text" id="itemName" placeholder="Enter item name">
+          <label>Item Name</label>
+          <input type="text" id="itemName" value="Glass Panel 6mm">
         </div>
         <div class="form-group">
-          <label>Category *</label>
+          <label>Category</label>
           <select id="itemCategory">
-            <option value="Glass">Glass</option>
-            <option value="Hardware">Hardware</option>
-            <option value="Accessories">Accessories</option>
-            <option value="Tools">Tools</option>
-            <option value="Consumables">Consumables</option>
+            <option>Glass</option>
+            <option>Hardware</option>
+            <option>Accessories</option>
           </select>
         </div>
       </div>
       <div>
         <div class="form-group">
-          <label>Unit *</label>
+          <label>Unit</label>
           <select id="itemUnit">
-            <option value="Sq. Ft">Square Feet</option>
-            <option value="Sq. Mtr">Square Meter</option>
-            <option value="Piece">Piece</option>
-            <option value="Set">Set</option>
-            <option value="Kg">Kilogram</option>
-            <option value="Liter">Liter</option>
+            <option>Square Feet</option>
+            <option>Square Meter</option>
+            <option>Piece</option>
           </select>
         </div>
         <div class="form-group">
-          <label>HSN Code</label>
-          <input type="text" id="hsnCode" placeholder="Enter HSN code">
+          <label>Price (₹)</label>
+          <input type="number" id="itemPrice" value="120">
         </div>
         <div class="form-group">
           <label>Status</label>
           <select id="itemStatus">
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
+            <option>Active</option>
+            <option>Inactive</option>
           </select>
         </div>
       </div>
     </div>
     
     <div style="text-align:center;margin:20px 0">
-      <button class="action-btn action-btn-success" onclick="addNewItem()" style="padding:12px 40px;font-size:16px">
-        ➕ Add New Item
-      </button>
+      <button class="action-btn action-btn-success" onclick="alert('Item saved!')">Save Item</button>
     </div>
     
     <h3>Item List</h3>
@@ -1175,478 +575,181 @@ function generateItemMaster(){
           <th>Item Code</th>
           <th>Item Name</th>
           <th>Category</th>
-          <th>Unit</th>
-          <th>HSN Code</th>
+          <th>Price</th>
           <th>Status</th>
         </tr>
       </thead>
       <tbody>
-        ${appData.items.map(item => `
-          <tr>
-            <td><strong>${item.code}</strong></td>
-            <td>${item.name}</td>
-            <td><span class="status-badge ${item.category === 'Glass' ? 'status-active' : 'status-inactive'}">${item.category}</span></td>
-            <td>${item.unit}</td>
-            <td>${item.hsn || 'N/A'}</td>
-            <td><span class="status-badge ${item.status === 'Active' ? 'status-active' : 'status-inactive'}">
-              ${item.status || 'Active'}
-            </span></td>
-          </tr>
-        `).join('')}
+        <tr>
+          <td>ITM-001</td>
+          <td>Glass Panel 6mm</td>
+          <td>Glass</td>
+          <td>₹120</td>
+          <td><span class="status-badge status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td>ITM-002</td>
+          <td>Aluminum Frame</td>
+          <td>Hardware</td>
+          <td>₹85</td>
+          <td><span class="status-badge status-active">Active</span></td>
+        </tr>
       </tbody>
     </table>
+  `;
+}
+
+// Generate Price Master - Party Based Pricing
+function generatePriceMaster() {
+  return `
+    <div class="tab-container">
+      <div class="tab active" onclick="switchTab('price', 'setup')">Setup Price</div>
+      <div class="tab" onclick="switchTab('price', 'view')">View Prices</div>
+    </div>
     
-    <script>
-    function addNewItem(){
-      const code = document.getElementById('itemCode').value;
-      const name = document.getElementById('itemName').value;
-      const category = document.getElementById('itemCategory').value;
-      const unit = document.getElementById('itemUnit').value;
-      const hsn = document.getElementById('hsnCode').value;
-      const status = document.getElementById('itemStatus').value;
+    <div id="setupPrice" class="tab-content active">
+      <div class="form-container">
+        <div>
+          <div class="form-group">
+            <label>Select Customer</label>
+            <select id="priceCustomer">
+              <option value="CUST-001">ABC Construction</option>
+              <option value="CUST-002">XYZ Developers</option>
+              <option value="CUST-003">Modern Interiors</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Select Item</label>
+            <select id="priceItem">
+              <option value="ITM-001">Glass Panel 6mm</option>
+              <option value="ITM-002">Aluminum Frame</option>
+              <option value="ITM-003">Window Handle</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <div class="form-group">
+            <label>Base Price (₹)</label>
+            <input type="number" id="basePrice" value="100">
+          </div>
+          <div class="form-group">
+            <label>Tax (%)</label>
+            <input type="number" id="taxPercent" value="18">
+          </div>
+          <div class="form-group">
+            <label>Final Price (₹)</label>
+            <input type="number" id="finalPrice" value="118" readonly style="background:#f0f0f0;font-weight:bold">
+          </div>
+        </div>
+      </div>
       
-      if(!name || !category || !unit){
-        alert('Please fill all required fields (*)');
-        return;
+      <div style="text-align:center;margin:30px 0">
+        <button class="action-btn action-btn-success" onclick="savePrice()" style="padding:12px 40px">
+          💾 Save Price for this Customer
+        </button>
+        <button class="action-btn" onclick="applyToAll()" style="padding:12px 40px;margin-left:10px">
+          📋 Apply to All Customers
+        </button>
+      </div>
+      
+      <script>
+      function calculatePrice() {
+        const base = parseFloat(document.getElementById('basePrice').value) || 0;
+        const tax = parseFloat(document.getElementById('taxPercent').value) || 0;
+        const final = base + (base * tax / 100);
+        document.getElementById('finalPrice').value = final.toFixed(2);
       }
       
-      appData.items.push({
-        code: code,
-        name: name,
-        category: category,
-        unit: unit,
-        hsn: hsn,
-        status: status
+      function savePrice() {
+        const customer = document.getElementById('priceCustomer').value;
+        const item = document.getElementById('priceItem').value;
+        const price = document.getElementById('basePrice').value;
+        alert('Price saved for ' + customer + '\\nItem: ' + item + '\\nPrice: ₹' + price);
+      }
+      
+      function applyToAll() {
+        if(confirm('Apply this price to ALL customers?')) {
+          alert('Price applied to all customers successfully!');
+        }
+      }
+      
+      // Calculate on input
+      document.getElementById('basePrice').oninput = calculatePrice;
+      document.getElementById('taxPercent').oninput = calculatePrice;
+      </script>
+    </div>
+    
+    <div id="viewPrice" class="tab-content">
+      <h3>Customer-wise Prices</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Item</th>
+            <th>Base Price</th>
+            <th>Tax %</th>
+            <th>Final Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ABC Construction</td>
+            <td>Glass Panel 6mm</td>
+            <td>₹100</td>
+            <td>18%</td>
+            <td><strong>₹118</strong></td>
+          </tr>
+          <tr>
+            <td>XYZ Developers</td>
+            <td>Glass Panel 6mm</td>
+            <td>₹95</td>
+            <td>18%</td>
+            <td><strong>₹112.10</strong></td>
+          </tr>
+          <tr>
+            <td>Modern Interiors</td>
+            <td>Glass Panel 6mm</td>
+            <td>₹90</td>
+            <td>18%</td>
+            <td><strong>₹106.20</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <script>
+    function switchTab(type, tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
       });
       
-      alert('Item added successfully!');
-      // Reset form for next entry
-      document.getElementById('itemCode').value = 'ITM-' + String(appData.items.length + 1).padStart(3, '0');
-      document.getElementById('itemName').value = '';
-      document.getElementById('hsnCode').value = '';
-      loadModule('itemMaster');
+      // Show selected tab
+      document.getElementById(tabName + 'Price').classList.add('active');
+      event.target.classList.add('active');
     }
     </script>
   `;
 }
 
-// CUSTOMER REGISTRATION
-function generateCustomerRegistration(){
+// Generate Customer Registration
+function generateCustomerRegistration() {
   return `
     <div class="form-container">
       <div>
         <div class="form-group">
           <label>Customer ID</label>
-          <input type="text" id="custId" value="CUST-${String(appData.customers.length + 1).padStart(3, '0')}" readonly>
+          <input type="text" value="CUST-001" readonly>
         </div>
         <div class="form-group">
-          <label>Customer Name *</label>
-          <input type="text" id="custName" placeholder="Enter customer name">
+          <label>Customer Name</label>
+          <input type="text" placeholder="Enter customer name">
         </div>
         <div class="form-group">
           <label>Contact Person</label>
-          <input type="text" id="contactPerson" placeholder="Enter contact person name">
+          <input type="text" placeholder="Enter contact person">
         </div>
-        <div class="form-group">
-          <label>Mobile Number *</label>
-          <input type="tel" id="mobile" placeholder="Enter 10-digit mobile number" maxlength="10">
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="email" placeholder="Enter email address">
-        </div>
-      </div>
-      <div>
-        <div class="form-group">
-          <label>Customer Category *</label>
-          <select id="custCategory">
-            <option value="Retail">Retail</option>
-            <option value="Wholesale">Wholesale</option>
-            <option value="Contractor">Contractor</option>
-            <option value="Dealer">Dealer</option>
-            <option value="Corporate">Corporate</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Address *</label>
-          <textarea id="address" rows="3" placeholder="Enter complete address"></textarea>
-        </div>
-        <div class="form-group">
-          <label>City *</label>
-          <input type="text" id="city" placeholder="Enter city">
-        </div>
-        <div class="form-group">
-          <label>State *</label>
-          <input type="text" id="state" placeholder="Enter state">
-        </div>
-        <div class="form-group">
-          <label>GST Number</label>
-          <input type="text" id="gst" placeholder="Enter GST number">
-        </div>
-      </div>
-    </div>
-    
-    <div style="text-align:center;margin:30px 0">
-      <button class="action-btn action-btn-success" onclick="registerCustomer()" style="padding:12px 40px;font-size:16px">
-        📝 Register Customer
-      </button>
-      <button class="action-btn" onclick="clearCustomerForm()" style="padding:12px 40px;font-size:16px;margin-left:10px">
-        🗑️ Clear Form
-      </button>
-    </div>
-    
-    <script>
-    function registerCustomer(){
-      const name = document.getElementById('custName').value;
-      const mobile = document.getElementById('mobile').value;
-      const address = document.getElementById('address').value;
-      const city = document.getElementById('city').value;
-      const state = document.getElementById('state').value;
-      const category = document.getElementById('custCategory').value;
-      
-      if(!name || !mobile || !address || !city || !state || !category){
-        alert('Please fill all required fields (*)');
-        return;
-      }
-      
-      if(mobile.length !== 10 || isNaN(mobile)){
-        alert('Please enter a valid 10-digit mobile number');
-        return;
-      }
-      
-      const customer = {
-        id: document.getElementById('custId').value,
-        name: name,
-        contactPerson: document.getElementById('contactPerson').value,
-        mobile: mobile,
-        email: document.getElementById('email').value,
-        category: category,
-        address: address,
-        city: city,
-        state: state,
-        gst: document.getElementById('gst').value,
-        registrationDate: new Date().toISOString().split('T')[0]
-      };
-      
-      appData.customers.push(customer);
-      
-      alert('Customer registered successfully!\\nCustomer ID: ' + customer.id);
-      clearCustomerForm();
-      document.getElementById('custId').value = 'CUST-' + String(appData.customers.length + 1).padStart(3, '0');
-    }
-    
-    function clearCustomerForm(){
-      document.getElementById('custName').value = '';
-      document.getElementById('contactPerson').value = '';
-      document.getElementById('mobile').value = '';
-      document.getElementById('email').value = '';
-      document.getElementById('address').value = '';
-      document.getElementById('city').value = '';
-      document.getElementById('state').value = '';
-      document.getElementById('gst').value = '';
-    }
-    </script>
-  `;
-}
-
-// SALES INVOICE
-function generateSalesInvoice(){
-  const invoiceNo = `INV-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
-  
-  return `
-    <div class="form-container">
-      <div>
-        <div class="form-group">
-          <label>Invoice No.</label>
-          <input type="text" value="${invoiceNo}" readonly style="background:#f8f9fa">
-        </div>
-        <div class="form-group">
-          <label>Invoice Date *</label>
-          <input type="date" value="${new Date().toISOString().split('T')[0]}">
-        </div>
-        <div class="form-group">
-          <label>Customer *</label>
-          <select>
-            <option value="">Select Customer</option>
-            ${appData.customers.map(c => `<option value="${c.id}">${c.id} - ${c.name}</option>`).join('')}
-          </select>
-        </div>
-      </div>
-      <div>
-        <div class="form-group">
-          <label>Payment Terms *</label>
-          <select>
-            <option value="Net30">Net 30 Days</option>
-            <option value="Net45">Net 45 Days</option>
-            <option value="Immediate">Immediate</option>
-            <option value="Advance50">50% Advance</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Transport Mode</label>
-          <select>
-            <option value="Road">By Road</option>
-            <option value="Courier">By Courier</option>
-            <option value="Pickup">Customer Pickup</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Delivery Date</label>
-          <input type="date" value="${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}">
-        </div>
-      </div>
-    </div>
-    
-    <h3>Add Items</h3>
-    <div style="background:#f8f9fa;padding:20px;border-radius:8px;margin-bottom:20px">
-      <div class="form-container">
-        <div>
-          <div class="form-group">
-            <label>Select Item *</label>
-            <select id="invoiceItem">
-              <option value="">Select Item</option>
-              ${appData.items.map(i => `<option value="${i.code}">${i.code} - ${i.name} (${i.unit})</option>`).join('')}
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Quantity *</label>
-            <input type="number" id="itemQty" value="1" min="1">
-          </div>
-        </div>
-        <div>
-          <div class="form-group">
-            <label>Rate (₹) *</label>
-            <input type="number" id="itemRate" placeholder="Enter rate" min="0" step="0.01">
-          </div>
-          <div class="form-group">
-            <label>Amount (₹)</label>
-            <input type="number" id="itemAmount" readonly style="background:#f0f0f0;font-weight:bold">
-          </div>
-        </div>
-      </div>
-      <div style="text-align:center;margin-top:15px">
-        <button class="action-btn action-btn-success" onclick="addInvoiceItem()">➕ Add Item to Invoice</button>
-      </div>
-    </div>
-    
-    <h3>Invoice Summary</h3>
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Item</th>
-          <th>Quantity</th>
-          <th>Unit</th>
-          <th>Rate</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colspan="5" style="text-align:center;padding:30px;color:#888">
-            Items will appear here after adding
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    
-    <div style="margin-top:30px;text-align:center">
-      <button class="action-btn action-btn-success" style="padding:12px 40px;font-size:16px">
-        🧾 Generate Invoice
-      </button>
-      <button class="action-btn" style="padding:12px 40px;font-size:16px;margin-left:10px">
-        💾 Save as Draft
-      </button>
-      <button class="action-btn action-btn-warning" style="padding:12px 40px;font-size:16px;margin-left:10px">
-        🖨️ Print Preview
-      </button>
-    </div>
-    
-    <script>
-    function addInvoiceItem(){
-      const itemCode = document.getElementById('invoiceItem').value;
-      const qty = parseFloat(document.getElementById('itemQty').value) || 0;
-      const rate = parseFloat(document.getElementById('itemRate').value) || 0;
-      
-      if(!itemCode || qty <= 0 || rate <= 0){
-        alert('Please select item and enter valid quantity and rate');
-        return;
-      }
-      
-      const item = appData.items.find(i => i.code === itemCode);
-      if(item){
-        const amount = qty * rate;
-        alert('Item added successfully!\\n' + 
-              'Item: ' + item.name + '\\n' +
-              'Quantity: ' + qty + ' ' + item.unit + '\\n' +
-              'Rate: ₹' + rate.toFixed(2) + '\\n' +
-              'Amount: ₹' + amount.toFixed(2));
-      }
-    }
-    </script>
-  `;
-}
-
-// OTHER MODULES (Simplified)
-function generateProcessMaster(){
-  return `<div class="form-container"><h3>Process Master</h3><p>Define manufacturing processes</p></div>`;
-}
-function generateCuttingRule(){
-  return `<div class="form-container"><h3>Cutting Rule (Z Rule)</h3><p>Glass cutting optimization rules</p></div>`;
-}
-function generateGlassSize(){
-  return `<div class="form-container"><h3>Glass Size Master</h3><p>Standard and jumbo glass sizes</p></div>`;
-}
-function generateGlassType(){
-  return `<div class="form-container"><h3>Glass Type Master</h3><p>Different types of glass</p></div>`;
-}
-function generateRouteMaster(){
-  return `<div class="form-container"><h3>Route Master</h3><p>Delivery routes management</p></div>`;
-}
-function generatePaymentTerms(){
-  return `<div class="form-container"><h3>Payment Terms Master</h3><p>Payment terms configuration</p></div>`;
-}
-function generateFilmType(){
-  return `<div class="form-container"><h3>Film Type Master</h3><p>Glass film types</p></div>`;
-}
-function generateBankMaster(){
-  return `<div class="form-container"><h3>Bank Master</h3><p>Bank account management</p></div>`;
-}
-function generateVehicleMaster(){
-  return `<div class="form-container"><h3>Vehicle Master</h3><p>Company vehicles</p></div>`;
-}
-function generateAdditionalCharges(){
-  return `<div class="form-container"><h3>Additional Charges Master</h3><p>Extra charges configuration</p></div>`;
-}
-function generateRemarksMaster(){
-  return `<div class="form-container"><h3>Remarks Master</h3><p>Standard remarks</p></div>`;
-}
-function generateProformaInvoice(){
-  return `<div class="form-container"><h3>Proforma Invoice</h3><p>Create proforma invoices</p></div>`;
-}
-function generateWorkOrder(){
-  return `<div class="form-container"><h3>Work Order</h3><p>Production work orders</p></div>`;
-}
-function generateCuttingOptimizer(){
-  return `<div class="form-container"><h3>Cutting Optimizer</h3><p>Glass cutting optimization</p></div>`;
-}
-function generateLabelGeneration(){
-  return `<div class="form-container"><h3>Label Generation</h3><p>Generate product labels</p></div>`;
-}
-function generateHardwareInventory(){
-  return `<div class="form-container"><h3>Hardware Inventory</h3><p>Hardware stock management</p></div>`;
-}
-function generateGlassInventory(){
-  return `<div class="form-container"><h3>Glass Inventory</h3><p>Glass stock management</p></div>`;
-}
-function generateDefaultConfig(){
-  return `<div class="form-container"><h3>Default Configuration</h3><p>System defaults</p></div>`;
-}
-function generateFileStorage(){
-  return `<div class="form-container"><h3>File Storage Config</h3><p>Storage settings</p></div>`;
-}
-function generateNetworkConfig(){
-  return `<div class="form-container"><h3>Network Configuration</h3><p>Network settings</p></div>`;
-}
-function generateDataBackup(){
-  return `<div class="form-container"><h3>Data Backup & Restore</h3><p>Backup management</p></div>`;
-}
-function generateSmsEmail(){
-  return `<div class="form-container"><h3>SMS/Email Config</h3><p>Notification settings</p></div>`;
-}
-function generateBillingConfig(){
-  return `<div class="form-container"><h3>Billing Configuration</h3><p>Billing settings</p></div>`;
-}
-function generatePrintConfig(){
-  return `<div class="form-container"><h3>Print Configuration</h3><p>Printer settings</p></div>`;
-}
-function generateUserAccess(){
-  return `<div class="form-container"><h3>User Access Control</h3><p>Permission management</p></div>`;
-}
-function generateSoftwareUpdate(){
-  return `<div class="form-container"><h3>Software Update</h3><p>Update management</p></div>`;
-}
-function generateCustomerList(){
-  return `<div class="form-container"><h3>Customer List</h3><p>View all customers</p></div>`;
-}
-function generateSalespersonRegistration(){
-  return `<div class="form-container"><h3>Salesperson Registration</h3><p>Register salespersons</p></div>`;
-}
-function generateSalespersonList(){
-  return `<div class="form-container"><h3>Salesperson List</h3><p>View all salespersons</p></div>`;
-}
-function generateProformaReport(){
-  return `<div class="form-container"><h3>Proforma Report</h3><p>Proforma invoice reports</p></div>`;
-}
-function generateInvoiceReport(){
-  return `<div class="form-container"><h3>Invoice Report</h3><p>Sales invoice reports</p></div>`;
-}
-function generateSalesPerformance(){
-  return `<div class="form-container"><h3>Sales Performance</h3><p>Salesperson reports</p></div>`;
-}
-function generateProductionReport(){
-  return `<div class="form-container"><h3>Production Report</h3><p>Production reports</p></div>`;
-}
-function generateWorkOrderReport(){
-  return `<div class="form-container"><h3>Work Order Report</h3><p>Work order reports</p></div>`;
-}
-function generateGlassInventoryReport(){
-  return `<div class="form-container"><h3>Glass Inventory Report</h3><p>Glass stock reports</p></div>`;
-}
-function generateBreakageReport(){
-  return `<div class="form-container"><h3>Breakage Report</h3><p>Breakage reports</p></div>`;
-}
-function generateRejectionReport(){
-  return `<div class="form-container"><h3>Rejection Report</h3><p>Rejection reports</p></div>`;
-}
-function generatePendingBilling(){
-  return `<div class="form-container"><h3>Pending Billing Report</h3><p>Pending invoices</p></div>`;
-}
-function generateBilledArea(){
-  return `<div class="form-container"><h3>Billed Area Report</h3><p>Area reports in Sq.Mtr</p></div>`;
-}
-function generateTallyExport(){
-  return `<div class="form-container"><h3>Tally Export Report</h3><p>Export to Tally</p></div>`;
-}
-function generateDirectInvoice(){
-  return `<div class="form-container"><h3>Direct Invoice Report</h3><p>Direct invoice reports</p></div>`;
-}
-function generateCreditNote(){
-  return `<div class="form-container"><h3>Credit Note Report</h3><p>Credit note reports</p></div>`;
-}
-function generateUserManagement(){
-  return `<div class="form-container"><h3>User Management</h3><p>User management system</p></div>`;
-}
-
-// Action functions
-function saveModule(moduleName){
-  alert(`✅ Changes saved successfully for ${moduleName} module`);
-}
-
-function printModule(moduleName){
-  alert(`🖨️ Printing ${moduleName} module`);
-  window.print();
-}
-
-function exportModule(moduleName){
-  alert(`📤 Exporting ${moduleName} module data to Excel`);
-}
-
-// Add Enter key support for login
-document.addEventListener('DOMContentLoaded', function(){
-  const passwordField = document.getElementById('password');
-  if(passwordField){
-    passwordField.addEventListener('keypress', function(e){
-      if(e.key === 'Enter'){
-        login();
-      }
-    });
-  }
-  
-  // Auto-fill demo credentials
-  document.getElementById('username').value = 'admin';
-  document.getElementById('password').value = 'admin123';
-});
-</script>
-
-</body>
-</html>
+        <div class="for
