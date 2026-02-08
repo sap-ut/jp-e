@@ -2,259 +2,236 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>JP Solutions ERP</title>
+<title>JP Solutions ERP - Item Master & Invoice</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 :root{
   --blue:#0d6efd;
   --light:#e9f2ff;
-  --dropdown-bg:#fff;
-  --dropdown-hover:#f0f4ff;
+  --green:#28a745;
+  --red:#dc3545;
+  --gray:#f1f1f1;
 }
-*{box-sizing:border-box;font-family:Segoe UI,Arial}
-body{margin:0;background:#f4f8ff}
+*{box-sizing:border-box;font-family:Segoe UI,Arial;}
+body{margin:0;background:#f4f8ff;}
+h2{margin:0 0 10px 0;}
 
-/* LOGIN */
-#loginBox{
-  height:100vh;display:flex;align-items:center;justify-content:center;
-}
-.login{
-  background:#fff;padding:30px;width:320px;border-radius:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,.15);text-align:center
-}
-.login h2{margin:0;color:#0a2a43}
-.login input{
-  width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid #ccc
-}
-.login button{
-  width:100%;padding:10px;border:none;border-radius:6px;
-  background:var(--blue);color:#fff;cursor:pointer
-}
-.error{color:red;font-size:13px}
+/* Container */
+.container{max-width:1200px;margin:20px auto;padding:0 15px;}
 
-/* APP */
-#app{display:none}
+/* Forms */
+form{background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);margin-bottom:20px;}
+form h2{color:var(--blue);}
+form input, form select{width:100%;padding:8px;margin:8px 0;border-radius:6px;border:1px solid #ccc;}
+form button{padding:10px 20px;border:none;border-radius:6px;background:var(--blue);color:#fff;cursor:pointer;margin-top:10px;}
+form button:hover{background:#0953c6;}
 
-/* NAVBAR */
-.navbar{
-  position:sticky;
-  top:0;
-  z-index:1000;
-  background:var(--blue);
-  display:flex;
-  align-items:center;
-  overflow-x:auto;
-  padding:10px;
-  color:#fff;
-  white-space:nowrap;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.4) transparent;
-}
-.navbar::-webkit-scrollbar { height: 6px; }
-.navbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.4); border-radius: 3px; }
+/* Tables */
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);}
+table th, table td{padding:10px;text-align:left;border-bottom:1px solid #eee;}
+table th{background:var(--blue);color:#fff;}
+table tr:last-child td{border-bottom:none;}
+.delete-btn{color:#fff;background:var(--red);border:none;padding:5px 10px;border-radius:5px;cursor:pointer;}
+.delete-btn:hover{background:#a71d2a;}
 
-.brand{font-weight:600;margin-right:20px;flex-shrink:0}
-.menu{display:flex;gap:14px;flex-shrink:0}
-.menu-item{position:relative;cursor:pointer;flex-shrink:0}
-.menu-item span{
-  padding:6px 10px;
-  display:block;
-  transition: background 0.3s;
-  border-radius:6px;
-}
-.menu-item span:hover{
-  background: rgba(255,255,255,0.2);
-}
-
-/* DROPDOWN */
-.dropdown{
-  display:none;
-  position:fixed;
-  background:var(--dropdown-bg);
-  color:#000;
-  border-radius:8px;
-  box-shadow:0 6px 20px rgba(0,0,0,.2);
-  z-index:9999;
-  padding:4px 0;
-  min-width:auto;
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-  opacity:0;
-}
-.dropdown.show{
-  display:block;
-  transform: scaleY(1);
-  opacity:1;
-}
-.dropdown div{
-  padding:8px 14px;
-  cursor:pointer;
-  white-space:nowrap;
-  transition: background 0.2s;
-}
-.dropdown div:hover{
-  background: var(--dropdown-hover);
-}
-
-/* CONTENT */
-.content{
-  padding:20px;
-  position:relative;
-  z-index:1;
+/* Responsive */
+@media(max-width:768px){
+  table, form input, form select, form button{width:100%;}
 }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="loginBox">
-  <div class="login">
-    <h2>JP Solutions ERP</h2>
-    <p style="font-size:13px;color:#555">Powered by JP</p>
-    <input id="u" placeholder="Username">
-    <input id="p" type="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <div class="error" id="err"></div>
-  </div>
-</div>
+<div class="container">
 
-<!-- APP -->
-<div id="app">
-  <div class="navbar">
-    <div class="brand">JP ERP</div>
-    <div class="menu">
+  <!-- Item Master Form -->
+  <form id="itemMasterForm">
+    <h2>🧱 Item Master</h2>
+    <input type="text" id="itemName" placeholder="Item Name" required>
+    <input type="text" id="itemUnit" placeholder="Unit (e.g., Sq.Mtr / Pc)" required>
+    <input type="number" id="itemRate" placeholder="Rate per Unit" required>
+    <input type="number" id="itemCharge" placeholder="Additional Charges (Optional)" value="0">
+    <button type="submit">Add / Update Item</button>
+  </form>
 
-      <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>🧱 Masters</span>
-        <div class="dropdown">
-          <div>Item Master</div>
-          <div>Price Master</div>
-          <div>Process Master</div>
-          <div>Cutting Rule (Z Rule)</div>
-          <div>Glass Size Master (Jumbo Size)</div>
-          <div>Glass Type Master</div>
-          <div>Route Master</div>
-          <div>Payment Terms Master</div>
-          <div>Film Type</div>
-          <div>Bank Master</div>
-          <div>Vehicle Master</div>
-          <div>Additional Charges Master</div>
-          <div>Remarks Master</div>
-        </div>
-      </div>
+  <!-- Item List Table -->
+  <table id="itemTable">
+    <thead>
+      <tr>
+        <th>Item Name</th>
+        <th>Unit</th>
+        <th>Rate</th>
+        <th>Additional Charge</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Dynamic Items -->
+    </tbody>
+  </table>
 
-      <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>🔁 Transactions</span>
-        <div class="dropdown">
-          <div>Proforma Invoice</div>
-          <div>Work Order</div>
-          <div>Sales Invoice</div>
-          <div>Cutting Optimizer</div>
-          <div>Label / Sticker Generation</div>
-        </div>
-      </div>
+  <!-- Invoice Form -->
+  <form id="invoiceForm">
+    <h2>📄 Invoice</h2>
+    <input type="text" id="customerName" placeholder="Customer Name" required>
 
-      <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>📦 Inventory / Stock</span>
-        <div class="dropdown">
-          <div>Hardware Inventory</div>
-          <div>Glass Inventory</div>
-        </div>
-      </div>
+    <table id="invoiceItems" style="margin-top:10px;">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Unit</th>
+          <th>Rate</th>
+          <th>Qty</th>
+          <th>Additional</th>
+          <th>Amount</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic Invoice Rows -->
+      </tbody>
+    </table>
 
-      <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>⚙️ System Settings</span>
-        <div class="dropdown">
-          <div>Default Configuration</div>
-          <div>File Storage Configuration</div>
-          <div>Network Configuration</div>
-          <div>Data Backup & Restore</div>
-          <div>SMS / Email Configuration</div>
-          <div>Billing Configuration</div>
-          <div>Print Configuration</div>
-          <div>User Access Control</div>
-          <div>Software Update</div>
-        </div>
-      </div>
+    <button type="button" onclick="addInvoiceRow()">➕ Add Item</button>
 
-      <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>👥 Customer Management</span>
-        <div class="dropdown">
-          <div>Customer Registration</div>
-          <div>Customer List / Customer Master</div>
-        </div>
-      </div>
-
-      <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>🧑‍💼 Sales Management</span>
-        <div class="dropdown">
-          <div>Salesperson Registration</div>
-          <div>Salesperson List</div>
-        </div>
-      </div>
-
-      <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>📊 Reports</span>
-        <div class="dropdown">
-          <div>Proforma Report</div>
-          <div>Invoice Report</div>
-          <div>Salesperson Performance Report</div>
-          <div>Production Report</div>
-          <div>Work Order Report</div>
-          <div>Glass Inventory Report</div>
-          <div>Breakage Report</div>
-          <div>Rejection Report</div>
-          <div>Pending Billing Report</div>
-          <div>Billed Area Report (Sq.Mtr)</div>
-          <div>Tally Export Report</div>
-          <div>Direct Invoice Report</div>
-          <div>Credit Note Report</div>
-        </div>
-      </div>
-
-      <div class="menu-item" onclick="toggleDropdown(event,this)">
-        <span>👤 User Management</span>
-        <div class="dropdown">
-          <div>User Management</div>
-        </div>
-      </div>
-
+    <div style="margin-top:10px;">
+      <p>Subtotal: <span id="subtotal">0</span></p>
+      <p>CGST (9%): <span id="cgst">0</span></p>
+      <p>SGST (9%): <span id="sgst">0</span></p>
+      <p>Total: <span id="total">0</span></p>
     </div>
-  </div>
 
-  <div class="content">
-    <!-- Empty content -->
-  </div>
+    <button type="submit">Generate Invoice</button>
+  </form>
+
 </div>
 
 <script>
-function login(){
-  if(u.value==="admin" && p.value==="admin123"){
-    loginBox.style.display="none";
-    app.style.display="block";
+let items = [];
+
+// Add / Update Item
+document.getElementById('itemMasterForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('itemName').value.trim();
+  const unit = document.getElementById('itemUnit').value.trim();
+  const rate = parseFloat(document.getElementById('itemRate').value);
+  const charge = parseFloat(document.getElementById('itemCharge').value) || 0;
+
+  // Check if item exists
+  const index = items.findIndex(i => i.name.toLowerCase()===name.toLowerCase());
+  if(index>-1){
+    items[index] = {name, unit, rate, charge};
   }else{
-    err.innerText="Invalid username or password";
+    items.push({name, unit, rate, charge});
+  }
+  renderItemTable();
+  this.reset();
+});
+
+// Render Item Table
+function renderItemTable(){
+  const tbody = document.querySelector('#itemTable tbody');
+  tbody.innerHTML = '';
+  items.forEach((i,idx)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i.name}</td><td>${i.unit}</td><td>${i.rate}</td><td>${i.charge}</td>
+      <td><button class="delete-btn" onclick="deleteItem(${idx})">Delete</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// Delete Item
+function deleteItem(idx){
+  if(confirm("Are you sure to delete this item?")){
+    items.splice(idx,1);
+    renderItemTable();
+    updateInvoiceRows();
   }
 }
 
-function toggleDropdown(event,el){
-  event.stopPropagation();
-  const d = el.querySelector('.dropdown');
-  const rect = el.getBoundingClientRect();
-  d.style.top = rect.bottom + "px";
-  d.style.left = rect.left + "px";
+// Invoice Rows
+function addInvoiceRow(){
+  const tbody = document.querySelector('#invoiceItems tbody');
+  const tr = document.createElement('tr');
 
-  document.querySelectorAll('.dropdown').forEach(drop=>{
-    if(drop!==d) drop.classList.remove('show');
+  tr.innerHTML = `
+    <td>
+      <select onchange="updateRow(this)">
+        <option value="">Select Item</option>
+        ${items.map(i=>`<option value="${i.name}">${i.name}</option>`).join('')}
+      </select>
+    </td>
+    <td class="unit"></td>
+    <td class="rate"></td>
+    <td><input type="number" class="qty" value="1" min="1" onchange="updateRow(this)"></td>
+    <td class="addl"></td>
+    <td class="amount">0</td>
+    <td><button type="button" onclick="removeRow(this)">❌</button></td>
+  `;
+  tbody.appendChild(tr);
+}
+
+// Update row values and calculation
+function updateRow(el){
+  const tr = el.closest('tr');
+  const itemName = tr.querySelector('select').value;
+  const qty = parseFloat(tr.querySelector('.qty').value) || 0;
+
+  const item = items.find(i=>i.name===itemName);
+  if(item){
+    tr.querySelector('.unit').innerText = item.unit;
+    tr.querySelector('.rate').innerText = item.rate;
+    tr.querySelector('.addl').innerText = item.charge;
+    tr.querySelector('.amount').innerText = ((item.rate*qty)+item.charge).toFixed(2);
+  }else{
+    tr.querySelector('.unit').innerText='';
+    tr.querySelector('.rate').innerText='';
+    tr.querySelector('.addl').innerText='';
+    tr.querySelector('.amount').innerText='0';
+  }
+  calculateTotals();
+}
+
+// Remove invoice row
+function removeRow(btn){
+  btn.closest('tr').remove();
+  calculateTotals();
+}
+
+// Update dropdown options if item deleted
+function updateInvoiceRows(){
+  document.querySelectorAll('#invoiceItems tbody select').forEach(sel=>{
+    const val = sel.value;
+    sel.innerHTML = `<option value="">Select Item</option>` + items.map(i=>`<option value="${i.name}">${i.name}</option>`).join('');
+    sel.value = val;
   });
-
-  d.classList.toggle('show');
+  document.querySelectorAll('#invoiceItems tbody tr').forEach(r=>updateRow(r.querySelector('select')));
 }
 
-document.body.onclick=function(){
-  document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('show'));
+// Calculate totals
+function calculateTotals(){
+  let subtotal=0;
+  document.querySelectorAll('#invoiceItems tbody tr').forEach(tr=>{
+    subtotal += parseFloat(tr.querySelector('.amount').innerText) || 0;
+  });
+  const cgst = subtotal*0.09;
+  const sgst = subtotal*0.09;
+  const total = subtotal + cgst + sgst;
+
+  document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+  document.getElementById('cgst').innerText = cgst.toFixed(2);
+  document.getElementById('sgst').innerText = sgst.toFixed(2);
+  document.getElementById('total').innerText = total.toFixed(2);
 }
+
+// Invoice form submission
+document.getElementById('invoiceForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  alert('Invoice Generated for '+document.getElementById('customerName').value+'\nTotal: '+document.getElementById('total').innerText);
+  this.reset();
+  document.querySelector('#invoiceItems tbody').innerHTML='';
+  calculateTotals();
+});
 </script>
 
 </body>
