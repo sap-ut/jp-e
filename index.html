@@ -5,7 +5,6 @@
 <title>JP Solutions ERP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-/* All your original CSS remains exactly the same */
 :root{
   --blue:#0d6efd;
   --light:#e9f2ff;
@@ -20,27 +19,8 @@
 *{box-sizing:border-box;font-family:Segoe UI,Arial}
 body{margin:0;background:#f4f8ff;color:#333}
 
-/* LOGIN */
-#loginBox{
-  height:100vh;display:flex;align-items:center;justify-content:center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-.login{
-  background:#fff;padding:30px;width:320px;border-radius:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,.15);text-align:center
-}
-.login h2{margin:0;color:#0a2a43}
-.login input{
-  width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid #ccc
-}
-.login button{
-  width:100%;padding:10px;border:none;border-radius:6px;
-  background:var(--blue);color:#fff;cursor:pointer;font-weight:bold
-}
-.error{color:red;font-size:13px;margin-top:10px;min-height:20px}
-
 /* APP */
-#app{display:none;height:100vh;overflow:hidden}
+#app{display:block;height:100vh;overflow:hidden}
 
 /* NAVBAR */
 .navbar{
@@ -327,20 +307,7 @@ body{margin:0;background:#f4f8ff;color:#333}
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="loginBox">
-  <div class="login">
-    <h2>JP Solutions ERP</h2>
-    <p style="font-size:13px;color:#555">Powered by JP</p>
-    <input id="u" placeholder="Username" value="admin">
-    <input id="p" type="password" placeholder="Password" value="admin123">
-    <button onclick="login()">Login</button>
-    <div class="error" id="err"></div>
-    <p style="margin-top:15px;font-size:12px;color:#888">Use admin/admin123 for demo</p>
-  </div>
-</div>
-
-<!-- APP -->
+<!-- APP - Directly starts without login -->
 <div id="app">
   <div class="navbar">
     <div class="brand">JP ERP</div>
@@ -441,7 +408,7 @@ body{margin:0;background:#f4f8ff;color:#333}
       </div>
       
       <div class="logout-btn" onclick="logout()">
-        <span>🚪 Logout</span>
+        <span>🚪 Exit</span>
       </div>
     </div>
   </div>
@@ -480,28 +447,6 @@ const appData = {
   ]
 };
 
-// Login function - FIXED
-function login(){
-  const u = document.getElementById('u').value;
-  const p = document.getElementById('p').value;
-  
-  if(u === "admin" && p === "admin123"){
-    document.getElementById('loginBox').style.display = "none";
-    document.getElementById('app').style.display = "block";
-    showWelcomeMessage();
-    document.getElementById('err').innerText = ""; // Clear error message
-  } else if(u === "user" && p === "user123"){
-    document.getElementById('loginBox').style.display = "none";
-    document.getElementById('app').style.display = "block";
-    showWelcomeMessage();
-    document.getElementById('err').innerText = ""; // Clear error message
-  } else {
-    document.getElementById('err').innerText = "Invalid username or password";
-    document.getElementById('p').value = ""; // Clear password field
-    document.getElementById('p').focus(); // Focus on password field
-  }
-}
-
 // Toggle dropdown
 function toggleDropdown(event,el){
   event.stopPropagation();
@@ -537,7 +482,7 @@ function showWelcomeMessage(){
   `;
 }
 
-// Module loading function - FIXED
+// Module loading function
 function loadModule(moduleName){
   document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
   
@@ -765,14 +710,15 @@ function loadModule(moduleName){
   window.scrollTo(0, 0);
 }
 
-// Logout function
+// Logout function - Changed to Exit
 function logout(){
-  if(confirm('Are you sure you want to logout?')){
-    document.getElementById('loginBox').style.display = "flex";
-    document.getElementById('app').style.display = "none";
-    document.getElementById('u').value = 'admin'; // Reset to default
-    document.getElementById('p').value = 'admin123'; // Reset to default
-    document.getElementById('err').innerText = '';
+  if(confirm('Are you sure you want to exit?')){
+    document.getElementById('moduleContent').innerHTML = `
+      <div style="text-align:center;padding:100px;color:#666">
+        <h2>Thank you for using JP Solutions ERP</h2>
+        <p>You can close this window or refresh to start again</p>
+      </div>
+    `;
   }
 }
 
@@ -1535,7 +1481,7 @@ function generateSalesInvoice(){
   `;
 }
 
-// OTHER MODULES (Simplified implementations)
+// OTHER MODULES (Simplified implementations) - All your original functions remain exactly the same
 function generateProcessMaster(){
   return `<div class="form-container">
     <h3>Process Master</h3>
@@ -1854,24 +1800,9 @@ function exportModule(moduleName){
   alert(`Exporting ${moduleName} module data`);
 }
 
-// Auto-login for demo - FIXED
+// Auto-start the application
 window.onload = function() {
-  // Auto-fill login for demo
-  document.getElementById('u').value = 'admin';
-  document.getElementById('p').value = 'admin123';
-  
-  // Add event listener for Enter key in login - FIXED
-  document.getElementById('u').addEventListener('keypress', function(e){
-    if(e.key === 'Enter'){
-      login();
-    }
-  });
-  
-  document.getElementById('p').addEventListener('keypress', function(e){
-    if(e.key === 'Enter'){
-      login();
-    }
-  });
+  showWelcomeMessage();
 };
 </script>
 
