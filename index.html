@@ -42,14 +42,18 @@ body{margin:0;background:#f4f8ff}
   background:var(--blue);
   display:flex;
   align-items:center;
+  overflow-x:auto;
   padding:10px;
   color:#fff;
-  flex-wrap:wrap;
+  white-space:nowrap;
 }
-.brand{font-weight:600;margin-right:20px;white-space:nowrap}
-.menu{display:flex;gap:14px;flex-wrap:wrap}
-.menu-item{position:relative;cursor:pointer;white-space:nowrap}
-.menu-item span{padding:6px 10px;display:block}
+.navbar::-webkit-scrollbar { height: 6px; }
+.navbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.4); border-radius: 3px; }
+
+.brand{font-weight:600;margin-right:20px;flex-shrink:0}
+.menu{display:flex;gap:14px;flex-shrink:0}
+.menu-item{position:relative;cursor:pointer;flex-shrink:0}
+.menu-item span{padding:6px 10px;display:block;}
 
 /* DROPDOWN */
 .dropdown{
@@ -59,13 +63,14 @@ body{margin:0;background:#f4f8ff}
   left:0;
   background:#fff;
   color:#000;
-  min-width:240px;
   border-radius:8px;
   box-shadow:0 10px 30px rgba(0,0,0,.2);
   z-index:2000;
+  min-width:auto;
+  padding:4px 0;
 }
 .dropdown div{
-  padding:8px 14px;
+  padding:6px 12px;
   cursor:pointer;
   white-space:nowrap;
 }
@@ -199,7 +204,7 @@ body{margin:0;background:#f4f8ff}
   </div>
 
   <div class="content">
-    <!-- Dashboard removed, content area empty -->
+    <!-- Empty content area, Dashboard removed -->
   </div>
 </div>
 
