@@ -2,97 +2,91 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>JP Solutions ERP</title>
+<title>JP ERP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-:root{
-  --blue:#1e88e5;
-  --dark:#0d47a1;
-  --light:#e3f2fd;
-}
-*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial}
-body{
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+
+/* ===== LOGIN ===== */
+#loginPage{
   height:100vh;
-  background:linear-gradient(135deg,#e3f2fd,#bbdefb,#e3f2fd);
+  background:linear-gradient(135deg,#0d47a1,#1976d2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
-
-/* ---------- LOGIN ---------- */
-#loginBox{
-  width:340px;
-  padding:30px;
+.login-box{
   background:#fff;
-  border-radius:14px;
-  box-shadow:0 20px 40px rgba(0,0,0,.25);
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-}
-.jp-logo{
+  width:320px;
+  padding:25px;
+  border-radius:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
   text-align:center;
-  font-size:42px;
-  font-weight:900;
-  letter-spacing:4px;
-  background:repeating-linear-gradient(
-    45deg,#1e88e5,#1e88e5 10px,#64b5f6 10px,#64b5f6 20px
-  );
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
 }
-#loginBox h3{text-align:center;margin:15px 0;color:var(--dark)}
-input{
-  width:100%;padding:12px;margin-top:12px;
-  border-radius:8px;border:1px solid #bbb;
+.login-box h2{
+  margin-bottom:15px;
+  color:#0d47a1;
 }
-button{
-  width:100%;padding:12px;margin-top:18px;
-  background:var(--blue);color:#fff;border:none;
-  border-radius:8px;font-size:16px;cursor:pointer;
+.login-box input{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border:1px solid #ccc;
+  border-radius:5px;
 }
-button:hover{background:var(--dark)}
-#error{color:red;text-align:center;margin-top:10px}
+.login-box button{
+  width:100%;
+  padding:10px;
+  background:#0d47a1;
+  color:#fff;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  margin-top:10px;
+}
+.login-box button:hover{background:#08306b}
 
-/* ---------- DASHBOARD ---------- */
-#dashboard{display:none;height:100vh}
+/* ===== APP ===== */
+#app{display:none}
 
-/* TOP MENU BAR */
-.navbar{
-  background:var(--blue);
-  height:56px;
+/* ===== TOP MENU BAR ===== */
+.topbar{
+  background:#0d47a1;
+  color:#fff;
   display:flex;
   align-items:center;
-  padding:0 18px;
-  color:#fff;
-  position:relative;
-  z-index:100;
+  padding:0 10px;
+  height:48px;
 }
 .logo{
-  font-size:20px;
-  font-weight:800;
-  letter-spacing:2px;
-  margin-right:25px;
-  white-space:nowrap;
+  font-weight:bold;
+  margin-right:20px;
+  letter-spacing:1px;
 }
 .menu{
   display:flex;
-  gap:18px;
-  white-space:nowrap;
+  gap:15px;
 }
+
+/* ===== MENU ITEM ===== */
 .menu-item{
   position:relative;
   cursor:pointer;
   font-size:14px;
+  padding:6px 4px;
+  white-space:nowrap;
 }
 
-/* DROPDOWN (CLICK BASED) */
+/* ===== DROPDOWN ===== */
 .dropdown{
   display:none;
   position:absolute;
   top:100%;
   left:0;
   background:#fff;
-  min-width:280px;
+  width:max-content;
+  min-width:220px;
   border-radius:8px;
   box-shadow:0 12px 30px rgba(0,0,0,.3);
   z-index:9999;
@@ -100,161 +94,121 @@ button:hover{background:var(--dark)}
 }
 .dropdown.show{display:block}
 .dropdown div{
-  padding:9px 14px;
+  padding:8px 16px;
   font-size:13px;
   color:#333;
-  border-bottom:1px solid #eee;
+  white-space:nowrap;
 }
-.dropdown div:hover{background:var(--light)}
+.dropdown div:hover{
+  background:#e3f2fd;
+}
 
+/* ===== CONTENT ===== */
+.content{
+  padding:20px;
+}
+.box{
+  background:#f5f7fa;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,.1);
+}
 </style>
 </head>
 
 <body>
 
 <!-- LOGIN -->
-<div id="loginBox">
-  <div class="jp-logo">JP</div>
-  <h3>JP Solutions ERP</h3>
-  <input id="user" placeholder="Username">
-  <input id="pass" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <div id="error"></div>
+<div id="loginPage">
+  <div class="login-box">
+    <h2>JP ERP Login</h2>
+    <input type="text" placeholder="Username">
+    <input type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard">
-  <div class="navbar">
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
     <div class="logo">JP ERP</div>
 
     <div class="menu">
-
-      <div class="menu-item" onclick="toggleMenu(this)">
+      <div class="menu-item" onclick="toggleMenu(this,event)">
         Masters
         <div class="dropdown">
+          <div>Customer Master</div>
+          <div>Supplier Master</div>
           <div>Item Master</div>
-          <div>Price Master</div>
-          <div>Process Master</div>
-          <div>Cutting Rule (Z Rule)</div>
-          <div>Glass Size Master (Jumbo Size)</div>
-          <div>Glass Type Master</div>
-          <div>Route Master</div>
-          <div>Payment Terms Master</div>
-          <div>Film Type Master</div>
-          <div>Bank Master</div>
-          <div>Vehicle Master</div>
-          <div>Additional Charges Master</div>
-          <div>Remarks Master</div>
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggleMenu(this)">
-        Transactions
+      <div class="menu-item" onclick="toggleMenu(this,event)">
+        Sales
         <div class="dropdown">
-          <div>Proforma Invoice</div>
-          <div>Work Order</div>
-          <div>Sales Invoice</div>
-          <div>Cutting Optimizer</div>
-          <div>Label / Sticker Generation</div>
+          <div>Quotation</div>
+          <div>Sales Order</div>
+          <div>Invoice</div>
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggleMenu(this)">
-        Inventory / Stock
+      <div class="menu-item" onclick="toggleMenu(this,event)">
+        Purchase
         <div class="dropdown">
-          <div>Hardware Inventory</div>
-          <div>Glass Inventory</div>
+          <div>Purchase Order</div>
+          <div>Purchase Entry</div>
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggleMenu(this)">
-        Customer Management
+      <div class="menu-item" onclick="toggleMenu(this,event)">
+        Accounts
         <div class="dropdown">
-          <div>Customer Registration</div>
-          <div>Customer List / Customer Master</div>
+          <div>Receipt</div>
+          <div>Payment</div>
+          <div>Ledger</div>
         </div>
       </div>
 
-      <div class="menu-item" onclick="toggleMenu(this)">
-        Sales Management
-        <div class="dropdown">
-          <div>Salesperson Registration</div>
-          <div>Salesperson List</div>
-        </div>
-      </div>
-
-      <div class="menu-item" onclick="toggleMenu(this)">
+      <div class="menu-item" onclick="toggleMenu(this,event)">
         Reports
         <div class="dropdown">
-          <div>Proforma Report</div>
-          <div>Invoice Report</div>
-          <div>Salesperson Performance Report</div>
-          <div>Production Report</div>
-          <div>Work Order Report</div>
-          <div>Glass Inventory Report</div>
-          <div>Breakage Report</div>
-          <div>Rejection Report</div>
-          <div>Pending Billing Report</div>
-          <div>Billed Area Report (Sq.Mtr)</div>
-          <div>Tally Export Report</div>
-          <div>Direct Invoice Report</div>
-          <div>Credit Note Report</div>
+          <div>Sales Report</div>
+          <div>Purchase Report</div>
+          <div>GST Report</div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="menu-item" onclick="toggleMenu(this)">
-        System Settings
-        <div class="dropdown">
-          <div>Default Configuration</div>
-          <div>File Storage Configuration</div>
-          <div>Network Configuration</div>
-          <div>Data Backup & Restore</div>
-          <div>SMS / Email Configuration</div>
-          <div>Billing Configuration</div>
-          <div>Print Configuration</div>
-          <div>User Access Control</div>
-          <div>Software Update</div>
-        </div>
-      </div>
-
-      <div class="menu-item" onclick="toggleMenu(this)">
-        User Management
-        <div class="dropdown">
-          <div>User Management</div>
-        </div>
-      </div>
-
+  <div class="content">
+    <div class="box">
+      <h3>Dashboard</h3>
+      <p>Select any menu option from top bar.</p>
     </div>
   </div>
 </div>
 
 <script>
-const users={admin:"admin123",jp:"jp123",user:"user123"};
-
 function login(){
-  if(users[user.value]===pass.value){
-    loginBox.style.display="none";
-    dashboard.style.display="block";
-  }else{
-    error.innerText="Invalid Username or Password";
-  }
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('app').style.display='block';
 }
 
-function toggleMenu(el){
-  event.stopPropagation();
-  document.querySelectorAll('.dropdown').forEach(d=>{
-    if(d!==el.querySelector('.dropdown')){
-      d.classList.remove('show');
-    }
-  });
+/* ===== MENU CONTROL ===== */
+function toggleMenu(el,e){
+  e.stopPropagation();
+  closeAll();
   el.querySelector('.dropdown').classList.toggle('show');
 }
 
-document.addEventListener('click',()=>{
-  document.querySelectorAll('.dropdown').forEach(d=>{
-    d.classList.remove('show');
-  });
-});
+function closeAll(){
+  document.querySelectorAll('.dropdown')
+    .forEach(d=>d.classList.remove('show'));
+}
+
+document.body.addEventListener('click',closeAll);
+document.querySelectorAll('.dropdown')
+  .forEach(d=>d.addEventListener('click',e=>e.stopPropagation()));
 </script>
 
 </body>
