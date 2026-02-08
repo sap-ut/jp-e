@@ -69,12 +69,12 @@ button:hover{background:var(--dark)}
   font-weight:900;
   font-size:20px;
   letter-spacing:2px;
-  margin-right:30px;
+  margin-right:24px;
   white-space:nowrap;
 }
 .menu{
   display:flex;
-  gap:18px;
+  gap:16px;
   white-space:nowrap;
 }
 .menu-item{
@@ -91,7 +91,7 @@ button:hover{background:var(--dark)}
   top:36px;
   left:0;
   background:white;
-  min-width:260px;
+  min-width:270px;
   border-radius:8px;
   box-shadow:0 12px 30px rgba(0,0,0,.25);
   z-index:999;
@@ -104,7 +104,6 @@ button:hover{background:var(--dark)}
 }
 .dropdown div:hover{background:var(--light)}
 
-.content{padding:30px}
 </style>
 </head>
 
@@ -126,13 +125,15 @@ button:hover{background:var(--dark)}
     <div class="logo">JP ERP</div>
 
     <div class="menu">
+
+      <!-- MASTERS -->
       <div class="menu-item">Masters
         <div class="dropdown">
           <div>Item Master</div>
           <div>Price Master</div>
           <div>Process Master</div>
           <div>Cutting Rule (Z Rule)</div>
-          <div>Glass Size Master (Jumbo)</div>
+          <div>Glass Size Master (Jumbo Size)</div>
           <div>Glass Type Master</div>
           <div>Route Master</div>
           <div>Payment Terms Master</div>
@@ -144,6 +145,7 @@ button:hover{background:var(--dark)}
         </div>
       </div>
 
+      <!-- TRANSACTIONS -->
       <div class="menu-item">Transactions
         <div class="dropdown">
           <div>Proforma Invoice</div>
@@ -154,32 +156,36 @@ button:hover{background:var(--dark)}
         </div>
       </div>
 
-      <div class="menu-item">Inventory
+      <!-- INVENTORY -->
+      <div class="menu-item">Inventory / Stock
         <div class="dropdown">
           <div>Hardware Inventory</div>
           <div>Glass Inventory</div>
         </div>
       </div>
 
-      <div class="menu-item">Customer
+      <!-- CUSTOMER -->
+      <div class="menu-item">Customer Management
         <div class="dropdown">
           <div>Customer Registration</div>
-          <div>Customer List / Master</div>
+          <div>Customer List / Customer Master</div>
         </div>
       </div>
 
-      <div class="menu-item">Sales
+      <!-- SALES -->
+      <div class="menu-item">Sales Management
         <div class="dropdown">
           <div>Salesperson Registration</div>
           <div>Salesperson List</div>
         </div>
       </div>
 
+      <!-- REPORTS -->
       <div class="menu-item">Reports
         <div class="dropdown">
           <div>Proforma Report</div>
           <div>Invoice Report</div>
-          <div>Salesperson Performance</div>
+          <div>Salesperson Performance Report</div>
           <div>Production Report</div>
           <div>Work Order Report</div>
           <div>Glass Inventory Report</div>
@@ -193,6 +199,7 @@ button:hover{background:var(--dark)}
         </div>
       </div>
 
+      <!-- SYSTEM -->
       <div class="menu-item">System Settings
         <div class="dropdown">
           <div>Default Configuration</div>
@@ -207,11 +214,13 @@ button:hover{background:var(--dark)}
         </div>
       </div>
 
-      <div class="menu-item">User
+      <!-- USER -->
+      <div class="menu-item">User Management
         <div class="dropdown">
           <div>User Management</div>
         </div>
       </div>
+
     </div>
   </div>
 </div>
