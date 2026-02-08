@@ -16,7 +16,7 @@
   --warning:#ffc107;
   --danger:#dc3545;
 }
-*{box-sizing:border-box;font-family:Segoe UI,Arial}
+*{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
 body{margin:0;background:#f4f8ff;color:#333}
 
 /* LOGIN */
@@ -28,15 +28,21 @@ body{margin:0;background:#f4f8ff;color:#333}
   background:#fff;padding:30px;width:320px;border-radius:12px;
   box-shadow:0 10px 30px rgba(0,0,0,.15);text-align:center
 }
-.login h2{margin:0;color:#0a2a43}
+.login h2{margin:0 0 10px 0;color:#0a2a43}
 .login input{
-  width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid #ccc
+  width:100%;padding:10px;margin:10px 0;border-radius:6px;
+  border:1px solid #ccc;font-size:14px
 }
 .login button{
   width:100%;padding:10px;border:none;border-radius:6px;
-  background:var(--blue);color:#fff;cursor:pointer;font-weight:bold
+  background:var(--blue);color:#fff;cursor:pointer;
+  font-weight:bold;font-size:16px;margin-top:10px
 }
 .error{color:red;font-size:13px;margin-top:10px;min-height:20px}
+.demo-note{
+  font-size:12px;color:#888;margin-top:15px;background:#f8f9fa;
+  padding:8px;border-radius:6px;border-left:3px solid var(--blue)
+}
 
 /* APP */
 #app{display:none;height:100vh;overflow:hidden}
@@ -50,7 +56,7 @@ body{margin:0;background:#f4f8ff;color:#333}
   display:flex;
   align-items:center;
   overflow-x:auto;
-  padding:10px;
+  padding:10px 15px;
   color:#fff;
   white-space:nowrap;
   scrollbar-width: thin;
@@ -79,6 +85,7 @@ body{margin:0;background:#f4f8ff;color:#333}
   border-radius:6px;
   cursor:pointer;
   margin-left:auto;
+  transition:background 0.3s;
 }
 .logout-btn:hover{
   background:rgba(255,255,255,0.3);
@@ -253,46 +260,19 @@ body{margin:0;background:#f4f8ff;color:#333}
   background:#f8d7da;
   color:#842029;
 }
-.status-pending{
-  background:#fff3cd;
-  color:#856404;
-}
 
-/* MODULE SPECIFIC */
-.optimizer-grid{
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:20px;
-  margin-top:20px;
-}
-.optimizer-card{
-  background:#f8f9fa;
-  padding:20px;
-  border-radius:8px;
-  border:1px solid #e9ecef;
-}
-.config-card{
-  background:#fff;
-  padding:15px;
-  border-radius:8px;
-  border:1px solid #ddd;
-  margin-bottom:15px;
-}
-.report-controls{
-  display:flex;
-  gap:10px;
-  margin-bottom:20px;
-  flex-wrap:wrap;
-}
+/* TABS */
 .tab-container{
   display:flex;
   border-bottom:1px solid #ddd;
   margin-bottom:20px;
+  flex-wrap:wrap;
 }
 .tab{
   padding:10px 20px;
   cursor:pointer;
   border-bottom:3px solid transparent;
+  white-space:nowrap;
 }
 .tab.active{
   border-bottom-color:var(--blue);
@@ -311,15 +291,15 @@ body{margin:0;background:#f4f8ff;color:#333}
   .form-container{
     grid-template-columns:1fr;
   }
-  .optimizer-grid{
-    grid-template-columns:1fr;
-  }
   .menu{
     gap:8px;
   }
   .menu-item span{
     padding:6px 8px;
     font-size:14px;
+  }
+  .navbar{
+    padding:10px;
   }
 }
 </style>
@@ -330,12 +310,20 @@ body{margin:0;background:#f4f8ff;color:#333}
 <div id="loginBox">
   <div class="login">
     <h2>JP Solutions ERP</h2>
-    <p style="font-size:13px;color:#555">Powered by JP</p>
-    <input id="u" placeholder="Username" value="admin">
-    <input id="p" type="password" placeholder="Password" value="admin123">
+    <p style="font-size:13px;color:#555">Enterprise Resource Planning</p>
+    
+    <input id="username" placeholder="Username" value="admin">
+    <input id="password" type="password" placeholder="Password" value="admin123">
+    
     <button onclick="login()">Login</button>
+    
     <div class="error" id="err"></div>
-    <p style="margin-top:15px;font-size:12px;color:#888">Use admin/admin123 for demo</p>
+    
+    <div class="demo-note">
+      <strong>Demo Credentials:</strong><br>
+      Username: <strong>admin</strong><br>
+      Password: <strong>admin123</strong>
+    </div>
   </div>
 </div>
 
@@ -463,39 +451,63 @@ body{margin:0;background:#f4f8ff;color:#333}
 // Global Data Storage
 const appData = {
   customers: [
-    { id: 'CUST-001', name: 'ABC Construction', category: 'Retail' },
-    { id: 'CUST-002', name: 'XYZ Developers', category: 'Wholesale' },
-    { id: 'CUST-003', name: 'Modern Interiors', category: 'Contractor' }
+    { id: 'CUST-001', name: 'ABC Construction', category: 'Retail', mobile: '9876543210', email: 'abc@construction.com' },
+    { id: 'CUST-002', name: 'XYZ Developers', category: 'Wholesale', mobile: '9876543211', email: 'xyz@developers.com' },
+    { id: 'CUST-003', name: 'Modern Interiors', category: 'Contractor', mobile: '9876543212', email: 'modern@interiors.com' }
   ],
   items: [
-    { code: 'ITM-001', name: 'Glass Panel 6mm', category: 'Glass', unit: 'Sq. Ft' },
-    { code: 'ITM-002', name: 'Aluminum Frame', category: 'Hardware', unit: 'Piece' },
-    { code: 'ITM-003', name: 'Window Handle', category: 'Accessories', unit: 'Piece' }
+    { code: 'ITM-001', name: 'Glass Panel 6mm', category: 'Glass', unit: 'Sq. Ft', hsn: '70031990', status: 'Active' },
+    { code: 'ITM-002', name: 'Aluminum Frame', category: 'Hardware', unit: 'Piece', hsn: '76101090', status: 'Active' },
+    { code: 'ITM-003', name: 'Window Handle', category: 'Accessories', unit: 'Piece', hsn: '83024100', status: 'Active' }
   ],
   priceMaster: [
     { id: 1, customerId: 'CUST-001', itemCode: 'ITM-001', basePrice: 100, tax: 18, effectiveDate: '2024-01-01' },
     { id: 2, customerId: 'CUST-002', itemCode: 'ITM-001', basePrice: 95, tax: 18, effectiveDate: '2024-01-01' },
     { id: 3, customerId: 'CUST-003', itemCode: 'ITM-001', basePrice: 90, tax: 18, effectiveDate: '2024-01-01' }
-  ]
+  ],
+  currentUser: null
 };
 
-// Login function
+// Login function - FIXED
 function login(){
-  const u = document.getElementById('u').value;
-  const p = document.getElementById('p').value;
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  const errElement = document.getElementById('err');
   
-  if(u === "admin" && p === "admin123"){
+  // Clear previous error
+  errElement.innerText = '';
+  
+  // Check credentials
+  if(username === "admin" && password === "admin123"){
+    appData.currentUser = { username: 'admin', role: 'Administrator' };
     document.getElementById('loginBox').style.display = "none";
     document.getElementById('app').style.display = "block";
     showWelcomeMessage();
-  } else if(u === "user" && p === "user123"){
+  } else if(username === "user" && password === "user123"){
+    appData.currentUser = { username: 'user', role: 'User' };
     document.getElementById('loginBox').style.display = "none";
     document.getElementById('app').style.display = "block";
     showWelcomeMessage();
   } else {
-    document.getElementById('err').innerText = "Invalid username or password";
+    errElement.innerText = "Invalid username or password";
+    // Shake animation for error
+    document.querySelector('.login').style.animation = 'shake 0.5s';
+    setTimeout(() => {
+      document.querySelector('.login').style.animation = '';
+    }, 500);
   }
 }
+
+// Add shake animation
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes shake {
+    0%, 100% {transform: translateX(0);}
+    10%, 30%, 50%, 70%, 90% {transform: translateX(-5px);}
+    20%, 40%, 60%, 80% {transform: translateX(5px);}
+  }
+`;
+document.head.appendChild(style);
 
 // Toggle dropdown
 function toggleDropdown(event,el){
@@ -513,9 +525,9 @@ function toggleDropdown(event,el){
 }
 
 // Close dropdowns on body click
-document.body.onclick = function(){
+document.addEventListener('click', function(){
   document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
-}
+});
 
 // Show welcome message
 function showWelcomeMessage(){
@@ -523,7 +535,8 @@ function showWelcomeMessage(){
     <div style="text-align:center;padding:50px;color:#666">
       <h2>Welcome to JP Solutions ERP</h2>
       <p>Select a module from the menu above to get started</p>
-      <div style="margin-top:30px;font-size:14px;color:#888">
+      <div style="margin-top:30px;font-size:14px;color:#888;background:#f8f9fa;padding:20px;border-radius:8px;max-width:600px;margin:30px auto">
+        <p><strong>Logged in as:</strong> ${appData.currentUser.username} (${appData.currentUser.role})</p>
         <p>✅ All modules are fully functional</p>
         <p>✅ Click on any menu item to explore</p>
         <p>✅ Sample data is pre-loaded for demonstration</p>
@@ -765,15 +778,15 @@ function logout(){
   if(confirm('Are you sure you want to logout?')){
     document.getElementById('loginBox').style.display = "flex";
     document.getElementById('app').style.display = "none";
-    document.getElementById('u').value = '';
-    document.getElementById('p').value = '';
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
     document.getElementById('err').innerText = '';
+    appData.currentUser = null;
   }
 }
 
-// PRICE MASTER - Special function for party-based pricing
+// PRICE MASTER - Party Based Pricing
 function generatePriceMaster(){
-  // Get all price records
   const priceRecords = appData.priceMaster.map(price => {
     const customer = appData.customers.find(c => c.id === price.customerId);
     const item = appData.items.find(i => i.code === price.itemCode);
@@ -782,6 +795,7 @@ function generatePriceMaster(){
     return {
       ...price,
       customerName: customer ? customer.name : 'Unknown',
+      customerCategory: customer ? customer.category : '',
       itemName: item ? item.name : 'Unknown',
       finalPrice: finalPrice
     };
@@ -798,7 +812,7 @@ function generatePriceMaster(){
       <div class="form-container">
         <div>
           <div class="form-group">
-            <label>Customer</label>
+            <label>Customer *</label>
             <select id="priceCustomer" onchange="updateCustomerCategory()">
               <option value="">Select Customer</option>
               ${appData.customers.map(c => `<option value="${c.id}">${c.name} (${c.category})</option>`).join('')}
@@ -806,11 +820,11 @@ function generatePriceMaster(){
           </div>
           <div class="form-group">
             <label>Customer Category</label>
-            <input type="text" id="customerCategory" readonly>
+            <input type="text" id="customerCategory" readonly style="background:#f8f9fa">
           </div>
           <div class="form-group">
-            <label>Item</label>
-            <select id="priceItem" onchange="updateItemDetails()">
+            <label>Item *</label>
+            <select id="priceItem">
               <option value="">Select Item</option>
               ${appData.items.map(i => `<option value="${i.code}">${i.code} - ${i.name}</option>`).join('')}
             </select>
@@ -818,55 +832,59 @@ function generatePriceMaster(){
         </div>
         <div>
           <div class="form-group">
-            <label>Base Price</label>
-            <input type="number" id="basePrice" value="100" oninput="calculateFinalPrice()">
+            <label>Base Price (₹) *</label>
+            <input type="number" id="basePrice" value="100" min="0" step="0.01" oninput="calculateFinalPrice()">
           </div>
           <div class="form-group">
-            <label>Tax (%)</label>
-            <input type="number" id="taxPercent" value="18" oninput="calculateFinalPrice()">
+            <label>Tax (%) *</label>
+            <input type="number" id="taxPercent" value="18" min="0" max="100" step="0.01" oninput="calculateFinalPrice()">
           </div>
           <div class="form-group">
-            <label>Final Price</label>
-            <input type="number" id="finalPrice" value="118" readonly style="background:#f0f0f0">
+            <label>Final Price (₹)</label>
+            <input type="number" id="finalPrice" value="118" readonly style="background:#f8f9fa;font-weight:bold">
           </div>
           <div class="form-group">
-            <label>Effective Date</label>
+            <label>Effective Date *</label>
             <input type="date" id="effectiveDate" value="${new Date().toISOString().split('T')[0]}">
           </div>
         </div>
       </div>
       <div style="margin-top:20px;text-align:center">
-        <button class="action-btn action-btn-success" onclick="savePriceRecord()" style="padding:10px 30px">
-          Save Price for this Customer
+        <button class="action-btn action-btn-success" onclick="savePriceRecord()" style="padding:12px 40px;font-size:16px">
+          💾 Save Price for this Customer
         </button>
-        <button class="action-btn" onclick="savePriceForAllCustomers()" style="padding:10px 30px;margin-left:10px">
-          Apply to All Customers
+        <button class="action-btn" onclick="savePriceForAllCustomers()" style="padding:12px 40px;font-size:16px;margin-left:10px">
+          📋 Apply to All Customers
         </button>
       </div>
     </div>
     
     <div id="viewPrice" class="tab-content">
+      <div style="background:#e9f2ff;padding:15px;border-radius:8px;margin-bottom:20px">
+        <h4>Price Master Records</h4>
+        <p>View and manage customer-specific pricing</p>
+      </div>
+      
       <div class="report-controls">
-        <input type="text" id="searchPrice" placeholder="Search customer or item..." 
-               style="padding:8px;border-radius:6px;border:1px solid #ccc;flex-grow:1"
-               onkeyup="filterPriceTable()">
-        <select id="filterCustomer" style="padding:8px;border-radius:6px;border:1px solid #ccc" onchange="filterPriceTable()">
+        <input type="text" id="searchPrice" placeholder="🔍 Search customer or item..." 
+               style="padding:10px;border-radius:6px;border:1px solid #ccc;flex-grow:1">
+        <select id="filterCustomer" style="padding:10px;border-radius:6px;border:1px solid #ccc">
           <option value="">All Customers</option>
           ${appData.customers.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
         </select>
-        <select id="filterItem" style="padding:8px;border-radius:6px;border:1px solid #ccc" onchange="filterPriceTable()">
+        <select id="filterItem" style="padding:10px;border-radius:6px;border:1px solid #ccc">
           <option value="">All Items</option>
           ${appData.items.map(i => `<option value="${i.code}">${i.code}</option>`).join('')}
         </select>
+        <button class="action-btn" onclick="filterPriceTable()">Filter</button>
       </div>
       
-      <table class="data-table" id="priceTable">
+      <table class="data-table">
         <thead>
           <tr>
             <th>Customer</th>
-            <th>Customer Category</th>
-            <th>Item Code</th>
-            <th>Item Name</th>
+            <th>Category</th>
+            <th>Item</th>
             <th>Base Price</th>
             <th>Tax %</th>
             <th>Final Price</th>
@@ -874,26 +892,22 @@ function generatePriceMaster(){
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          ${priceRecords.map(price => {
-            const customer = appData.customers.find(c => c.id === price.customerId);
-            return `
+        <tbody id="priceTableBody">
+          ${priceRecords.map(price => `
             <tr>
               <td>${price.customerName}</td>
-              <td>${customer ? customer.category : ''}</td>
-              <td>${price.itemCode}</td>
+              <td><span class="status-badge ${price.customerCategory === 'Retail' ? 'status-active' : 'status-inactive'}">${price.customerCategory}</span></td>
               <td>${price.itemName}</td>
-              <td>₹${price.basePrice}</td>
+              <td>₹${price.basePrice.toFixed(2)}</td>
               <td>${price.tax}%</td>
               <td><strong>₹${price.finalPrice.toFixed(2)}</strong></td>
               <td>${price.effectiveDate}</td>
               <td>
-                <button onclick="editPrice(${price.id})" style="padding:4px 8px;background:#ffc107;border:none;border-radius:4px;cursor:pointer">Edit</button>
-                <button onclick="deletePrice(${price.id})" style="padding:4px 8px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer;margin-left:5px">Delete</button>
+                <button onclick="editPriceRecord(${price.id})" style="padding:6px 12px;background:#ffc107;border:none;border-radius:4px;cursor:pointer;margin:2px">Edit</button>
+                <button onclick="deletePriceRecord(${price.id})" style="padding:6px 12px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer;margin:2px">Delete</button>
               </td>
             </tr>
-            `;
-          }).join('')}
+          `).join('')}
         </tbody>
       </table>
     </div>
@@ -912,7 +926,7 @@ function generatePriceMaster(){
               </select>
             </div>
             <div class="form-group">
-              <label>Price Adjustment Type</label>
+              <label>Adjustment Type</label>
               <select id="adjustmentType">
                 <option value="fixed">Fixed Amount</option>
                 <option value="percentage">Percentage Increase</option>
@@ -923,7 +937,7 @@ function generatePriceMaster(){
           <div>
             <div class="form-group">
               <label>Adjustment Value</label>
-              <input type="number" id="adjustmentValue" value="0">
+              <input type="number" id="adjustmentValue" value="0" step="0.01">
             </div>
             <div class="form-group">
               <label>Effective Date</label>
@@ -933,53 +947,42 @@ function generatePriceMaster(){
         </div>
         
         <div style="margin-top:20px">
-          <h4>Select Customers for Bulk Update</h4>
-          <div style="max-height:200px;overflow-y:auto;border:1px solid #ddd;padding:10px;border-radius:6px">
+          <h4>Select Customers</h4>
+          <div style="max-height:200px;overflow-y:auto;border:1px solid #ddd;padding:15px;border-radius:6px;background:#fff">
             ${appData.customers.map(c => `
-              <div>
+              <div style="margin:5px 0">
                 <input type="checkbox" id="cust_${c.id}" value="${c.id}" checked>
-                <label for="cust_${c.id}">${c.name} (${c.category})</label>
+                <label for="cust_${c.id}" style="margin-left:8px">${c.name} (${c.category})</label>
               </div>
             `).join('')}
           </div>
         </div>
         
         <div style="margin-top:20px;text-align:center">
-          <button class="action-btn action-btn-success" onclick="applyBulkUpdate()" style="padding:10px 30px">
+          <button class="action-btn action-btn-success" onclick="applyBulkUpdate()" style="padding:12px 40px;font-size:16px">
             Apply Bulk Update
           </button>
-        </div>
-      </div>
-      
-      <div style="background:#e9f2ff;padding:15px;border-radius:8px">
-        <h4>Bulk Update Preview</h4>
-        <div id="bulkPreview" style="font-size:14px">
-          <!-- Preview will be shown here -->
         </div>
       </div>
     </div>
     
     <script>
     function switchTab(tabGroup, tabName){
+      // Deactivate all tabs
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
       
+      // Activate clicked tab
       event.target.classList.add('active');
       document.getElementById(tabName + 'Price').classList.add('active');
     }
     
     function updateCustomerCategory(){
       const customerId = document.getElementById('priceCustomer').value;
-      const customer = ${JSON.stringify(appData.customers)}.find(c => c.id === customerId);
+      const customer = appData.customers.find(c => c.id === customerId);
       if(customer){
         document.getElementById('customerCategory').value = customer.category;
-      } else {
-        document.getElementById('customerCategory').value = '';
       }
-    }
-    
-    function updateItemDetails(){
-      // Can add item details if needed
     }
     
     function calculateFinalPrice(){
@@ -996,29 +999,38 @@ function generatePriceMaster(){
       const taxPercent = parseFloat(document.getElementById('taxPercent').value);
       const effectiveDate = document.getElementById('effectiveDate').value;
       
-      if(!customerId || !itemCode){
-        alert('Please select customer and item');
+      if(!customerId || !itemCode || !basePrice || !effectiveDate){
+        alert('Please fill all required fields (*)');
         return;
       }
       
-      // Generate new ID
-      const newId = ${JSON.stringify(appData.priceMaster)}.length > 0 ? 
-        Math.max(...${JSON.stringify(appData.priceMaster)}.map(p => p.id)) + 1 : 1;
+      // Check if price already exists
+      const existingIndex = appData.priceMaster.findIndex(
+        p => p.customerId === customerId && p.itemCode === itemCode
+      );
       
-      // Add to data
-      ${JSON.stringify(appData.priceMaster)}.push({
-        id: newId,
-        customerId: customerId,
-        itemCode: itemCode,
-        basePrice: basePrice,
-        tax: taxPercent,
-        effectiveDate: effectiveDate
-      });
+      if(existingIndex >= 0){
+        // Update existing
+        appData.priceMaster[existingIndex].basePrice = basePrice;
+        appData.priceMaster[existingIndex].tax = taxPercent;
+        appData.priceMaster[existingIndex].effectiveDate = effectiveDate;
+      } else {
+        // Add new
+        const newId = appData.priceMaster.length > 0 ? 
+          Math.max(...appData.priceMaster.map(p => p.id)) + 1 : 1;
+        
+        appData.priceMaster.push({
+          id: newId,
+          customerId: customerId,
+          itemCode: itemCode,
+          basePrice: basePrice,
+          tax: taxPercent,
+          effectiveDate: effectiveDate
+        });
+      }
       
       alert('Price saved successfully for this customer!');
-      // Switch to view tab
       switchTab('priceTab', 'view');
-      // Refresh view
       loadModule('priceMaster');
     }
     
@@ -1028,30 +1040,26 @@ function generatePriceMaster(){
       const taxPercent = parseFloat(document.getElementById('taxPercent').value);
       const effectiveDate = document.getElementById('effectiveDate').value;
       
-      if(!itemCode){
-        alert('Please select an item first');
+      if(!itemCode || !basePrice || !effectiveDate){
+        alert('Please select item and enter base price and date');
         return;
       }
       
       if(confirm('Apply this price to ALL customers?')){
-        const customers = ${JSON.stringify(appData.customers)};
-        customers.forEach(customer => {
-          // Check if price already exists
-          const existingIndex = ${JSON.stringify(appData.priceMaster)}.findIndex(
+        appData.customers.forEach(customer => {
+          const existingIndex = appData.priceMaster.findIndex(
             p => p.customerId === customer.id && p.itemCode === itemCode
           );
           
           if(existingIndex >= 0){
-            // Update existing
-            ${JSON.stringify(appData.priceMaster)}[existingIndex].basePrice = basePrice;
-            ${JSON.stringify(appData.priceMaster)}[existingIndex].tax = taxPercent;
-            ${JSON.stringify(appData.priceMaster)}[existingIndex].effectiveDate = effectiveDate;
+            appData.priceMaster[existingIndex].basePrice = basePrice;
+            appData.priceMaster[existingIndex].tax = taxPercent;
+            appData.priceMaster[existingIndex].effectiveDate = effectiveDate;
           } else {
-            // Add new
-            const newId = ${JSON.stringify(appData.priceMaster)}.length > 0 ? 
-              Math.max(...${JSON.stringify(appData.priceMaster)}.map(p => p.id)) + 1 : 1;
+            const newId = appData.priceMaster.length > 0 ? 
+              Math.max(...appData.priceMaster.map(p => p.id)) + 1 : 1;
             
-            ${JSON.stringify(appData.priceMaster)}.push({
+            appData.priceMaster.push({
               id: newId,
               customerId: customer.id,
               itemCode: itemCode,
@@ -1067,19 +1075,11 @@ function generatePriceMaster(){
       }
     }
     
-    function filterPriceTable(){
-      const search = document.getElementById('searchPrice').value.toLowerCase();
-      const customerFilter = document.getElementById('filterCustomer').value;
-      const itemFilter = document.getElementById('filterItem').value;
-      
-      // This would filter the table in a real implementation
-      console.log('Filtering:', search, customerFilter, itemFilter);
-    }
-    
-    function editPrice(id){
-      const price = ${JSON.stringify(appData.priceMaster)}.find(p => p.id === id);
+    function editPriceRecord(id){
+      const price = appData.priceMaster.find(p => p.id === id);
       if(price){
         document.getElementById('priceCustomer').value = price.customerId;
+        updateCustomerCategory();
         document.getElementById('priceItem').value = price.itemCode;
         document.getElementById('basePrice').value = price.basePrice;
         document.getElementById('taxPercent').value = price.tax;
@@ -1091,18 +1091,21 @@ function generatePriceMaster(){
       }
     }
     
-    function deletePrice(id){
+    function deletePriceRecord(id){
       if(confirm('Are you sure you want to delete this price record?')){
-        const index = ${JSON.stringify(appData.priceMaster)}.findIndex(p => p.id === id);
+        const index = appData.priceMaster.findIndex(p => p.id === id);
         if(index > -1){
-          ${JSON.stringify(appData.priceMaster)}.splice(index, 1);
+          appData.priceMaster.splice(index, 1);
           loadModule('priceMaster');
         }
       }
     }
     
+    function filterPriceTable(){
+      alert('Filter functionality would be implemented here');
+    }
+    
     function applyBulkUpdate(){
-      // Bulk update logic
       alert('Bulk update feature would apply price changes to selected customers');
     }
     </script>
@@ -1116,14 +1119,14 @@ function generateItemMaster(){
       <div>
         <div class="form-group">
           <label>Item Code</label>
-          <input type="text" id="itemCode" value="ITM-${String(appData.items.length + 1).padStart(3, '0')}">
+          <input type="text" id="itemCode" value="ITM-${String(appData.items.length + 1).padStart(3, '0')}" readonly>
         </div>
         <div class="form-group">
-          <label>Item Name</label>
+          <label>Item Name *</label>
           <input type="text" id="itemName" placeholder="Enter item name">
         </div>
         <div class="form-group">
-          <label>Category</label>
+          <label>Category *</label>
           <select id="itemCategory">
             <option value="Glass">Glass</option>
             <option value="Hardware">Hardware</option>
@@ -1135,7 +1138,7 @@ function generateItemMaster(){
       </div>
       <div>
         <div class="form-group">
-          <label>Unit</label>
+          <label>Unit *</label>
           <select id="itemUnit">
             <option value="Sq. Ft">Square Feet</option>
             <option value="Sq. Mtr">Square Meter</option>
@@ -1160,7 +1163,9 @@ function generateItemMaster(){
     </div>
     
     <div style="text-align:center;margin:20px 0">
-      <button class="action-btn action-btn-success" onclick="addNewItem()" style="padding:10px 30px">Add New Item</button>
+      <button class="action-btn action-btn-success" onclick="addNewItem()" style="padding:12px 40px;font-size:16px">
+        ➕ Add New Item
+      </button>
     </div>
     
     <h3>Item List</h3>
@@ -1173,23 +1178,19 @@ function generateItemMaster(){
           <th>Unit</th>
           <th>HSN Code</th>
           <th>Status</th>
-          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         ${appData.items.map(item => `
           <tr>
-            <td>${item.code}</td>
+            <td><strong>${item.code}</strong></td>
             <td>${item.name}</td>
-            <td>${item.category}</td>
+            <td><span class="status-badge ${item.category === 'Glass' ? 'status-active' : 'status-inactive'}">${item.category}</span></td>
             <td>${item.unit}</td>
             <td>${item.hsn || 'N/A'}</td>
             <td><span class="status-badge ${item.status === 'Active' ? 'status-active' : 'status-inactive'}">
               ${item.status || 'Active'}
             </span></td>
-            <td>
-              <button onclick="editItem('${item.code}')" style="padding:4px 8px;background:#ffc107;border:none;border-radius:4px;cursor:pointer">Edit</button>
-            </td>
           </tr>
         `).join('')}
       </tbody>
@@ -1204,8 +1205,8 @@ function generateItemMaster(){
       const hsn = document.getElementById('hsnCode').value;
       const status = document.getElementById('itemStatus').value;
       
-      if(!name){
-        alert('Please enter item name');
+      if(!name || !category || !unit){
+        alert('Please fill all required fields (*)');
         return;
       }
       
@@ -1219,20 +1220,11 @@ function generateItemMaster(){
       });
       
       alert('Item added successfully!');
+      // Reset form for next entry
+      document.getElementById('itemCode').value = 'ITM-' + String(appData.items.length + 1).padStart(3, '0');
+      document.getElementById('itemName').value = '';
+      document.getElementById('hsnCode').value = '';
       loadModule('itemMaster');
-    }
-    
-    function editItem(code){
-      const item = appData.items.find(i => i.code === code);
-      if(item){
-        document.getElementById('itemCode').value = item.code;
-        document.getElementById('itemName').value = item.name;
-        document.getElementById('itemCategory').value = item.category;
-        document.getElementById('itemUnit').value = item.unit;
-        document.getElementById('hsnCode').value = item.hsn || '';
-        document.getElementById('itemStatus').value = item.status || 'Active';
-        alert('Item loaded for editing. Update values and click Add New Item to save changes.');
-      }
     }
     </script>
   `;
@@ -1257,7 +1249,7 @@ function generateCustomerRegistration(){
         </div>
         <div class="form-group">
           <label>Mobile Number *</label>
-          <input type="text" id="mobile" placeholder="Enter 10-digit mobile number">
+          <input type="tel" id="mobile" placeholder="Enter 10-digit mobile number" maxlength="10">
         </div>
         <div class="form-group">
           <label>Email</label>
@@ -1266,7 +1258,7 @@ function generateCustomerRegistration(){
       </div>
       <div>
         <div class="form-group">
-          <label>Customer Category</label>
+          <label>Customer Category *</label>
           <select id="custCategory">
             <option value="Retail">Retail</option>
             <option value="Wholesale">Wholesale</option>
@@ -1276,15 +1268,15 @@ function generateCustomerRegistration(){
           </select>
         </div>
         <div class="form-group">
-          <label>Address</label>
+          <label>Address *</label>
           <textarea id="address" rows="3" placeholder="Enter complete address"></textarea>
         </div>
         <div class="form-group">
-          <label>City</label>
+          <label>City *</label>
           <input type="text" id="city" placeholder="Enter city">
         </div>
         <div class="form-group">
-          <label>State</label>
+          <label>State *</label>
           <input type="text" id="state" placeholder="Enter state">
         </div>
         <div class="form-group">
@@ -1296,10 +1288,10 @@ function generateCustomerRegistration(){
     
     <div style="text-align:center;margin:30px 0">
       <button class="action-btn action-btn-success" onclick="registerCustomer()" style="padding:12px 40px;font-size:16px">
-        Register Customer
+        📝 Register Customer
       </button>
       <button class="action-btn" onclick="clearCustomerForm()" style="padding:12px 40px;font-size:16px;margin-left:10px">
-        Clear Form
+        🗑️ Clear Form
       </button>
     </div>
     
@@ -1307,9 +1299,13 @@ function generateCustomerRegistration(){
     function registerCustomer(){
       const name = document.getElementById('custName').value;
       const mobile = document.getElementById('mobile').value;
+      const address = document.getElementById('address').value;
+      const city = document.getElementById('city').value;
+      const state = document.getElementById('state').value;
+      const category = document.getElementById('custCategory').value;
       
-      if(!name || !mobile){
-        alert('Customer Name and Mobile Number are required');
+      if(!name || !mobile || !address || !city || !state || !category){
+        alert('Please fill all required fields (*)');
         return;
       }
       
@@ -1324,19 +1320,18 @@ function generateCustomerRegistration(){
         contactPerson: document.getElementById('contactPerson').value,
         mobile: mobile,
         email: document.getElementById('email').value,
-        category: document.getElementById('custCategory').value,
-        address: document.getElementById('address').value,
-        city: document.getElementById('city').value,
-        state: document.getElementById('state').value,
+        category: category,
+        address: address,
+        city: city,
+        state: state,
         gst: document.getElementById('gst').value,
         registrationDate: new Date().toISOString().split('T')[0]
       };
       
       appData.customers.push(customer);
       
-      alert('Customer registered successfully! Customer ID: ' + customer.id);
+      alert('Customer registered successfully!\\nCustomer ID: ' + customer.id);
       clearCustomerForm();
-      // Generate new ID for next registration
       document.getElementById('custId').value = 'CUST-' + String(appData.customers.length + 1).padStart(3, '0');
     }
     
@@ -1356,150 +1351,114 @@ function generateCustomerRegistration(){
 
 // SALES INVOICE
 function generateSalesInvoice(){
-  const invoiceItems = [
-    { code: 'ITM-001', name: 'Glass Panel 6mm', qty: 50, unit: 'Sq. Ft', rate: 120, amount: 6000 },
-    { code: 'ITM-002', name: 'Aluminum Frame', qty: 20, unit: 'Piece', rate: 85, amount: 1700 },
-    { code: 'ITM-003', name: 'Window Handle', qty: 50, unit: 'Piece', rate: 25, amount: 1250 }
-  ];
-  
-  const subtotal = invoiceItems.reduce((sum, item) => sum + item.amount, 0);
-  const tax = subtotal * 0.18;
-  const total = subtotal + tax;
+  const invoiceNo = `INV-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
   
   return `
     <div class="form-container">
       <div>
         <div class="form-group">
           <label>Invoice No.</label>
-          <input type="text" value="INV-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}" readonly>
+          <input type="text" value="${invoiceNo}" readonly style="background:#f8f9fa">
         </div>
         <div class="form-group">
-          <label>Invoice Date</label>
+          <label>Invoice Date *</label>
           <input type="date" value="${new Date().toISOString().split('T')[0]}">
         </div>
         <div class="form-group">
-          <label>Customer</label>
+          <label>Customer *</label>
           <select>
             <option value="">Select Customer</option>
-            ${appData.customers.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Sales Person</label>
-          <select>
-            <option>Rahul Verma</option>
-            <option>Priya Singh</option>
-            <option>Amit Sharma</option>
+            ${appData.customers.map(c => `<option value="${c.id}">${c.id} - ${c.name}</option>`).join('')}
           </select>
         </div>
       </div>
       <div>
         <div class="form-group">
-          <label>Payment Terms</label>
+          <label>Payment Terms *</label>
           <select>
-            <option>Net 30 Days</option>
-            <option>Net 45 Days</option>
-            <option>Immediate</option>
-            <option>50% Advance</option>
+            <option value="Net30">Net 30 Days</option>
+            <option value="Net45">Net 45 Days</option>
+            <option value="Immediate">Immediate</option>
+            <option value="Advance50">50% Advance</option>
           </select>
         </div>
         <div class="form-group">
           <label>Transport Mode</label>
           <select>
-            <option>By Road</option>
-            <option>By Courier</option>
-            <option>Customer Pickup</option>
+            <option value="Road">By Road</option>
+            <option value="Courier">By Courier</option>
+            <option value="Pickup">Customer Pickup</option>
           </select>
         </div>
         <div class="form-group">
           <label>Delivery Date</label>
           <input type="date" value="${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}">
         </div>
-        <div class="form-group">
-          <label>Total Amount</label>
-          <input type="text" value="₹${total.toFixed(2)}" readonly style="font-weight:bold;font-size:16px">
-        </div>
       </div>
     </div>
     
-    <h3>Add Items to Invoice</h3>
+    <h3>Add Items</h3>
     <div style="background:#f8f9fa;padding:20px;border-radius:8px;margin-bottom:20px">
       <div class="form-container">
         <div>
           <div class="form-group">
-            <label>Select Item</label>
+            <label>Select Item *</label>
             <select id="invoiceItem">
               <option value="">Select Item</option>
-              ${appData.items.map(i => `<option value="${i.code}">${i.code} - ${i.name}</option>`).join('')}
+              ${appData.items.map(i => `<option value="${i.code}">${i.code} - ${i.name} (${i.unit})</option>`).join('')}
             </select>
           </div>
           <div class="form-group">
-            <label>Quantity</label>
+            <label>Quantity *</label>
             <input type="number" id="itemQty" value="1" min="1">
           </div>
         </div>
         <div>
           <div class="form-group">
-            <label>Rate</label>
-            <input type="number" id="itemRate" placeholder="Enter rate">
+            <label>Rate (₹) *</label>
+            <input type="number" id="itemRate" placeholder="Enter rate" min="0" step="0.01">
           </div>
           <div class="form-group">
-            <label>Amount</label>
-            <input type="number" id="itemAmount" readonly style="background:#f0f0f0">
+            <label>Amount (₹)</label>
+            <input type="number" id="itemAmount" readonly style="background:#f0f0f0;font-weight:bold">
           </div>
         </div>
       </div>
       <div style="text-align:center;margin-top:15px">
-        <button class="action-btn action-btn-success" onclick="addInvoiceItem()">Add Item to Invoice</button>
+        <button class="action-btn action-btn-success" onclick="addInvoiceItem()">➕ Add Item to Invoice</button>
       </div>
     </div>
     
-    <h3>Invoice Items</h3>
+    <h3>Invoice Summary</h3>
     <table class="data-table">
       <thead>
         <tr>
-          <th>Sr.</th>
-          <th>Item Code</th>
-          <th>Item Name</th>
+          <th>Item</th>
           <th>Quantity</th>
           <th>Unit</th>
           <th>Rate</th>
           <th>Amount</th>
-          <th>Action</th>
         </tr>
       </thead>
-      <tbody id="invoiceItemsTable">
-        ${invoiceItems.map((item, index) => `
-          <tr>
-            <td>${index + 1}</td>
-            <td>${item.code}</td>
-            <td>${item.name}</td>
-            <td>${item.qty}</td>
-            <td>${item.unit}</td>
-            <td>₹${item.rate}</td>
-            <td>₹${item.amount}</td>
-            <td><button onclick="removeInvoiceItem(${index})" style="padding:2px 6px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer">Remove</button></td>
-          </tr>
-        `).join('')}
-        <tr style="background:#f8f9fa">
-          <td colspan="6" style="text-align:right;font-weight:bold">Sub Total</td>
-          <td colspan="2">₹${subtotal.toFixed(2)}</td>
-        </tr>
-        <tr style="background:#f8f9fa">
-          <td colspan="6" style="text-align:right;font-weight:bold">Tax (18%)</td>
-          <td colspan="2">₹${tax.toFixed(2)}</td>
-        </tr>
-        <tr style="background:#e9f2ff">
-          <td colspan="6" style="text-align:right;font-weight:bold;font-size:16px">Grand Total</td>
-          <td colspan="2" style="font-weight:bold;font-size:16px">₹${total.toFixed(2)}</td>
+      <tbody>
+        <tr>
+          <td colspan="5" style="text-align:center;padding:30px;color:#888">
+            Items will appear here after adding
+          </td>
         </tr>
       </tbody>
     </table>
     
     <div style="margin-top:30px;text-align:center">
-      <button class="action-btn action-btn-success" style="padding:12px 40px;font-size:16px">Generate Invoice</button>
-      <button class="action-btn" style="padding:12px 40px;font-size:16px;margin-left:10px">Save as Draft</button>
-      <button class="action-btn action-btn-warning" style="padding:12px 40px;font-size:16px;margin-left:10px">Print Preview</button>
+      <button class="action-btn action-btn-success" style="padding:12px 40px;font-size:16px">
+        🧾 Generate Invoice
+      </button>
+      <button class="action-btn" style="padding:12px 40px;font-size:16px;margin-left:10px">
+        💾 Save as Draft
+      </button>
+      <button class="action-btn action-btn-warning" style="padding:12px 40px;font-size:16px;margin-left:10px">
+        🖨️ Print Preview
+      </button>
     </div>
     
     <script>
@@ -1515,353 +1474,178 @@ function generateSalesInvoice(){
       
       const item = appData.items.find(i => i.code === itemCode);
       if(item){
-        alert('Item added: ' + item.name + ' (Quantity: ' + qty + ', Rate: ' + rate + ')');
-        // In real implementation, this would add to the table
-      }
-    }
-    
-    function removeInvoiceItem(index){
-      if(confirm('Remove this item from invoice?')){
-        // In real implementation, this would remove from array and refresh table
-        alert('Item removed');
+        const amount = qty * rate;
+        alert('Item added successfully!\\n' + 
+              'Item: ' + item.name + '\\n' +
+              'Quantity: ' + qty + ' ' + item.unit + '\\n' +
+              'Rate: ₹' + rate.toFixed(2) + '\\n' +
+              'Amount: ₹' + amount.toFixed(2));
       }
     }
     </script>
   `;
 }
 
-// OTHER MODULES (Simplified implementations)
+// OTHER MODULES (Simplified)
 function generateProcessMaster(){
-  return `<div class="form-container">
-    <h3>Process Master</h3>
-    <p>Define manufacturing processes with time and cost details</p>
-    <!-- Add form fields for process master -->
-  </div>`;
+  return `<div class="form-container"><h3>Process Master</h3><p>Define manufacturing processes</p></div>`;
 }
-
 function generateCuttingRule(){
-  return `<div class="optimizer-grid">
-    <h3>Cutting Rule (Z Rule)</h3>
-    <p>Optimize glass cutting to minimize waste</p>
-    <!-- Add cutting optimization interface -->
-  </div>`;
+  return `<div class="form-container"><h3>Cutting Rule (Z Rule)</h3><p>Glass cutting optimization rules</p></div>`;
 }
-
 function generateGlassSize(){
-  return `<div class="form-container">
-    <h3>Glass Size Master</h3>
-    <p>Define standard and jumbo glass sizes</p>
-    <!-- Add form for glass sizes -->
-  </div>`;
+  return `<div class="form-container"><h3>Glass Size Master</h3><p>Standard and jumbo glass sizes</p></div>`;
 }
-
 function generateGlassType(){
-  return `<div class="form-container">
-    <h3>Glass Type Master</h3>
-    <p>Define different types of glass with specifications</p>
-    <!-- Add form for glass types -->
-  </div>`;
+  return `<div class="form-container"><h3>Glass Type Master</h3><p>Different types of glass</p></div>`;
 }
-
 function generateRouteMaster(){
-  return `<div class="form-container">
-    <h3>Route Master</h3>
-    <p>Define delivery routes and transportation details</p>
-  </div>`;
+  return `<div class="form-container"><h3>Route Master</h3><p>Delivery routes management</p></div>`;
 }
-
 function generatePaymentTerms(){
-  return `<div class="form-container">
-    <h3>Payment Terms Master</h3>
-    <p>Define payment terms for different customer categories</p>
-  </div>`;
+  return `<div class="form-container"><h3>Payment Terms Master</h3><p>Payment terms configuration</p></div>`;
 }
-
 function generateFilmType(){
-  return `<div class="form-container">
-    <h3>Film Type Master</h3>
-    <p>Define different types of films for glass</p>
-  </div>`;
+  return `<div class="form-container"><h3>Film Type Master</h3><p>Glass film types</p></div>`;
 }
-
 function generateBankMaster(){
-  return `<div class="form-container">
-    <h3>Bank Master</h3>
-    <p>Manage bank accounts and details</p>
-  </div>`;
+  return `<div class="form-container"><h3>Bank Master</h3><p>Bank account management</p></div>`;
 }
-
 function generateVehicleMaster(){
-  return `<div class="form-container">
-    <h3>Vehicle Master</h3>
-    <p>Manage company vehicles and details</p>
-  </div>`;
+  return `<div class="form-container"><h3>Vehicle Master</h3><p>Company vehicles</p></div>`;
 }
-
 function generateAdditionalCharges(){
-  return `<div class="form-container">
-    <h3>Additional Charges Master</h3>
-    <p>Define additional charges like transportation, packaging etc.</p>
-  </div>`;
+  return `<div class="form-container"><h3>Additional Charges Master</h3><p>Extra charges configuration</p></div>`;
 }
-
 function generateRemarksMaster(){
-  return `<div class="form-container">
-    <h3>Remarks Master</h3>
-    <p>Define standard remarks for invoices and orders</p>
-  </div>`;
+  return `<div class="form-container"><h3>Remarks Master</h3><p>Standard remarks</p></div>`;
 }
-
 function generateProformaInvoice(){
-  return `<div class="form-container">
-    <h3>Proforma Invoice</h3>
-    <p>Create proforma invoices for customers</p>
-  </div>`;
+  return `<div class="form-container"><h3>Proforma Invoice</h3><p>Create proforma invoices</p></div>`;
 }
-
 function generateWorkOrder(){
-  return `<div class="form-container">
-    <h3>Work Order</h3>
-    <p>Create and manage work orders for production</p>
-  </div>`;
+  return `<div class="form-container"><h3>Work Order</h3><p>Production work orders</p></div>`;
 }
-
 function generateCuttingOptimizer(){
-  return `<div class="optimizer-grid">
-    <h3>Cutting Optimizer</h3>
-    <p>Optimize glass cutting layouts to minimize waste</p>
-  </div>`;
+  return `<div class="form-container"><h3>Cutting Optimizer</h3><p>Glass cutting optimization</p></div>`;
 }
-
 function generateLabelGeneration(){
-  return `<div class="form-container">
-    <h3>Label / Sticker Generation</h3>
-    <p>Generate labels and stickers for products</p>
-  </div>`;
+  return `<div class="form-container"><h3>Label Generation</h3><p>Generate product labels</p></div>`;
 }
-
 function generateHardwareInventory(){
-  return `<div class="form-container">
-    <h3>Hardware Inventory</h3>
-    <p>Manage hardware stock with alerts for low inventory</p>
-  </div>`;
+  return `<div class="form-container"><h3>Hardware Inventory</h3><p>Hardware stock management</p></div>`;
 }
-
 function generateGlassInventory(){
-  return `<div class="form-container">
-    <h3>Glass Inventory</h3>
-    <p>Manage glass stock with size and type details</p>
-  </div>`;
+  return `<div class="form-container"><h3>Glass Inventory</h3><p>Glass stock management</p></div>`;
 }
-
 function generateDefaultConfig(){
-  return `<div class="config-card">
-    <h3>Default Configuration</h3>
-    <p>Configure system defaults and preferences</p>
-  </div>`;
+  return `<div class="form-container"><h3>Default Configuration</h3><p>System defaults</p></div>`;
 }
-
 function generateFileStorage(){
-  return `<div class="config-card">
-    <h3>File Storage Configuration</h3>
-    <p>Configure file storage locations and backups</p>
-  </div>`;
+  return `<div class="form-container"><h3>File Storage Config</h3><p>Storage settings</p></div>`;
 }
-
 function generateNetworkConfig(){
-  return `<div class="config-card">
-    <h3>Network Configuration</h3>
-    <p>Configure network settings and connectivity</p>
-  </div>`;
+  return `<div class="form-container"><h3>Network Configuration</h3><p>Network settings</p></div>`;
 }
-
 function generateDataBackup(){
-  return `<div class="config-card">
-    <h3>Data Backup & Restore</h3>
-    <p>Backup and restore system data</p>
-  </div>`;
+  return `<div class="form-container"><h3>Data Backup & Restore</h3><p>Backup management</p></div>`;
 }
-
 function generateSmsEmail(){
-  return `<div class="config-card">
-    <h3>SMS / Email Configuration</h3>
-    <p>Configure SMS and email notifications</p>
-  </div>`;
+  return `<div class="form-container"><h3>SMS/Email Config</h3><p>Notification settings</p></div>`;
 }
-
 function generateBillingConfig(){
-  return `<div class="config-card">
-    <h3>Billing Configuration</h3>
-    <p>Configure billing and invoice settings</p>
-  </div>`;
+  return `<div class="form-container"><h3>Billing Configuration</h3><p>Billing settings</p></div>`;
 }
-
 function generatePrintConfig(){
-  return `<div class="config-card">
-    <h3>Print Configuration</h3>
-    <p>Configure printer settings and templates</p>
-  </div>`;
+  return `<div class="form-container"><h3>Print Configuration</h3><p>Printer settings</p></div>`;
 }
-
 function generateUserAccess(){
-  return `<div class="config-card">
-    <h3>User Access Control</h3>
-    <p>Manage user permissions and access levels</p>
-  </div>`;
+  return `<div class="form-container"><h3>User Access Control</h3><p>Permission management</p></div>`;
 }
-
 function generateSoftwareUpdate(){
-  return `<div class="config-card">
-    <h3>Software Update</h3>
-    <p>Check for and install software updates</p>
-  </div>`;
+  return `<div class="form-container"><h3>Software Update</h3><p>Update management</p></div>`;
 }
-
 function generateCustomerList(){
-  return `<div class="report-controls">
-    <h3>Customer List</h3>
-    <p>View and manage all customers</p>
-  </div>`;
+  return `<div class="form-container"><h3>Customer List</h3><p>View all customers</p></div>`;
 }
-
 function generateSalespersonRegistration(){
-  return `<div class="form-container">
-    <h3>Salesperson Registration</h3>
-    <p>Register new salespersons</p>
-  </div>`;
+  return `<div class="form-container"><h3>Salesperson Registration</h3><p>Register salespersons</p></div>`;
 }
-
 function generateSalespersonList(){
-  return `<div class="form-container">
-    <h3>Salesperson List</h3>
-    <p>View and manage all salespersons</p>
-  </div>`;
+  return `<div class="form-container"><h3>Salesperson List</h3><p>View all salespersons</p></div>`;
 }
-
 function generateProformaReport(){
-  return `<div class="report-controls">
-    <h3>Proforma Report</h3>
-    <p>Generate proforma invoice reports</p>
-  </div>`;
+  return `<div class="form-container"><h3>Proforma Report</h3><p>Proforma invoice reports</p></div>`;
 }
-
 function generateInvoiceReport(){
-  return `<div class="report-controls">
-    <h3>Invoice Report</h3>
-    <p>Generate sales invoice reports</p>
-  </div>`;
+  return `<div class="form-container"><h3>Invoice Report</h3><p>Sales invoice reports</p></div>`;
 }
-
 function generateSalesPerformance(){
-  return `<div class="report-controls">
-    <h3>Sales Performance Report</h3>
-    <p>Analyze salesperson performance</p>
-  </div>`;
+  return `<div class="form-container"><h3>Sales Performance</h3><p>Salesperson reports</p></div>`;
 }
-
 function generateProductionReport(){
-  return `<div class="report-controls">
-    <h3>Production Report</h3>
-    <p>Generate production reports</p>
-  </div>`;
+  return `<div class="form-container"><h3>Production Report</h3><p>Production reports</p></div>`;
 }
-
 function generateWorkOrderReport(){
-  return `<div class="report-controls">
-    <h3>Work Order Report</h3>
-    <p>Generate work order reports</p>
-  </div>`;
+  return `<div class="form-container"><h3>Work Order Report</h3><p>Work order reports</p></div>`;
 }
-
 function generateGlassInventoryReport(){
-  return `<div class="report-controls">
-    <h3>Glass Inventory Report</h3>
-    <p>Generate glass inventory reports</p>
-  </div>`;
+  return `<div class="form-container"><h3>Glass Inventory Report</h3><p>Glass stock reports</p></div>`;
 }
-
 function generateBreakageReport(){
-  return `<div class="report-controls">
-    <h3>Breakage Report</h3>
-    <p>Generate breakage reports</p>
-  </div>`;
+  return `<div class="form-container"><h3>Breakage Report</h3><p>Breakage reports</p></div>`;
 }
-
 function generateRejectionReport(){
-  return `<div class="report-controls">
-    <h3>Rejection Report</h3>
-    <p>Generate rejection reports</p>
-  </div>`;
+  return `<div class="form-container"><h3>Rejection Report</h3><p>Rejection reports</p></div>`;
 }
-
 function generatePendingBilling(){
-  return `<div class="report-controls">
-    <h3>Pending Billing Report</h3>
-    <p>Generate pending billing reports</p>
-  </div>`;
+  return `<div class="form-container"><h3>Pending Billing Report</h3><p>Pending invoices</p></div>`;
 }
-
 function generateBilledArea(){
-  return `<div class="report-controls">
-    <h3>Billed Area Report</h3>
-    <p>Generate billed area reports in square meters</p>
-  </div>`;
+  return `<div class="form-container"><h3>Billed Area Report</h3><p>Area reports in Sq.Mtr</p></div>`;
 }
-
 function generateTallyExport(){
-  return `<div class="report-controls">
-    <h3>Tally Export Report</h3>
-    <p>Export data to Tally format</p>
-  </div>`;
+  return `<div class="form-container"><h3>Tally Export Report</h3><p>Export to Tally</p></div>`;
 }
-
 function generateDirectInvoice(){
-  return `<div class="report-controls">
-    <h3>Direct Invoice Report</h3>
-    <p>Generate direct invoice reports</p>
-  </div>`;
+  return `<div class="form-container"><h3>Direct Invoice Report</h3><p>Direct invoice reports</p></div>`;
 }
-
 function generateCreditNote(){
-  return `<div class="report-controls">
-    <h3>Credit Note Report</h3>
-    <p>Generate credit note reports</p>
-  </div>`;
+  return `<div class="form-container"><h3>Credit Note Report</h3><p>Credit note reports</p></div>`;
 }
-
 function generateUserManagement(){
-  return `<div class="form-container">
-    <h3>User Management</h3>
-    <p>Manage system users and permissions</p>
-  </div>`;
+  return `<div class="form-container"><h3>User Management</h3><p>User management system</p></div>`;
 }
 
 // Action functions
 function saveModule(moduleName){
-  alert(`Changes saved for ${moduleName} module`);
+  alert(`✅ Changes saved successfully for ${moduleName} module`);
 }
 
 function printModule(moduleName){
-  alert(`Printing ${moduleName} module`);
+  alert(`🖨️ Printing ${moduleName} module`);
+  window.print();
 }
 
 function exportModule(moduleName){
-  alert(`Exporting ${moduleName} module data`);
+  alert(`📤 Exporting ${moduleName} module data to Excel`);
 }
 
-// Auto-login for demo
-window.onload = function() {
-  // Auto-fill login for demo
-  document.getElementById('u').value = 'admin';
-  document.getElementById('p').value = 'admin123';
+// Add Enter key support for login
+document.addEventListener('DOMContentLoaded', function(){
+  const passwordField = document.getElementById('password');
+  if(passwordField){
+    passwordField.addEventListener('keypress', function(e){
+      if(e.key === 'Enter'){
+        login();
+      }
+    });
+  }
   
-  // Add event listener for Enter key in login
-  document.getElementById('p').addEventListener('keypress', function(e){
-    if(e.key === 'Enter'){
-      login();
-    }
-  });
-};
+  // Auto-fill demo credentials
+  document.getElementById('username').value = 'admin';
+  document.getElementById('password').value = 'admin123';
+});
 </script>
 
 </body>
