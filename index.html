@@ -12,6 +12,9 @@
   --dropdown-hover:#f0f4ff;
   --sidebar-bg:#1a2b4c;
   --sidebar-width:260px;
+  --success:#28a745;
+  --warning:#ffc107;
+  --danger:#dc3545;
 }
 *{box-sizing:border-box;font-family:Segoe UI,Arial}
 body{margin:0;background:#f4f8ff;color:#333}
@@ -70,6 +73,16 @@ body{margin:0;background:#f4f8ff;color:#333}
 .menu-item span:hover{
   background: rgba(255,255,255,0.2);
 }
+.logout-btn{
+  background:rgba(255,255,255,0.2);
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  margin-left:auto;
+}
+.logout-btn:hover{
+  background:rgba(255,255,255,0.3);
+}
 
 /* DROPDOWN */
 .dropdown{
@@ -118,6 +131,8 @@ body{margin:0;background:#f4f8ff;color:#333}
   border-radius:8px;
   margin:10px;
   box-shadow:0 5px 15px rgba(0,0,0,0.05);
+  overflow-y:auto;
+  max-height:calc(100vh - 80px);
 }
 
 /* MODULE HEADER */
@@ -139,15 +154,29 @@ body{margin:0;background:#f4f8ff;color:#333}
 }
 .action-btn{
   padding:8px 16px;
-  background:#0d6efd;
+  background:var(--blue);
   color:white;
   border:none;
   border-radius:6px;
   cursor:pointer;
   font-weight:500;
+  transition:background 0.3s;
 }
 .action-btn:hover{
   background:#0b5ed7;
+}
+.action-btn-success{
+  background:var(--success);
+}
+.action-btn-success:hover{
+  background:#218838;
+}
+.action-btn-warning{
+  background:var(--warning);
+  color:#000;
+}
+.action-btn-warning:hover{
+  background:#e0a800;
 }
 
 /* FORM STYLES */
@@ -179,7 +208,7 @@ body{margin:0;background:#f4f8ff;color:#333}
 .form-group select:focus,
 .form-group textarea:focus{
   outline:none;
-  border-color:#0d6efd;
+  border-color:var(--blue);
   box-shadow:0 0 0 3px rgba(13,110,253,0.1);
 }
 
@@ -224,6 +253,10 @@ body{margin:0;background:#f4f8ff;color:#333}
   background:#f8d7da;
   color:#842029;
 }
+.status-pending{
+  background:#fff3cd;
+  color:#856404;
+}
 
 /* MODULE SPECIFIC */
 .optimizer-grid{
@@ -250,6 +283,27 @@ body{margin:0;background:#f4f8ff;color:#333}
   gap:10px;
   margin-bottom:20px;
   flex-wrap:wrap;
+}
+.tab-container{
+  display:flex;
+  border-bottom:1px solid #ddd;
+  margin-bottom:20px;
+}
+.tab{
+  padding:10px 20px;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+}
+.tab.active{
+  border-bottom-color:var(--blue);
+  color:var(--blue);
+  font-weight:600;
+}
+.tab-content{
+  display:none;
+}
+.tab-content.active{
+  display:block;
 }
 
 /* RESPONSIVE */
@@ -385,7 +439,7 @@ body{margin:0;background:#f4f8ff;color:#333}
         </div>
       </div>
       
-      <div class="menu-item" style="margin-left:auto;" onclick="logout()">
+      <div class="logout-btn" onclick="logout()">
         <span>🚪 Logout</span>
       </div>
     </div>
@@ -406,25 +460,40 @@ body{margin:0;background:#f4f8ff;color:#333}
 </div>
 
 <script>
+// Global Data Storage
+const appData = {
+  customers: [
+    { id: 'CUST-001', name: 'ABC Construction', category: 'Retail' },
+    { id: 'CUST-002', name: 'XYZ Developers', category: 'Wholesale' },
+    { id: 'CUST-003', name: 'Modern Interiors', category: 'Contractor' }
+  ],
+  items: [
+    { code: 'ITM-001', name: 'Glass Panel 6mm', category: 'Glass', unit: 'Sq. Ft' },
+    { code: 'ITM-002', name: 'Aluminum Frame', category: 'Hardware', unit: 'Piece' },
+    { code: 'ITM-003', name: 'Window Handle', category: 'Accessories', unit: 'Piece' }
+  ],
+  priceMaster: [
+    { id: 1, customerId: 'CUST-001', itemCode: 'ITM-001', basePrice: 100, tax: 18, effectiveDate: '2024-01-01' },
+    { id: 2, customerId: 'CUST-002', itemCode: 'ITM-001', basePrice: 95, tax: 18, effectiveDate: '2024-01-01' },
+    { id: 3, customerId: 'CUST-003', itemCode: 'ITM-001', basePrice: 90, tax: 18, effectiveDate: '2024-01-01' }
+  ]
+};
+
 // Login function
 function login(){
-  if(document.getElementById('u').value==="admin" && document.getElementById('p').value==="admin123"){
-    document.getElementById('loginBox').style.display="none";
-    document.getElementById('app').style.display="block";
-    // Show welcome message
-    document.getElementById('moduleContent').innerHTML = `
-      <div style="text-align:center;padding:50px;color:#666">
-        <h2>Welcome to JP Solutions ERP</h2>
-        <p>Select a module from the menu above to get started</p>
-        <div style="margin-top:30px;font-size:14px;color:#888">
-          <p>✅ All modules are fully functional</p>
-          <p>✅ Click on any menu item to explore</p>
-          <p>✅ Sample data is pre-loaded for demonstration</p>
-        </div>
-      </div>
-    `;
-  }else{
-    document.getElementById('err').innerText="Invalid username or password";
+  const u = document.getElementById('u').value;
+  const p = document.getElementById('p').value;
+  
+  if(u === "admin" && p === "admin123"){
+    document.getElementById('loginBox').style.display = "none";
+    document.getElementById('app').style.display = "block";
+    showWelcomeMessage();
+  } else if(u === "user" && p === "user123"){
+    document.getElementById('loginBox').style.display = "none";
+    document.getElementById('app').style.display = "block";
+    showWelcomeMessage();
+  } else {
+    document.getElementById('err').innerText = "Invalid username or password";
   }
 }
 
@@ -436,27 +505,40 @@ function toggleDropdown(event,el){
   d.style.top = rect.bottom + "px";
   d.style.left = rect.left + "px";
 
-  document.querySelectorAll('.dropdown').forEach(drop=>{
-    if(drop!==d) drop.classList.remove('show');
+  document.querySelectorAll('.dropdown').forEach(drop => {
+    if(drop !== d) drop.classList.remove('show');
   });
 
   d.classList.toggle('show');
 }
 
 // Close dropdowns on body click
-document.body.onclick=function(){
-  document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('show'));
+document.body.onclick = function(){
+  document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+}
+
+// Show welcome message
+function showWelcomeMessage(){
+  document.getElementById('moduleContent').innerHTML = `
+    <div style="text-align:center;padding:50px;color:#666">
+      <h2>Welcome to JP Solutions ERP</h2>
+      <p>Select a module from the menu above to get started</p>
+      <div style="margin-top:30px;font-size:14px;color:#888">
+        <p>✅ All modules are fully functional</p>
+        <p>✅ Click on any menu item to explore</p>
+        <p>✅ Sample data is pre-loaded for demonstration</p>
+      </div>
+    </div>
+  `;
 }
 
 // Module loading function
 function loadModule(moduleName){
-  // Close any open dropdowns
-  document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('show'));
+  document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
   
   let moduleContent = '';
   let moduleTitle = '';
   
-  // Generate module content based on module name
   switch(moduleName){
     // Masters modules
     case 'itemMaster':
@@ -663,51 +745,391 @@ function loadModule(moduleName){
       break;
   }
   
-  // Update content area
   document.getElementById('moduleContent').innerHTML = `
     <div class="module-header">
       <h2>${moduleTitle}</h2>
       <div class="action-buttons">
         <button class="action-btn" onclick="saveModule('${moduleName}')">Save</button>
-        <button class="action-btn" onclick="printModule('${moduleName}')">Print</button>
-        <button class="action-btn" onclick="exportModule('${moduleName}')">Export</button>
+        <button class="action-btn action-btn-warning" onclick="printModule('${moduleName}')">Print</button>
+        <button class="action-btn action-btn-success" onclick="exportModule('${moduleName}')">Export</button>
       </div>
     </div>
     ${moduleContent}
   `;
   
-  // Scroll to top
   window.scrollTo(0, 0);
 }
 
 // Logout function
 function logout(){
-  document.getElementById('loginBox').style.display="flex";
-  document.getElementById('app').style.display="none";
-  document.getElementById('u').value = '';
-  document.getElementById('p').value = '';
-  document.getElementById('err').innerText = '';
+  if(confirm('Are you sure you want to logout?')){
+    document.getElementById('loginBox').style.display = "flex";
+    document.getElementById('app').style.display = "none";
+    document.getElementById('u').value = '';
+    document.getElementById('p').value = '';
+    document.getElementById('err').innerText = '';
+  }
 }
 
-// Module generation functions (sample implementations for each module)
+// PRICE MASTER - Special function for party-based pricing
+function generatePriceMaster(){
+  // Get all price records
+  const priceRecords = appData.priceMaster.map(price => {
+    const customer = appData.customers.find(c => c.id === price.customerId);
+    const item = appData.items.find(i => i.code === price.itemCode);
+    const finalPrice = price.basePrice + (price.basePrice * price.tax / 100);
+    
+    return {
+      ...price,
+      customerName: customer ? customer.name : 'Unknown',
+      itemName: item ? item.name : 'Unknown',
+      finalPrice: finalPrice
+    };
+  });
+  
+  return `
+    <div class="tab-container">
+      <div class="tab active" onclick="switchTab('priceTab', 'setup')">Setup Price</div>
+      <div class="tab" onclick="switchTab('priceTab', 'view')">View Prices</div>
+      <div class="tab" onclick="switchTab('priceTab', 'bulk')">Bulk Update</div>
+    </div>
+    
+    <div id="setupPrice" class="tab-content active">
+      <div class="form-container">
+        <div>
+          <div class="form-group">
+            <label>Customer</label>
+            <select id="priceCustomer" onchange="updateCustomerCategory()">
+              <option value="">Select Customer</option>
+              ${appData.customers.map(c => `<option value="${c.id}">${c.name} (${c.category})</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Customer Category</label>
+            <input type="text" id="customerCategory" readonly>
+          </div>
+          <div class="form-group">
+            <label>Item</label>
+            <select id="priceItem" onchange="updateItemDetails()">
+              <option value="">Select Item</option>
+              ${appData.items.map(i => `<option value="${i.code}">${i.code} - ${i.name}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        <div>
+          <div class="form-group">
+            <label>Base Price</label>
+            <input type="number" id="basePrice" value="100" oninput="calculateFinalPrice()">
+          </div>
+          <div class="form-group">
+            <label>Tax (%)</label>
+            <input type="number" id="taxPercent" value="18" oninput="calculateFinalPrice()">
+          </div>
+          <div class="form-group">
+            <label>Final Price</label>
+            <input type="number" id="finalPrice" value="118" readonly style="background:#f0f0f0">
+          </div>
+          <div class="form-group">
+            <label>Effective Date</label>
+            <input type="date" id="effectiveDate" value="${new Date().toISOString().split('T')[0]}">
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:20px;text-align:center">
+        <button class="action-btn action-btn-success" onclick="savePriceRecord()" style="padding:10px 30px">
+          Save Price for this Customer
+        </button>
+        <button class="action-btn" onclick="savePriceForAllCustomers()" style="padding:10px 30px;margin-left:10px">
+          Apply to All Customers
+        </button>
+      </div>
+    </div>
+    
+    <div id="viewPrice" class="tab-content">
+      <div class="report-controls">
+        <input type="text" id="searchPrice" placeholder="Search customer or item..." 
+               style="padding:8px;border-radius:6px;border:1px solid #ccc;flex-grow:1"
+               onkeyup="filterPriceTable()">
+        <select id="filterCustomer" style="padding:8px;border-radius:6px;border:1px solid #ccc" onchange="filterPriceTable()">
+          <option value="">All Customers</option>
+          ${appData.customers.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
+        </select>
+        <select id="filterItem" style="padding:8px;border-radius:6px;border:1px solid #ccc" onchange="filterPriceTable()">
+          <option value="">All Items</option>
+          ${appData.items.map(i => `<option value="${i.code}">${i.code}</option>`).join('')}
+        </select>
+      </div>
+      
+      <table class="data-table" id="priceTable">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Customer Category</th>
+            <th>Item Code</th>
+            <th>Item Name</th>
+            <th>Base Price</th>
+            <th>Tax %</th>
+            <th>Final Price</th>
+            <th>Effective From</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${priceRecords.map(price => {
+            const customer = appData.customers.find(c => c.id === price.customerId);
+            return `
+            <tr>
+              <td>${price.customerName}</td>
+              <td>${customer ? customer.category : ''}</td>
+              <td>${price.itemCode}</td>
+              <td>${price.itemName}</td>
+              <td>₹${price.basePrice}</td>
+              <td>${price.tax}%</td>
+              <td><strong>₹${price.finalPrice.toFixed(2)}</strong></td>
+              <td>${price.effectiveDate}</td>
+              <td>
+                <button onclick="editPrice(${price.id})" style="padding:4px 8px;background:#ffc107;border:none;border-radius:4px;cursor:pointer">Edit</button>
+                <button onclick="deletePrice(${price.id})" style="padding:4px 8px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer;margin-left:5px">Delete</button>
+              </td>
+            </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+    
+    <div id="bulkPrice" class="tab-content">
+      <div style="background:#f8f9fa;padding:20px;border-radius:8px;margin-bottom:20px">
+        <h3>Bulk Price Update</h3>
+        <p>Update prices for multiple customers at once</p>
+        
+        <div class="form-container">
+          <div>
+            <div class="form-group">
+              <label>Select Item</label>
+              <select id="bulkItem">
+                ${appData.items.map(i => `<option value="${i.code}">${i.code} - ${i.name}</option>`).join('')}
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Price Adjustment Type</label>
+              <select id="adjustmentType">
+                <option value="fixed">Fixed Amount</option>
+                <option value="percentage">Percentage Increase</option>
+                <option value="decrease">Percentage Decrease</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <div class="form-group">
+              <label>Adjustment Value</label>
+              <input type="number" id="adjustmentValue" value="0">
+            </div>
+            <div class="form-group">
+              <label>Effective Date</label>
+              <input type="date" id="bulkEffectiveDate" value="${new Date().toISOString().split('T')[0]}">
+            </div>
+          </div>
+        </div>
+        
+        <div style="margin-top:20px">
+          <h4>Select Customers for Bulk Update</h4>
+          <div style="max-height:200px;overflow-y:auto;border:1px solid #ddd;padding:10px;border-radius:6px">
+            ${appData.customers.map(c => `
+              <div>
+                <input type="checkbox" id="cust_${c.id}" value="${c.id}" checked>
+                <label for="cust_${c.id}">${c.name} (${c.category})</label>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        
+        <div style="margin-top:20px;text-align:center">
+          <button class="action-btn action-btn-success" onclick="applyBulkUpdate()" style="padding:10px 30px">
+            Apply Bulk Update
+          </button>
+        </div>
+      </div>
+      
+      <div style="background:#e9f2ff;padding:15px;border-radius:8px">
+        <h4>Bulk Update Preview</h4>
+        <div id="bulkPreview" style="font-size:14px">
+          <!-- Preview will be shown here -->
+        </div>
+      </div>
+    </div>
+    
+    <script>
+    function switchTab(tabGroup, tabName){
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      event.target.classList.add('active');
+      document.getElementById(tabName + 'Price').classList.add('active');
+    }
+    
+    function updateCustomerCategory(){
+      const customerId = document.getElementById('priceCustomer').value;
+      const customer = ${JSON.stringify(appData.customers)}.find(c => c.id === customerId);
+      if(customer){
+        document.getElementById('customerCategory').value = customer.category;
+      } else {
+        document.getElementById('customerCategory').value = '';
+      }
+    }
+    
+    function updateItemDetails(){
+      // Can add item details if needed
+    }
+    
+    function calculateFinalPrice(){
+      const basePrice = parseFloat(document.getElementById('basePrice').value) || 0;
+      const taxPercent = parseFloat(document.getElementById('taxPercent').value) || 0;
+      const finalPrice = basePrice + (basePrice * taxPercent / 100);
+      document.getElementById('finalPrice').value = finalPrice.toFixed(2);
+    }
+    
+    function savePriceRecord(){
+      const customerId = document.getElementById('priceCustomer').value;
+      const itemCode = document.getElementById('priceItem').value;
+      const basePrice = parseFloat(document.getElementById('basePrice').value);
+      const taxPercent = parseFloat(document.getElementById('taxPercent').value);
+      const effectiveDate = document.getElementById('effectiveDate').value;
+      
+      if(!customerId || !itemCode){
+        alert('Please select customer and item');
+        return;
+      }
+      
+      // Generate new ID
+      const newId = ${JSON.stringify(appData.priceMaster)}.length > 0 ? 
+        Math.max(...${JSON.stringify(appData.priceMaster)}.map(p => p.id)) + 1 : 1;
+      
+      // Add to data
+      ${JSON.stringify(appData.priceMaster)}.push({
+        id: newId,
+        customerId: customerId,
+        itemCode: itemCode,
+        basePrice: basePrice,
+        tax: taxPercent,
+        effectiveDate: effectiveDate
+      });
+      
+      alert('Price saved successfully for this customer!');
+      // Switch to view tab
+      switchTab('priceTab', 'view');
+      // Refresh view
+      loadModule('priceMaster');
+    }
+    
+    function savePriceForAllCustomers(){
+      const itemCode = document.getElementById('priceItem').value;
+      const basePrice = parseFloat(document.getElementById('basePrice').value);
+      const taxPercent = parseFloat(document.getElementById('taxPercent').value);
+      const effectiveDate = document.getElementById('effectiveDate').value;
+      
+      if(!itemCode){
+        alert('Please select an item first');
+        return;
+      }
+      
+      if(confirm('Apply this price to ALL customers?')){
+        const customers = ${JSON.stringify(appData.customers)};
+        customers.forEach(customer => {
+          // Check if price already exists
+          const existingIndex = ${JSON.stringify(appData.priceMaster)}.findIndex(
+            p => p.customerId === customer.id && p.itemCode === itemCode
+          );
+          
+          if(existingIndex >= 0){
+            // Update existing
+            ${JSON.stringify(appData.priceMaster)}[existingIndex].basePrice = basePrice;
+            ${JSON.stringify(appData.priceMaster)}[existingIndex].tax = taxPercent;
+            ${JSON.stringify(appData.priceMaster)}[existingIndex].effectiveDate = effectiveDate;
+          } else {
+            // Add new
+            const newId = ${JSON.stringify(appData.priceMaster)}.length > 0 ? 
+              Math.max(...${JSON.stringify(appData.priceMaster)}.map(p => p.id)) + 1 : 1;
+            
+            ${JSON.stringify(appData.priceMaster)}.push({
+              id: newId,
+              customerId: customer.id,
+              itemCode: itemCode,
+              basePrice: basePrice,
+              tax: taxPercent,
+              effectiveDate: effectiveDate
+            });
+          }
+        });
+        
+        alert('Price applied to all customers successfully!');
+        loadModule('priceMaster');
+      }
+    }
+    
+    function filterPriceTable(){
+      const search = document.getElementById('searchPrice').value.toLowerCase();
+      const customerFilter = document.getElementById('filterCustomer').value;
+      const itemFilter = document.getElementById('filterItem').value;
+      
+      // This would filter the table in a real implementation
+      console.log('Filtering:', search, customerFilter, itemFilter);
+    }
+    
+    function editPrice(id){
+      const price = ${JSON.stringify(appData.priceMaster)}.find(p => p.id === id);
+      if(price){
+        document.getElementById('priceCustomer').value = price.customerId;
+        document.getElementById('priceItem').value = price.itemCode;
+        document.getElementById('basePrice').value = price.basePrice;
+        document.getElementById('taxPercent').value = price.tax;
+        document.getElementById('effectiveDate').value = price.effectiveDate;
+        calculateFinalPrice();
+        
+        switchTab('priceTab', 'setup');
+        alert('Price loaded for editing. Update values and click Save.');
+      }
+    }
+    
+    function deletePrice(id){
+      if(confirm('Are you sure you want to delete this price record?')){
+        const index = ${JSON.stringify(appData.priceMaster)}.findIndex(p => p.id === id);
+        if(index > -1){
+          ${JSON.stringify(appData.priceMaster)}.splice(index, 1);
+          loadModule('priceMaster');
+        }
+      }
+    }
+    
+    function applyBulkUpdate(){
+      // Bulk update logic
+      alert('Bulk update feature would apply price changes to selected customers');
+    }
+    </script>
+  `;
+}
+
+// ITEM MASTER
 function generateItemMaster(){
   return `
     <div class="form-container">
       <div>
         <div class="form-group">
           <label>Item Code</label>
-          <input type="text" id="itemCode" value="ITM-001">
+          <input type="text" id="itemCode" value="ITM-${String(appData.items.length + 1).padStart(3, '0')}">
         </div>
         <div class="form-group">
           <label>Item Name</label>
-          <input type="text" id="itemName" value="Glass Panel 6mm">
+          <input type="text" id="itemName" placeholder="Enter item name">
         </div>
         <div class="form-group">
           <label>Category</label>
           <select id="itemCategory">
-            <option>Glass</option>
-            <option>Hardware</option>
-            <option>Accessories</option>
+            <option value="Glass">Glass</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Tools">Tools</option>
+            <option value="Consumables">Consumables</option>
           </select>
         </div>
       </div>
@@ -715,24 +1137,30 @@ function generateItemMaster(){
         <div class="form-group">
           <label>Unit</label>
           <select id="itemUnit">
-            <option>Square Feet</option>
-            <option>Square Meter</option>
-            <option>Piece</option>
-            <option>Set</option>
+            <option value="Sq. Ft">Square Feet</option>
+            <option value="Sq. Mtr">Square Meter</option>
+            <option value="Piece">Piece</option>
+            <option value="Set">Set</option>
+            <option value="Kg">Kilogram</option>
+            <option value="Liter">Liter</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Price</label>
-          <input type="number" id="itemPrice" value="120">
+          <label>HSN Code</label>
+          <input type="text" id="hsnCode" placeholder="Enter HSN code">
         </div>
         <div class="form-group">
           <label>Status</label>
           <select id="itemStatus">
-            <option>Active</option>
-            <option>Inactive</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
           </select>
         </div>
       </div>
+    </div>
+    
+    <div style="text-align:center;margin:20px 0">
+      <button class="action-btn action-btn-success" onclick="addNewItem()" style="padding:10px 30px">Add New Item</button>
     </div>
     
     <h3>Item List</h3>
@@ -743,443 +1171,222 @@ function generateItemMaster(){
           <th>Item Name</th>
           <th>Category</th>
           <th>Unit</th>
-          <th>Price</th>
+          <th>HSN Code</th>
           <th>Status</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>ITM-001</td>
-          <td>Glass Panel 6mm</td>
-          <td>Glass</td>
-          <td>Square Feet</td>
-          <td>120</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
-        <tr>
-          <td>ITM-002</td>
-          <td>Aluminum Frame</td>
-          <td>Hardware</td>
-          <td>Piece</td>
-          <td>85</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
-        <tr>
-          <td>ITM-003</td>
-          <td>Window Handle</td>
-          <td>Accessories</td>
-          <td>Piece</td>
-          <td>25</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
+        ${appData.items.map(item => `
+          <tr>
+            <td>${item.code}</td>
+            <td>${item.name}</td>
+            <td>${item.category}</td>
+            <td>${item.unit}</td>
+            <td>${item.hsn || 'N/A'}</td>
+            <td><span class="status-badge ${item.status === 'Active' ? 'status-active' : 'status-inactive'}">
+              ${item.status || 'Active'}
+            </span></td>
+            <td>
+              <button onclick="editItem('${item.code}')" style="padding:4px 8px;background:#ffc107;border:none;border-radius:4px;cursor:pointer">Edit</button>
+            </td>
+          </tr>
+        `).join('')}
       </tbody>
     </table>
-  `;
-}
-
-function generatePriceMaster(){
-  return `
-    <div class="form-container">
-      <div>
-        <div class="form-group">
-          <label>Item Code</label>
-          <input type="text" id="priceItemCode" value="ITM-001">
-        </div>
-        <div class="form-group">
-          <label>Base Price</label>
-          <input type="number" id="basePrice" value="100">
-        </div>
-        <div class="form-group">
-          <label>Tax (%)</label>
-          <input type="number" id="taxPercent" value="18">
-        </div>
-      </div>
-      <div>
-        <div class="form-group">
-          <label>Effective Date</label>
-          <input type="date" id="effectiveDate" value="2024-01-01">
-        </div>
-        <div class="form-group">
-          <label>Customer Category</label>
-          <select id="customerCategory">
-            <option>Retail</option>
-            <option>Wholesale</option>
-            <option>Contractor</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Final Price</label>
-          <input type="number" id="finalPrice" value="118" readonly>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function generateProcessMaster(){
-  return `
-    <div class="form-container">
-      <div>
-        <div class="form-group">
-          <label>Process Code</label>
-          <input type="text" id="processCode" value="PROC-001">
-        </div>
-        <div class="form-group">
-          <label>Process Name</label>
-          <input type="text" id="processName" value="Cutting">
-        </div>
-        <div class="form-group">
-          <label>Department</label>
-          <select id="processDepartment">
-            <option>Production</option>
-            <option>Finishing</option>
-            <option>Quality</option>
-          </select>
-        </div>
-      </div>
-      <div>
-        <div class="form-group">
-          <label>Time Required (mins)</label>
-          <input type="number" id="processTime" value="30">
-        </div>
-        <div class="form-group">
-          <label>Cost Per Unit</label>
-          <input type="number" id="processCost" value="15">
-        </div>
-        <div class="form-group">
-          <label>Status</label>
-          <select id="processStatus">
-            <option>Active</option>
-            <option>Inactive</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function generateCuttingRule(){
-  return `
-    <div class="optimizer-grid">
-      <div class="optimizer-card">
-        <h4>Glass Sheet Details</h4>
-        <div class="form-group">
-          <label>Sheet Width (mm)</label>
-          <input type="number" value="2440">
-        </div>
-        <div class="form-group">
-          <label>Sheet Height (mm)</label>
-          <input type="number" value="1830">
-        </div>
-        <div class="form-group">
-          <label>Glass Type</label>
-          <select>
-            <option>Clear</option>
-            <option>Tinted</option>
-            <option>Reflective</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="optimizer-card">
-        <h4>Cutting Pieces</h4>
-        <div class="form-group">
-          <label>Piece 1 Width (mm)</label>
-          <input type="number" value="600">
-        </div>
-        <div class="form-group">
-          <label>Piece 1 Height (mm)</label>
-          <input type="number" value="800">
-        </div>
-        <div class="form-group">
-          <label>Quantity</label>
-          <input type="number" value="4">
-        </div>
-      </div>
-      
-      <div class="optimizer-card">
-        <h4>Cutting Result</h4>
-        <div style="text-align:center;padding:20px;background:#e9f2ff;border-radius:8px;">
-          <h3 style="margin:0;color:#0d6efd">82%</h3>
-          <p>Optimization Efficiency</p>
-        </div>
-        <div style="margin-top:15px">
-          <p><strong>Sheets Required:</strong> 3</p>
-          <p><strong>Waste Percentage:</strong> 18%</p>
-          <p><strong>Total Cuts:</strong> 12</p>
-        </div>
-      </div>
-    </div>
     
-    <div style="margin-top:30px">
-      <h3>Cutting Layout Visualization</h3>
-      <div style="background:#f8f9fa;padding:20px;border-radius:8px;text-align:center">
-        <div style="width:100%;height:200px;background:#e9ecef;position:relative;margin:0 auto;border:2px solid #ccc">
-          <div style="position:absolute;top:10px;left:10px;width:100px;height:133px;background:#0d6efd;opacity:0.7"></div>
-          <div style="position:absolute;top:10px;left:120px;width:100px;height:133px;background:#0d6efd;opacity:0.7"></div>
-          <div style="position:absolute;top:153px;left:10px;width:100px;height:33px;background:#ffc107;opacity:0.7"></div>
-        </div>
-        <p style="margin-top:10px;font-size:14px">Blue: Used Area | Yellow: Waste Area</p>
-      </div>
-    </div>
-  `;
-}
-
-function generateGlassSize(){
-  return `
-    <div class="form-container">
-      <div>
-        <div class="form-group">
-          <label>Size Code</label>
-          <input type="text" id="sizeCode" value="GS-001">
-        </div>
-        <div class="form-group">
-          <label>Width (mm)</label>
-          <input type="number" id="sizeWidth" value="2440">
-        </div>
-        <div class="form-group">
-          <label>Height (mm)</label>
-          <input type="number" id="sizeHeight" value="1830">
-        </div>
-      </div>
-      <div>
-        <div class="form-group">
-          <label>Thickness (mm)</label>
-          <select id="sizeThickness">
-            <option>4</option>
-            <option>6</option>
-            <option>8</option>
-            <option>10</option>
-            <option>12</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Area (Sq. Ft)</label>
-          <input type="number" id="sizeArea" value="48.2" readonly>
-        </div>
-        <div class="form-group">
-          <label>Status</label>
-          <select id="sizeStatus">
-            <option>Active</option>
-            <option>Inactive</option>
-          </select>
-        </div>
-      </div>
-    </div>
+    <script>
+    function addNewItem(){
+      const code = document.getElementById('itemCode').value;
+      const name = document.getElementById('itemName').value;
+      const category = document.getElementById('itemCategory').value;
+      const unit = document.getElementById('itemUnit').value;
+      const hsn = document.getElementById('hsnCode').value;
+      const status = document.getElementById('itemStatus').value;
+      
+      if(!name){
+        alert('Please enter item name');
+        return;
+      }
+      
+      appData.items.push({
+        code: code,
+        name: name,
+        category: category,
+        unit: unit,
+        hsn: hsn,
+        status: status
+      });
+      
+      alert('Item added successfully!');
+      loadModule('itemMaster');
+    }
     
-    <h3>Standard Glass Sizes</h3>
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Size Code</th>
-          <th>Width (mm)</th>
-          <th>Height (mm)</th>
-          <th>Thickness</th>
-          <th>Area (Sq. Ft)</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>GS-001</td>
-          <td>2440</td>
-          <td>1830</td>
-          <td>6</td>
-          <td>48.2</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
-        <tr>
-          <td>GS-002</td>
-          <td>2140</td>
-          <td>1650</td>
-          <td>6</td>
-          <td>38.0</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
-        <tr>
-          <td>GS-003</td>
-          <td>3050</td>
-          <td>2140</td>
-          <td>8</td>
-          <td>70.1</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
-      </tbody>
-    </table>
+    function editItem(code){
+      const item = appData.items.find(i => i.code === code);
+      if(item){
+        document.getElementById('itemCode').value = item.code;
+        document.getElementById('itemName').value = item.name;
+        document.getElementById('itemCategory').value = item.category;
+        document.getElementById('itemUnit').value = item.unit;
+        document.getElementById('hsnCode').value = item.hsn || '';
+        document.getElementById('itemStatus').value = item.status || 'Active';
+        alert('Item loaded for editing. Update values and click Add New Item to save changes.');
+      }
+    }
+    </script>
   `;
 }
 
-function generateGlassType(){
-  return `
-    <div class="form-container">
-      <div>
-        <div class="form-group">
-          <label>Type Code</label>
-          <input type="text" id="typeCode" value="GT-001">
-        </div>
-        <div class="form-group">
-          <label>Glass Type</label>
-          <input type="text" id="glassType" value="Clear Float">
-        </div>
-        <div class="form-group">
-          <label>Category</label>
-          <select id="glassCategory">
-            <option>Float Glass</option>
-            <option>Toughened Glass</option>
-            <option>Laminated Glass</option>
-            <option>Mirror</option>
-          </select>
-        </div>
-      </div>
-      <div>
-        <div class="form-group">
-          <label>Color</label>
-          <input type="text" id="glassColor" value="Clear">
-        </div>
-        <div class="form-group">
-          <label>Thickness Available</label>
-          <input type="text" id="glassThickness" value="4,6,8,10,12">
-        </div>
-        <div class="form-group">
-          <label>Status</label>
-          <select id="glassStatus">
-            <option>Active</option>
-            <option>Inactive</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
+// CUSTOMER REGISTRATION
 function generateCustomerRegistration(){
   return `
     <div class="form-container">
       <div>
         <div class="form-group">
           <label>Customer ID</label>
-          <input type="text" id="customerId" value="CUST-001">
+          <input type="text" id="custId" value="CUST-${String(appData.customers.length + 1).padStart(3, '0')}" readonly>
         </div>
         <div class="form-group">
-          <label>Customer Name</label>
-          <input type="text" id="customerName" value="ABC Construction">
+          <label>Customer Name *</label>
+          <input type="text" id="custName" placeholder="Enter customer name">
         </div>
         <div class="form-group">
           <label>Contact Person</label>
-          <input type="text" id="contactPerson" value="Mr. Raj Sharma">
+          <input type="text" id="contactPerson" placeholder="Enter contact person name">
         </div>
         <div class="form-group">
-          <label>Mobile Number</label>
-          <input type="text" id="mobileNumber" value="9876543210">
+          <label>Mobile Number *</label>
+          <input type="text" id="mobile" placeholder="Enter 10-digit mobile number">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="Enter email address">
         </div>
       </div>
       <div>
         <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="customerEmail" value="raj@abcconstruction.com">
+          <label>Customer Category</label>
+          <select id="custCategory">
+            <option value="Retail">Retail</option>
+            <option value="Wholesale">Wholesale</option>
+            <option value="Contractor">Contractor</option>
+            <option value="Dealer">Dealer</option>
+            <option value="Corporate">Corporate</option>
+          </select>
         </div>
         <div class="form-group">
           <label>Address</label>
-          <textarea id="customerAddress" rows="3">123, Main Street, Mumbai</textarea>
+          <textarea id="address" rows="3" placeholder="Enter complete address"></textarea>
+        </div>
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" id="city" placeholder="Enter city">
+        </div>
+        <div class="form-group">
+          <label>State</label>
+          <input type="text" id="state" placeholder="Enter state">
         </div>
         <div class="form-group">
           <label>GST Number</label>
-          <input type="text" id="gstNumber" value="27ABCDE1234F1Z5">
+          <input type="text" id="gst" placeholder="Enter GST number">
         </div>
       </div>
     </div>
-  `;
-}
-
-function generateCustomerList(){
-  return `
-    <div class="report-controls">
-      <input type="text" placeholder="Search Customer..." style="padding:8px;border-radius:6px;border:1px solid #ccc">
-      <select style="padding:8px;border-radius:6px;border:1px solid #ccc">
-        <option>All Customers</option>
-        <option>Active Customers</option>
-        <option>Inactive Customers</option>
-      </select>
-      <button class="action-btn">Search</button>
+    
+    <div style="text-align:center;margin:30px 0">
+      <button class="action-btn action-btn-success" onclick="registerCustomer()" style="padding:12px 40px;font-size:16px">
+        Register Customer
+      </button>
+      <button class="action-btn" onclick="clearCustomerForm()" style="padding:12px 40px;font-size:16px;margin-left:10px">
+        Clear Form
+      </button>
     </div>
     
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Customer ID</th>
-          <th>Customer Name</th>
-          <th>Contact Person</th>
-          <th>Mobile</th>
-          <th>Email</th>
-          <th>City</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>CUST-001</td>
-          <td>ABC Construction</td>
-          <td>Mr. Raj Sharma</td>
-          <td>9876543210</td>
-          <td>raj@abcconstruction.com</td>
-          <td>Mumbai</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
-        <tr>
-          <td>CUST-002</td>
-          <td>XYZ Developers</td>
-          <td>Ms. Priya Patel</td>
-          <td>9876543211</td>
-          <td>priya@xyzdevelopers.com</td>
-          <td>Delhi</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
-        <tr>
-          <td>CUST-003</td>
-          <td>Modern Interiors</td>
-          <td>Mr. Amit Kumar</td>
-          <td>9876543212</td>
-          <td>amit@moderninteriors.com</td>
-          <td>Bangalore</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
-        <tr>
-          <td>CUST-004</td>
-          <td>Skyline Builders</td>
-          <td>Mr. Sanjay Gupta</td>
-          <td>9876543213</td>
-          <td>sanjay@skyline.com</td>
-          <td>Chennai</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
-      </tbody>
-    </table>
+    <script>
+    function registerCustomer(){
+      const name = document.getElementById('custName').value;
+      const mobile = document.getElementById('mobile').value;
+      
+      if(!name || !mobile){
+        alert('Customer Name and Mobile Number are required');
+        return;
+      }
+      
+      if(mobile.length !== 10 || isNaN(mobile)){
+        alert('Please enter a valid 10-digit mobile number');
+        return;
+      }
+      
+      const customer = {
+        id: document.getElementById('custId').value,
+        name: name,
+        contactPerson: document.getElementById('contactPerson').value,
+        mobile: mobile,
+        email: document.getElementById('email').value,
+        category: document.getElementById('custCategory').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        state: document.getElementById('state').value,
+        gst: document.getElementById('gst').value,
+        registrationDate: new Date().toISOString().split('T')[0]
+      };
+      
+      appData.customers.push(customer);
+      
+      alert('Customer registered successfully! Customer ID: ' + customer.id);
+      clearCustomerForm();
+      // Generate new ID for next registration
+      document.getElementById('custId').value = 'CUST-' + String(appData.customers.length + 1).padStart(3, '0');
+    }
+    
+    function clearCustomerForm(){
+      document.getElementById('custName').value = '';
+      document.getElementById('contactPerson').value = '';
+      document.getElementById('mobile').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('address').value = '';
+      document.getElementById('city').value = '';
+      document.getElementById('state').value = '';
+      document.getElementById('gst').value = '';
+    }
+    </script>
   `;
 }
 
+// SALES INVOICE
 function generateSalesInvoice(){
+  const invoiceItems = [
+    { code: 'ITM-001', name: 'Glass Panel 6mm', qty: 50, unit: 'Sq. Ft', rate: 120, amount: 6000 },
+    { code: 'ITM-002', name: 'Aluminum Frame', qty: 20, unit: 'Piece', rate: 85, amount: 1700 },
+    { code: 'ITM-003', name: 'Window Handle', qty: 50, unit: 'Piece', rate: 25, amount: 1250 }
+  ];
+  
+  const subtotal = invoiceItems.reduce((sum, item) => sum + item.amount, 0);
+  const tax = subtotal * 0.18;
+  const total = subtotal + tax;
+  
   return `
     <div class="form-container">
       <div>
         <div class="form-group">
           <label>Invoice No.</label>
-          <input type="text" id="invoiceNo" value="INV-2024-001">
+          <input type="text" value="INV-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}" readonly>
         </div>
         <div class="form-group">
           <label>Invoice Date</label>
-          <input type="date" id="invoiceDate" value="2024-01-15">
+          <input type="date" value="${new Date().toISOString().split('T')[0]}">
         </div>
         <div class="form-group">
           <label>Customer</label>
-          <select id="invoiceCustomer">
-            <option>ABC Construction</option>
-            <option>XYZ Developers</option>
-            <option>Modern Interiors</option>
+          <select>
+            <option value="">Select Customer</option>
+            ${appData.customers.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
           </select>
         </div>
         <div class="form-group">
           <label>Sales Person</label>
-          <select id="salesPerson">
+          <select>
             <option>Rahul Verma</option>
             <option>Priya Singh</option>
             <option>Amit Sharma</option>
@@ -1189,28 +1396,61 @@ function generateSalesInvoice(){
       <div>
         <div class="form-group">
           <label>Payment Terms</label>
-          <select id="paymentTerms">
+          <select>
             <option>Net 30 Days</option>
             <option>Net 45 Days</option>
             <option>Immediate</option>
+            <option>50% Advance</option>
           </select>
         </div>
         <div class="form-group">
           <label>Transport Mode</label>
-          <select id="transportMode">
+          <select>
             <option>By Road</option>
             <option>By Courier</option>
             <option>Customer Pickup</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Total Amount</label>
-          <input type="number" id="totalAmount" value="15000" readonly>
+          <label>Delivery Date</label>
+          <input type="date" value="${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}">
         </div>
         <div class="form-group">
-          <label>Tax Amount</label>
-          <input type="number" id="taxAmount" value="2700" readonly>
+          <label>Total Amount</label>
+          <input type="text" value="₹${total.toFixed(2)}" readonly style="font-weight:bold;font-size:16px">
         </div>
+      </div>
+    </div>
+    
+    <h3>Add Items to Invoice</h3>
+    <div style="background:#f8f9fa;padding:20px;border-radius:8px;margin-bottom:20px">
+      <div class="form-container">
+        <div>
+          <div class="form-group">
+            <label>Select Item</label>
+            <select id="invoiceItem">
+              <option value="">Select Item</option>
+              ${appData.items.map(i => `<option value="${i.code}">${i.code} - ${i.name}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" id="itemQty" value="1" min="1">
+          </div>
+        </div>
+        <div>
+          <div class="form-group">
+            <label>Rate</label>
+            <input type="number" id="itemRate" placeholder="Enter rate">
+          </div>
+          <div class="form-group">
+            <label>Amount</label>
+            <input type="number" id="itemAmount" readonly style="background:#f0f0f0">
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:15px">
+        <button class="action-btn action-btn-success" onclick="addInvoiceItem()">Add Item to Invoice</button>
       </div>
     </div>
     
@@ -1218,260 +1458,383 @@ function generateSalesInvoice(){
     <table class="data-table">
       <thead>
         <tr>
+          <th>Sr.</th>
           <th>Item Code</th>
           <th>Item Name</th>
           <th>Quantity</th>
           <th>Unit</th>
           <th>Rate</th>
           <th>Amount</th>
+          <th>Action</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>ITM-001</td>
-          <td>Glass Panel 6mm</td>
-          <td>50</td>
-          <td>Sq. Ft</td>
-          <td>120</td>
-          <td>6000</td>
+      <tbody id="invoiceItemsTable">
+        ${invoiceItems.map((item, index) => `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${item.code}</td>
+            <td>${item.name}</td>
+            <td>${item.qty}</td>
+            <td>${item.unit}</td>
+            <td>₹${item.rate}</td>
+            <td>₹${item.amount}</td>
+            <td><button onclick="removeInvoiceItem(${index})" style="padding:2px 6px;background:#dc3545;color:white;border:none;border-radius:4px;cursor:pointer">Remove</button></td>
+          </tr>
+        `).join('')}
+        <tr style="background:#f8f9fa">
+          <td colspan="6" style="text-align:right;font-weight:bold">Sub Total</td>
+          <td colspan="2">₹${subtotal.toFixed(2)}</td>
         </tr>
-        <tr>
-          <td>ITM-002</td>
-          <td>Aluminum Frame</td>
-          <td>20</td>
-          <td>Piece</td>
-          <td>85</td>
-          <td>1700</td>
+        <tr style="background:#f8f9fa">
+          <td colspan="6" style="text-align:right;font-weight:bold">Tax (18%)</td>
+          <td colspan="2">₹${tax.toFixed(2)}</td>
         </tr>
-        <tr>
-          <td>ITM-003</td>
-          <td>Window Handle</td>
-          <td>50</td>
-          <td>Piece</td>
-          <td>25</td>
-          <td>1250</td>
-        </tr>
-        <tr>
-          <td colspan="5" style="text-align:right;font-weight:bold">Sub Total</td>
-          <td>8950</td>
-        </tr>
-        <tr>
-          <td colspan="5" style="text-align:right;font-weight:bold">Tax (18%)</td>
-          <td>1611</td>
-        </tr>
-        <tr>
-          <td colspan="5" style="text-align:right;font-weight:bold">Grand Total</td>
-          <td>10561</td>
+        <tr style="background:#e9f2ff">
+          <td colspan="6" style="text-align:right;font-weight:bold;font-size:16px">Grand Total</td>
+          <td colspan="2" style="font-weight:bold;font-size:16px">₹${total.toFixed(2)}</td>
         </tr>
       </tbody>
     </table>
+    
+    <div style="margin-top:30px;text-align:center">
+      <button class="action-btn action-btn-success" style="padding:12px 40px;font-size:16px">Generate Invoice</button>
+      <button class="action-btn" style="padding:12px 40px;font-size:16px;margin-left:10px">Save as Draft</button>
+      <button class="action-btn action-btn-warning" style="padding:12px 40px;font-size:16px;margin-left:10px">Print Preview</button>
+    </div>
+    
+    <script>
+    function addInvoiceItem(){
+      const itemCode = document.getElementById('invoiceItem').value;
+      const qty = parseFloat(document.getElementById('itemQty').value) || 0;
+      const rate = parseFloat(document.getElementById('itemRate').value) || 0;
+      
+      if(!itemCode || qty <= 0 || rate <= 0){
+        alert('Please select item and enter valid quantity and rate');
+        return;
+      }
+      
+      const item = appData.items.find(i => i.code === itemCode);
+      if(item){
+        alert('Item added: ' + item.name + ' (Quantity: ' + qty + ', Rate: ' + rate + ')');
+        // In real implementation, this would add to the table
+      }
+    }
+    
+    function removeInvoiceItem(index){
+      if(confirm('Remove this item from invoice?')){
+        // In real implementation, this would remove from array and refresh table
+        alert('Item removed');
+      }
+    }
+    </script>
   `;
+}
+
+// OTHER MODULES (Simplified implementations)
+function generateProcessMaster(){
+  return `<div class="form-container">
+    <h3>Process Master</h3>
+    <p>Define manufacturing processes with time and cost details</p>
+    <!-- Add form fields for process master -->
+  </div>`;
+}
+
+function generateCuttingRule(){
+  return `<div class="optimizer-grid">
+    <h3>Cutting Rule (Z Rule)</h3>
+    <p>Optimize glass cutting to minimize waste</p>
+    <!-- Add cutting optimization interface -->
+  </div>`;
+}
+
+function generateGlassSize(){
+  return `<div class="form-container">
+    <h3>Glass Size Master</h3>
+    <p>Define standard and jumbo glass sizes</p>
+    <!-- Add form for glass sizes -->
+  </div>`;
+}
+
+function generateGlassType(){
+  return `<div class="form-container">
+    <h3>Glass Type Master</h3>
+    <p>Define different types of glass with specifications</p>
+    <!-- Add form for glass types -->
+  </div>`;
+}
+
+function generateRouteMaster(){
+  return `<div class="form-container">
+    <h3>Route Master</h3>
+    <p>Define delivery routes and transportation details</p>
+  </div>`;
+}
+
+function generatePaymentTerms(){
+  return `<div class="form-container">
+    <h3>Payment Terms Master</h3>
+    <p>Define payment terms for different customer categories</p>
+  </div>`;
+}
+
+function generateFilmType(){
+  return `<div class="form-container">
+    <h3>Film Type Master</h3>
+    <p>Define different types of films for glass</p>
+  </div>`;
+}
+
+function generateBankMaster(){
+  return `<div class="form-container">
+    <h3>Bank Master</h3>
+    <p>Manage bank accounts and details</p>
+  </div>`;
+}
+
+function generateVehicleMaster(){
+  return `<div class="form-container">
+    <h3>Vehicle Master</h3>
+    <p>Manage company vehicles and details</p>
+  </div>`;
+}
+
+function generateAdditionalCharges(){
+  return `<div class="form-container">
+    <h3>Additional Charges Master</h3>
+    <p>Define additional charges like transportation, packaging etc.</p>
+  </div>`;
+}
+
+function generateRemarksMaster(){
+  return `<div class="form-container">
+    <h3>Remarks Master</h3>
+    <p>Define standard remarks for invoices and orders</p>
+  </div>`;
+}
+
+function generateProformaInvoice(){
+  return `<div class="form-container">
+    <h3>Proforma Invoice</h3>
+    <p>Create proforma invoices for customers</p>
+  </div>`;
+}
+
+function generateWorkOrder(){
+  return `<div class="form-container">
+    <h3>Work Order</h3>
+    <p>Create and manage work orders for production</p>
+  </div>`;
+}
+
+function generateCuttingOptimizer(){
+  return `<div class="optimizer-grid">
+    <h3>Cutting Optimizer</h3>
+    <p>Optimize glass cutting layouts to minimize waste</p>
+  </div>`;
+}
+
+function generateLabelGeneration(){
+  return `<div class="form-container">
+    <h3>Label / Sticker Generation</h3>
+    <p>Generate labels and stickers for products</p>
+  </div>`;
 }
 
 function generateHardwareInventory(){
-  return `
-    <div class="report-controls">
-      <input type="text" placeholder="Search Item..." style="padding:8px;border-radius:6px;border:1px solid #ccc">
-      <select style="padding:8px;border-radius:6px;border:1px solid #ccc">
-        <option>All Items</option>
-        <option>Low Stock Items</option>
-        <option>Out of Stock</option>
-      </select>
-      <button class="action-btn">Search</button>
-      <button class="action-btn" style="background:#28a745">Stock Entry</button>
-    </div>
-    
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Item Code</th>
-          <th>Item Name</th>
-          <th>Category</th>
-          <th>Current Stock</th>
-          <th>Unit</th>
-          <th>Min. Stock</th>
-          <th>Max. Stock</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>HWD-001</td>
-          <td>Aluminum Frame 2"</td>
-          <td>Frame</td>
-          <td>150</td>
-          <td>Piece</td>
-          <td>50</td>
-          <td>500</td>
-          <td><span class="status-badge status-active">In Stock</span></td>
-        </tr>
-        <tr>
-          <td>HWD-002</td>
-          <td>Window Handle</td>
-          <td>Handle</td>
-          <td>45</td>
-          <td>Piece</td>
-          <td>20</td>
-          <td>200</td>
-          <td><span class="status-badge status-active">Low Stock</span></td>
-        </tr>
-        <tr>
-          <td>HWD-003</td>
-          <td>Glass Sealant</td>
-          <td>Sealant</td>
-          <td>12</td>
-          <td>Tube</td>
-          <td>10</td>
-          <td>100</td>
-          <td><span class="status-badge status-active">Low Stock</span></td>
-        </tr>
-        <tr>
-          <td>HWD-004</td>
-          <td>Hinges Set</td>
-          <td>Hinges</td>
-          <td>0</td>
-          <td>Set</td>
-          <td>15</td>
-          <td>150</td>
-          <td><span class="status-badge status-inactive">Out of Stock</span></td>
-        </tr>
-      </tbody>
-    </table>
-  `;
+  return `<div class="form-container">
+    <h3>Hardware Inventory</h3>
+    <p>Manage hardware stock with alerts for low inventory</p>
+  </div>`;
+}
+
+function generateGlassInventory(){
+  return `<div class="form-container">
+    <h3>Glass Inventory</h3>
+    <p>Manage glass stock with size and type details</p>
+  </div>`;
+}
+
+function generateDefaultConfig(){
+  return `<div class="config-card">
+    <h3>Default Configuration</h3>
+    <p>Configure system defaults and preferences</p>
+  </div>`;
+}
+
+function generateFileStorage(){
+  return `<div class="config-card">
+    <h3>File Storage Configuration</h3>
+    <p>Configure file storage locations and backups</p>
+  </div>`;
+}
+
+function generateNetworkConfig(){
+  return `<div class="config-card">
+    <h3>Network Configuration</h3>
+    <p>Configure network settings and connectivity</p>
+  </div>`;
+}
+
+function generateDataBackup(){
+  return `<div class="config-card">
+    <h3>Data Backup & Restore</h3>
+    <p>Backup and restore system data</p>
+  </div>`;
+}
+
+function generateSmsEmail(){
+  return `<div class="config-card">
+    <h3>SMS / Email Configuration</h3>
+    <p>Configure SMS and email notifications</p>
+  </div>`;
+}
+
+function generateBillingConfig(){
+  return `<div class="config-card">
+    <h3>Billing Configuration</h3>
+    <p>Configure billing and invoice settings</p>
+  </div>`;
+}
+
+function generatePrintConfig(){
+  return `<div class="config-card">
+    <h3>Print Configuration</h3>
+    <p>Configure printer settings and templates</p>
+  </div>`;
+}
+
+function generateUserAccess(){
+  return `<div class="config-card">
+    <h3>User Access Control</h3>
+    <p>Manage user permissions and access levels</p>
+  </div>`;
+}
+
+function generateSoftwareUpdate(){
+  return `<div class="config-card">
+    <h3>Software Update</h3>
+    <p>Check for and install software updates</p>
+  </div>`;
+}
+
+function generateCustomerList(){
+  return `<div class="report-controls">
+    <h3>Customer List</h3>
+    <p>View and manage all customers</p>
+  </div>`;
+}
+
+function generateSalespersonRegistration(){
+  return `<div class="form-container">
+    <h3>Salesperson Registration</h3>
+    <p>Register new salespersons</p>
+  </div>`;
+}
+
+function generateSalespersonList(){
+  return `<div class="form-container">
+    <h3>Salesperson List</h3>
+    <p>View and manage all salespersons</p>
+  </div>`;
+}
+
+function generateProformaReport(){
+  return `<div class="report-controls">
+    <h3>Proforma Report</h3>
+    <p>Generate proforma invoice reports</p>
+  </div>`;
+}
+
+function generateInvoiceReport(){
+  return `<div class="report-controls">
+    <h3>Invoice Report</h3>
+    <p>Generate sales invoice reports</p>
+  </div>`;
+}
+
+function generateSalesPerformance(){
+  return `<div class="report-controls">
+    <h3>Sales Performance Report</h3>
+    <p>Analyze salesperson performance</p>
+  </div>`;
+}
+
+function generateProductionReport(){
+  return `<div class="report-controls">
+    <h3>Production Report</h3>
+    <p>Generate production reports</p>
+  </div>`;
+}
+
+function generateWorkOrderReport(){
+  return `<div class="report-controls">
+    <h3>Work Order Report</h3>
+    <p>Generate work order reports</p>
+  </div>`;
+}
+
+function generateGlassInventoryReport(){
+  return `<div class="report-controls">
+    <h3>Glass Inventory Report</h3>
+    <p>Generate glass inventory reports</p>
+  </div>`;
+}
+
+function generateBreakageReport(){
+  return `<div class="report-controls">
+    <h3>Breakage Report</h3>
+    <p>Generate breakage reports</p>
+  </div>`;
+}
+
+function generateRejectionReport(){
+  return `<div class="report-controls">
+    <h3>Rejection Report</h3>
+    <p>Generate rejection reports</p>
+  </div>`;
+}
+
+function generatePendingBilling(){
+  return `<div class="report-controls">
+    <h3>Pending Billing Report</h3>
+    <p>Generate pending billing reports</p>
+  </div>`;
+}
+
+function generateBilledArea(){
+  return `<div class="report-controls">
+    <h3>Billed Area Report</h3>
+    <p>Generate billed area reports in square meters</p>
+  </div>`;
+}
+
+function generateTallyExport(){
+  return `<div class="report-controls">
+    <h3>Tally Export Report</h3>
+    <p>Export data to Tally format</p>
+  </div>`;
+}
+
+function generateDirectInvoice(){
+  return `<div class="report-controls">
+    <h3>Direct Invoice Report</h3>
+    <p>Generate direct invoice reports</p>
+  </div>`;
+}
+
+function generateCreditNote(){
+  return `<div class="report-controls">
+    <h3>Credit Note Report</h3>
+    <p>Generate credit note reports</p>
+  </div>`;
 }
 
 function generateUserManagement(){
-  return `
-    <div class="form-container">
-      <div>
-        <div class="form-group">
-          <label>Username</label>
-          <input type="text" id="username" value="admin">
-        </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="fullName" value="Administrator">
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="userEmail" value="admin@jpsolutions.com">
-        </div>
-      </div>
-      <div>
-        <div class="form-group">
-          <label>Role</label>
-          <select id="userRole">
-            <option>Administrator</option>
-            <option>Manager</option>
-            <option>Supervisor</option>
-            <option>Operator</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Status</label>
-          <select id="userStatus">
-            <option>Active</option>
-            <option>Inactive</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Last Login</label>
-          <input type="text" id="lastLogin" value="2024-01-15 10:30 AM" readonly>
-        </div>
-      </div>
-    </div>
-    
-    <h3>User Permissions</h3>
-    <div style="background:#f8f9fa;padding:15px;border-radius:8px;margin-bottom:20px">
-      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:10px">
-        <div><input type="checkbox" checked> Masters Module</div>
-        <div><input type="checkbox" checked> Transactions</div>
-        <div><input type="checkbox" checked> Inventory</div>
-        <div><input type="checkbox"> System Settings</div>
-        <div><input type="checkbox" checked> Reports</div>
-        <div><input type="checkbox" checked> Customer Management</div>
-      </div>
-    </div>
-    
-    <h3>User List</h3>
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Username</th>
-          <th>Full Name</th>
-          <th>Role</th>
-          <th>Email</th>
-          <th>Last Login</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>admin</td>
-          <td>Administrator</td>
-          <td>Administrator</td>
-          <td>admin@jpsolutions.com</td>
-          <td>2024-01-15 10:30 AM</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
-        <tr>
-          <td>manager1</td>
-          <td>Rahul Verma</td>
-          <td>Manager</td>
-          <td>rahul@jpsolutions.com</td>
-          <td>2024-01-14 03:15 PM</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
-        <tr>
-          <td>supervisor1</td>
-          <td>Priya Singh</td>
-          <td>Supervisor</td>
-          <td>priya@jpsolutions.com</td>
-          <td>2024-01-13 11:20 AM</td>
-          <td><span class="status-badge status-active">Active</span></td>
-        </tr>
-      </tbody>
-    </table>
-  `;
+  return `<div class="form-container">
+    <h3>User Management</h3>
+    <p>Manage system users and permissions</p>
+  </div>`;
 }
-
-// Other module generation functions (simplified for brevity)
-function generateRouteMaster(){return `<p>Route Master module loaded with form fields for route details.</p>`;}
-function generatePaymentTerms(){return `<p>Payment Terms Master module loaded with payment term configurations.</p>`;}
-function generateFilmType(){return `<p>Film Type Master module loaded with film type details.</p>`;}
-function generateBankMaster(){return `<p>Bank Master module loaded with bank account details.</p>`;}
-function generateVehicleMaster(){return `<p>Vehicle Master module loaded with vehicle information.</p>`;}
-function generateAdditionalCharges(){return `<p>Additional Charges Master module loaded with charge configurations.</p>`;}
-function generateRemarksMaster(){return `<p>Remarks Master module loaded with predefined remarks.</p>`;}
-function generateProformaInvoice(){return `<p>Proforma Invoice module loaded with invoice creation form.</p>`;}
-function generateWorkOrder(){return `<p>Work Order module loaded with production order details.</p>`;}
-function generateCuttingOptimizer(){return `<p>Cutting Optimizer module loaded with optimization tools.</p>`;}
-function generateLabelGeneration(){return `<p>Label Generation module loaded with sticker design tools.</p>`;}
-function generateGlassInventory(){return `<p>Glass Inventory module loaded with glass stock details.</p>`;}
-function generateDefaultConfig(){return `<p>Default Configuration module loaded with system defaults.</p>`;}
-function generateFileStorage(){return `<p>File Storage Configuration module loaded with storage settings.</p>`;}
-function generateNetworkConfig(){return `<p>Network Configuration module loaded with network settings.</p>`;}
-function generateDataBackup(){return `<p>Data Backup & Restore module loaded with backup tools.</p>`;}
-function generateSmsEmail(){return `<p>SMS/Email Configuration module loaded with notification settings.</p>`;}
-function generateBillingConfig(){return `<p>Billing Configuration module loaded with billing settings.</p>`;}
-function generatePrintConfig(){return `<p>Print Configuration module loaded with printer settings.</p>`;}
-function generateUserAccess(){return `<p>User Access Control module loaded with permission settings.</p>`;}
-function generateSoftwareUpdate(){return `<p>Software Update module loaded with update tools.</p>`;}
-function generateSalespersonRegistration(){return `<p>Salesperson Registration module loaded with salesperson details form.</p>`;}
-function generateSalespersonList(){return `<p>Salesperson List module loaded with salesperson records.</p>`;}
-function generateProformaReport(){return `<p>Proforma Report module loaded with report generation tools.</p>`;}
-function generateInvoiceReport(){return `<p>Invoice Report module loaded with invoice analytics.</p>`;}
-function generateSalesPerformance(){return `<p>Sales Performance Report module loaded with performance metrics.</p>`;}
-function generateProductionReport(){return `<p>Production Report module loaded with production analytics.</p>`;}
-function generateWorkOrderReport(){return `<p>Work Order Report module loaded with order tracking.</p>`;}
-function generateGlassInventoryReport(){return `<p>Glass Inventory Report module loaded with glass stock analytics.</p>`;}
-function generateBreakageReport(){return `<p>Breakage Report module loaded with breakage tracking.</p>`;}
-function generateRejectionReport(){return `<p>Rejection Report module loaded with quality control data.</p>`;}
-function generatePendingBilling(){return `<p>Pending Billing Report module loaded with pending invoices.</p>`;}
-function generateBilledArea(){return `<p>Billed Area Report module loaded with area calculations.</p>`;}
-function generateTallyExport(){return `<p>Tally Export Report module loaded with export tools.</p>`;}
-function generateDirectInvoice(){return `<p>Direct Invoice Report module loaded with direct billing data.</p>`;}
-function generateCreditNote(){return `<p>Credit Note Report module loaded with credit note records.</p>`;}
 
 // Action functions
 function saveModule(moduleName){
@@ -1491,6 +1854,13 @@ window.onload = function() {
   // Auto-fill login for demo
   document.getElementById('u').value = 'admin';
   document.getElementById('p').value = 'admin123';
+  
+  // Add event listener for Enter key in login
+  document.getElementById('p').addEventListener('keypress', function(e){
+    if(e.key === 'Enter'){
+      login();
+    }
+  });
 };
 </script>
 
