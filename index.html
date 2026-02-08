@@ -12,15 +12,10 @@
   --light:#e3f2fd;
   --dark:#0d47a1;
 }
-
-/* RESET */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial}
-
-/* BACKGROUND */
 body{
   height:100vh;
-  background:
-    linear-gradient(135deg,#e3f2fd,#bbdefb,#e3f2fd);
+  background:linear-gradient(135deg,#e3f2fd,#bbdefb,#e3f2fd);
 }
 
 /* JP TEXT LOGO */
@@ -28,14 +23,7 @@ body{
   font-size:42px;
   font-weight:900;
   letter-spacing:4px;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      #1e88e5,
-      #1e88e5 10px,
-      #64b5f6 10px,
-      #64b5f6 20px
-    );
+  background:repeating-linear-gradient(45deg,#1e88e5,#1e88e5 10px,#64b5f6 10px,#64b5f6 20px);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   text-align:center;
@@ -53,45 +41,23 @@ body{
   left:50%;
   transform:translate(-50%,-50%);
 }
-
-#loginBox h3{
-  text-align:center;
-  color:var(--dark);
-  margin:15px 0;
-}
-
+#loginBox h3{text-align:center;color:var(--dark);margin:15px 0}
 input{
-  width:100%;
-  padding:12px;
-  margin-top:12px;
-  border-radius:8px;
-  border:1px solid #bbb;
+  width:100%;padding:12px;margin-top:12px;
+  border-radius:8px;border:1px solid #bbb;
 }
-
 button{
-  width:100%;
-  padding:12px;
-  margin-top:18px;
-  background:var(--blue);
-  color:white;
-  border:none;
-  border-radius:8px;
-  font-size:16px;
-  cursor:pointer;
+  width:100%;padding:12px;margin-top:18px;
+  background:var(--blue);color:white;border:none;
+  border-radius:8px;font-size:16px;cursor:pointer;
 }
-
 button:hover{background:var(--dark)}
-
-#error{
-  color:red;
-  text-align:center;
-  margin-top:10px;
-}
+#error{color:red;text-align:center;margin-top:10px}
 
 /* DASHBOARD */
 #dashboard{display:none;height:100vh}
 
-/* TOP MENU */
+/* NAVBAR */
 .navbar{
   background:var(--blue);
   display:flex;
@@ -100,56 +66,31 @@ button:hover{background:var(--dark)}
   height:56px;
   color:white;
 }
-
-.navbar .logo{
-  font-weight:900;
-  font-size:22px;
-  letter-spacing:2px;
-  margin-right:30px;
-}
-
-.menu{
-  display:flex;
-  gap:18px;
-}
-
-.menu-item{
-  position:relative;
-  cursor:pointer;
-  font-weight:500;
-}
-
+.logo{font-weight:900;font-size:22px;letter-spacing:2px;margin-right:30px}
+.menu{display:flex;gap:18px}
+.menu-item{position:relative;cursor:pointer;font-weight:500}
 .menu-item:hover .dropdown{display:block}
 
+/* DROPDOWN */
 .dropdown{
   display:none;
   position:absolute;
-  top:40px;
-  left:0;
+  top:40px;left:0;
   background:white;
-  min-width:260px;
+  min-width:280px;
   border-radius:8px;
   box-shadow:0 12px 30px rgba(0,0,0,.25);
-  overflow:hidden;
   z-index:999;
 }
-
 .dropdown div{
   padding:10px 14px;
   color:#333;
   border-bottom:1px solid #eee;
   font-size:14px;
 }
+.dropdown div:hover{background:var(--light)}
 
-.dropdown div:hover{
-  background:var(--light);
-}
-
-/* CONTENT */
-.content{
-  padding:30px;
-  color:#333;
-}
+.content{padding:30px}
 </style>
 </head>
 
@@ -159,7 +100,6 @@ button:hover{background:var(--dark)}
 <div id="loginBox">
   <div class="jp-logo">JP</div>
   <h3>JP Solutions ERP</h3>
-
   <input id="user" placeholder="Username">
   <input id="pass" type="password" placeholder="Password">
   <button onclick="login()">Login</button>
@@ -170,51 +110,55 @@ button:hover{background:var(--dark)}
 <div id="dashboard">
   <div class="navbar">
     <div class="logo">JP ERP</div>
-
     <div class="menu">
 
+      <!-- MASTERS -->
       <div class="menu-item">🧱 Masters
         <div class="dropdown">
           <div>Item Master</div>
           <div>Price Master</div>
           <div>Process Master</div>
           <div>Cutting Rule (Z Rule)</div>
-          <div>Glass Size Master</div>
+          <div>Glass Size Master (Jumbo)</div>
           <div>Glass Type Master</div>
           <div>Route Master</div>
-          <div>Payment Terms</div>
-          <div>Film Type</div>
+          <div>Payment Terms Master</div>
+          <div>Film Type Master</div>
           <div>Bank Master</div>
           <div>Vehicle Master</div>
-          <div>Additional Charges</div>
+          <div>Additional Charges Master</div>
           <div>Remarks Master</div>
         </div>
       </div>
 
+      <!-- TRANSACTIONS -->
       <div class="menu-item">🔁 Transactions
         <div class="dropdown">
           <div>Proforma Invoice</div>
           <div>Work Order</div>
           <div>Sales Invoice</div>
           <div>Cutting Optimizer</div>
-          <div>Label / Sticker</div>
+          <div>Label / Sticker Generation</div>
         </div>
       </div>
 
-      <div class="menu-item">📦 Inventory
+      <!-- INVENTORY -->
+      <div class="menu-item">📦 Inventory / Stock
         <div class="dropdown">
           <div>Hardware Inventory</div>
           <div>Glass Inventory</div>
         </div>
       </div>
 
-      <div class="menu-item">👥 Customers
+      <!-- CUSTOMER -->
+      <div class="menu-item">👥 Customer
         <div class="dropdown">
           <div>Customer Registration</div>
-          <div>Customer List</div>
+          <div>Customer List / Master</div>
         </div>
       </div>
 
+      <!-- SALES -->
       <div class="menu-item">🧑‍💼 Sales
         <div class="dropdown">
           <div>Salesperson Registration</div>
@@ -222,23 +166,44 @@ button:hover{background:var(--dark)}
         </div>
       </div>
 
+      <!-- REPORTS -->
       <div class="menu-item">📊 Reports
         <div class="dropdown">
+          <div>Proforma Report</div>
           <div>Invoice Report</div>
+          <div>Salesperson Performance</div>
           <div>Production Report</div>
-          <div>Inventory Report</div>
+          <div>Work Order Report</div>
+          <div>Glass Inventory Report</div>
           <div>Breakage Report</div>
-          <div>Pending Billing</div>
-          <div>Tally Export</div>
+          <div>Rejection Report</div>
+          <div>Pending Billing Report</div>
+          <div>Billed Area Report (Sq.Mtr)</div>
+          <div>Tally Export Report</div>
+          <div>Direct Invoice Report</div>
+          <div>Credit Note Report</div>
         </div>
       </div>
 
-      <div class="menu-item">⚙️ Settings
+      <!-- SETTINGS -->
+      <div class="menu-item">⚙️ System Settings
         <div class="dropdown">
-          <div>Billing Config</div>
-          <div>Print Config</div>
-          <div>User Access</div>
-          <div>Backup & Restore</div>
+          <div>Default Configuration</div>
+          <div>File Storage Configuration</div>
+          <div>Network Configuration</div>
+          <div>Data Backup & Restore</div>
+          <div>SMS / Email Configuration</div>
+          <div>Billing Configuration</div>
+          <div>Print Configuration</div>
+          <div>User Access Control</div>
+          <div>Software Update</div>
+        </div>
+      </div>
+
+      <!-- USER -->
+      <div class="menu-item">👤 User Management
+        <div class="dropdown">
+          <div>User Management</div>
         </div>
       </div>
 
@@ -246,22 +211,14 @@ button:hover{background:var(--dark)}
   </div>
 
   <div class="content">
-    ERP Dashboard Ready ✅
+    ERP Menu Loaded Successfully ✅
   </div>
 </div>
 
 <script>
-const users={
-  admin:"admin123",
-  jp:"jp123",
-  user:"user123"
-};
-
+const users={admin:"admin123",jp:"jp123",user:"user123"};
 function login(){
-  const u=user.value.trim();
-  const p=pass.value.trim();
-
-  if(users[u] && users[u]===p){
+  if(users[user.value]===pass.value){
     loginBox.style.display="none";
     dashboard.style.display="block";
   }else{
