@@ -3,201 +3,270 @@
 <head>
 <meta charset="UTF-8">
 <title>JP Solutions ERP</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#e3f2fd}
+:root{
+  --blue:#1e88e5;
+  --blue2:#64b5f6;
+  --light:#e3f2fd;
+  --dark:#0d47a1;
+}
 
-/* SPLASH */
-#splash{
-  position:fixed;
-  inset:0;
-  background:#0b3c6d;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-  z-index:9999;
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial}
+
+/* BACKGROUND */
+body{
+  height:100vh;
+  background:
+    linear-gradient(135deg,#e3f2fd,#bbdefb,#e3f2fd);
+}
+
+/* JP TEXT LOGO */
+.jp-logo{
+  font-size:42px;
+  font-weight:900;
+  letter-spacing:4px;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #1e88e5,
+      #1e88e5 10px,
+      #64b5f6 10px,
+      #64b5f6 20px
+    );
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-align:center;
 }
 
 /* LOGIN */
-#login{
-  display:none;
-  height:100vh;
-  background:#0b3c6d;
-}
-.login-box{
-  width:360px;
-  background:#fff;
-  padding:25px;
-  border-radius:16px;
-  box-shadow:0 20px 40px rgba(0,0,0,.4);
+#loginBox{
+  width:340px;
+  padding:30px;
+  background:white;
+  border-radius:14px;
+  box-shadow:0 20px 40px rgba(0,0,0,.2);
   position:absolute;
-  top:50%;left:50%;
+  top:50%;
+  left:50%;
   transform:translate(-50%,-50%);
 }
-.login-box h2{text-align:center;color:#1e88e5}
-.login-box input{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:10px;
-  border:1px solid #90caf9;
-}
-.login-box button{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  background:#1e88e5;
-  color:#fff;
-  font-weight:bold;
-}
-#error{text-align:center;color:red}
 
-/* DASH */
-#dash{display:none}
+#loginBox h3{
+  text-align:center;
+  color:var(--dark);
+  margin:15px 0;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  border-radius:8px;
+  border:1px solid #bbb;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  margin-top:18px;
+  background:var(--blue);
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{background:var(--dark)}
+
+#error{
+  color:red;
+  text-align:center;
+  margin-top:10px;
+}
+
+/* DASHBOARD */
+#dashboard{display:none;height:100vh}
 
 /* TOP MENU */
-.topbar{
-  background:#0b3c6d;
+.navbar{
+  background:var(--blue);
   display:flex;
   align-items:center;
-  padding:10px;
-  gap:12px;
+  padding:0 20px;
+  height:56px;
+  color:white;
 }
-.menu{position:relative}
-.menu button{
-  background:none;
-  border:none;
-  color:#fff;
+
+.navbar .logo{
+  font-weight:900;
+  font-size:22px;
+  letter-spacing:2px;
+  margin-right:30px;
+}
+
+.menu{
+  display:flex;
+  gap:18px;
+}
+
+.menu-item{
+  position:relative;
   cursor:pointer;
-  padding:8px 10px;
+  font-weight:500;
 }
-.menu i{margin-right:6px}
+
+.menu-item:hover .dropdown{display:block}
+
 .dropdown{
   display:none;
   position:absolute;
-  top:100%;
+  top:40px;
   left:0;
-  background:#fff;
-  min-width:220px;
-  box-shadow:0 10px 20px rgba(0,0,0,.2);
+  background:white;
+  min-width:260px;
+  border-radius:8px;
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
+  overflow:hidden;
+  z-index:999;
 }
-.dropdown a{
-  display:block;
-  padding:10px;
-  text-decoration:none;
-  color:#000;
+
+.dropdown div{
+  padding:10px 14px;
+  color:#333;
+  border-bottom:1px solid #eee;
+  font-size:14px;
 }
-.dropdown a:hover{background:#e3f2fd}
-.menu:hover .dropdown{display:block}
+
+.dropdown div:hover{
+  background:var(--light);
+}
+
+/* CONTENT */
+.content{
+  padding:30px;
+  color:#333;
+}
 </style>
 </head>
 
 <body>
 
-<!-- SPLASH -->
-<div id="splash">
-  <svg width="140" viewBox="0 0 200 200">
-    <defs>
-      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#4caf50"/>
-        <stop offset="100%" stop-color="#1b5e20"/>
-      </linearGradient>
-    </defs>
-    <circle cx="100" cy="100" r="95" fill="url(#g)"/>
-    <text x="50%" y="58%" text-anchor="middle"
-      font-size="72" fill="#fff" font-weight="bold">JP</text>
-  </svg>
-  <h3>Loading ERP...</h3>
-</div>
-
 <!-- LOGIN -->
-<div id="login">
-  <div class="login-box">
-    <svg width="80" viewBox="0 0 200 200">
-      <circle cx="100" cy="100" r="95" fill="#1e88e5"/>
-      <text x="50%" y="60%" text-anchor="middle"
-        font-size="64" fill="#fff" font-weight="bold">JP</text>
-    </svg>
-    <h2>Login</h2>
-    <input id="user" placeholder="Username">
-    <input id="pass" type="password" placeholder="Password">
-    <button onclick="doLogin()">Login</button>
-    <div id="error"></div>
-  </div>
+<div id="loginBox">
+  <div class="jp-logo">JP</div>
+  <h3>JP Solutions ERP</h3>
+
+  <input id="user" placeholder="Username">
+  <input id="pass" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <div id="error"></div>
 </div>
 
 <!-- DASHBOARD -->
-<div id="dash">
-  <div class="topbar">
-    <svg width="36" viewBox="0 0 200 200">
-      <circle cx="100" cy="100" r="95" fill="#1e88e5"/>
-      <text x="50%" y="62%" text-anchor="middle"
-        font-size="48" fill="#fff" font-weight="bold">JP</text>
-    </svg>
+<div id="dashboard">
+  <div class="navbar">
+    <div class="logo">JP ERP</div>
 
     <div class="menu">
-      <button><i class="fa fa-database"></i>Masters</button>
-      <div class="dropdown">
-        <a>Item Master</a>
-        <a>Rate Master</a>
-        <a>Process Master</a>
+
+      <div class="menu-item">🧱 Masters
+        <div class="dropdown">
+          <div>Item Master</div>
+          <div>Price Master</div>
+          <div>Process Master</div>
+          <div>Cutting Rule (Z Rule)</div>
+          <div>Glass Size Master</div>
+          <div>Glass Type Master</div>
+          <div>Route Master</div>
+          <div>Payment Terms</div>
+          <div>Film Type</div>
+          <div>Bank Master</div>
+          <div>Vehicle Master</div>
+          <div>Additional Charges</div>
+          <div>Remarks Master</div>
+        </div>
       </div>
-    </div>
 
-    <div class="menu">
-      <button><i class="fa fa-repeat"></i>Transactions</button>
-      <div class="dropdown">
-        <a>Quotation</a>
-        <a>Work Order</a>
-        <a>Invoice</a>
+      <div class="menu-item">🔁 Transactions
+        <div class="dropdown">
+          <div>Proforma Invoice</div>
+          <div>Work Order</div>
+          <div>Sales Invoice</div>
+          <div>Cutting Optimizer</div>
+          <div>Label / Sticker</div>
+        </div>
       </div>
-    </div>
 
-    <div class="menu">
-      <button><i class="fa fa-chart-line"></i>Reports</button>
-      <div class="dropdown">
-        <a>Sales Report</a>
-        <a>Production Report</a>
+      <div class="menu-item">📦 Inventory
+        <div class="dropdown">
+          <div>Hardware Inventory</div>
+          <div>Glass Inventory</div>
+        </div>
       </div>
-    </div>
 
-    <div class="menu">
-      <button onclick="logout()"><i class="fa fa-sign-out"></i>Logout</button>
+      <div class="menu-item">👥 Customers
+        <div class="dropdown">
+          <div>Customer Registration</div>
+          <div>Customer List</div>
+        </div>
+      </div>
+
+      <div class="menu-item">🧑‍💼 Sales
+        <div class="dropdown">
+          <div>Salesperson Registration</div>
+          <div>Salesperson List</div>
+        </div>
+      </div>
+
+      <div class="menu-item">📊 Reports
+        <div class="dropdown">
+          <div>Invoice Report</div>
+          <div>Production Report</div>
+          <div>Inventory Report</div>
+          <div>Breakage Report</div>
+          <div>Pending Billing</div>
+          <div>Tally Export</div>
+        </div>
+      </div>
+
+      <div class="menu-item">⚙️ Settings
+        <div class="dropdown">
+          <div>Billing Config</div>
+          <div>Print Config</div>
+          <div>User Access</div>
+          <div>Backup & Restore</div>
+        </div>
+      </div>
+
     </div>
+  </div>
+
+  <div class="content">
+    ERP Dashboard Ready ✅
   </div>
 </div>
 
 <script>
-const splash=document.getElementById("splash");
-const loginBox=document.getElementById("login");
-const dash=document.getElementById("dash");
+const users={
+  admin:"admin123",
+  jp:"jp123",
+  user:"user123"
+};
 
-setTimeout(()=>{
-  splash.style.display="none";
-  loginBox.style.display="block";
-},2000);
+function login(){
+  const u=user.value.trim();
+  const p=pass.value.trim();
 
-const users={admin:"admin",jp:"1234"};
-
-function doLogin(){
-  const u=user.value;
-  const p=pass.value;
-  if(users[u]===p){
+  if(users[u] && users[u]===p){
     loginBox.style.display="none";
-    dash.style.display="block";
+    dashboard.style.display="block";
   }else{
-    error.innerText="Invalid username or password";
+    error.innerText="Invalid Username or Password";
   }
-}
-function logout(){
-  dash.style.display="none";
-  loginBox.style.display="block";
 }
 </script>
 
