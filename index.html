@@ -832,7 +832,7 @@ const appData = {
 };
 
 // Initialize application when page loads
-document.addEventListener('DOMContentLoaded', function() {
+window.onload = function() {
   // Login screen is shown by default - NO SPLASH SCREEN
   
   // Handle login form submission
@@ -853,13 +853,11 @@ document.addEventListener('DOMContentLoaded', function() {
       };
       
       // Hide login screen
-      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('loginScreen').style.display = 'none';
       
       // Show app with dashboard
-      setTimeout(() => {
-        document.getElementById('app').classList.add('active');
-        showDashboard();
-      }, 300);
+      document.getElementById('app').style.display = 'block';
+      showDashboard();
     } else {
       alert('Please enter both username and password');
     }
@@ -873,7 +871,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
-});
+};
 
 // Toggle dropdown with proper positioning
 function toggleDropdown(event, el) {
