@@ -8,6 +8,8 @@
 :root{
   --blue:#0d6efd;
   --light:#e9f2ff;
+  --dropdown-bg:#fff;
+  --dropdown-hover:#f0f4ff;
 }
 *{box-sizing:border-box;font-family:Segoe UI,Arial}
 body{margin:0;background:#f4f8ff}
@@ -45,6 +47,8 @@ body{margin:0;background:#f4f8ff}
   padding:10px;
   color:#fff;
   white-space:nowrap;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.4) transparent;
 }
 .navbar::-webkit-scrollbar { height: 6px; }
 .navbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.4); border-radius: 3px; }
@@ -52,27 +56,48 @@ body{margin:0;background:#f4f8ff}
 .brand{font-weight:600;margin-right:20px;flex-shrink:0}
 .menu{display:flex;gap:14px;flex-shrink:0}
 .menu-item{position:relative;cursor:pointer;flex-shrink:0}
-.menu-item span{padding:6px 10px;display:block;}
+.menu-item span{
+  padding:6px 10px;
+  display:block;
+  transition: background 0.3s;
+  border-radius:6px;
+}
+.menu-item span:hover{
+  background: rgba(255,255,255,0.2);
+}
 
-/* DROPDOWN - FIXED so always visible */
+/* DROPDOWN */
 .dropdown{
   display:none;
   position:fixed;
-  background:#fff;
+  background:var(--dropdown-bg);
   color:#000;
   border-radius:8px;
   box-shadow:0 6px 20px rgba(0,0,0,.2);
   z-index:9999;
   padding:4px 0;
   min-width:auto;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  opacity:0;
+}
+.dropdown.show{
+  display:block;
+  transform: scaleY(1);
+  opacity:1;
 }
 .dropdown div{
-  padding:6px 12px;
+  padding:8px 14px;
   cursor:pointer;
   white-space:nowrap;
+  transition: background 0.2s;
 }
-.dropdown div:hover{background:var(--light)}
+.dropdown div:hover{
+  background: var(--dropdown-hover);
+}
 
+/* CONTENT */
 .content{
   padding:20px;
   position:relative;
@@ -199,7 +224,7 @@ body{margin:0;background:#f4f8ff}
   </div>
 
   <div class="content">
-    <!-- Empty content area -->
+    <!-- Empty content -->
   </div>
 </div>
 
@@ -214,21 +239,21 @@ function login(){
 }
 
 function toggleDropdown(event,el){
-  event.stopPropagation(); // prevent body click
+  event.stopPropagation();
   const d = el.querySelector('.dropdown');
   const rect = el.getBoundingClientRect();
   d.style.top = rect.bottom + "px";
   d.style.left = rect.left + "px";
 
   document.querySelectorAll('.dropdown').forEach(drop=>{
-    if(drop!==d) drop.style.display="none";
+    if(drop!==d) drop.classList.remove('show');
   });
 
-  d.style.display = d.style.display==="block" ? "none":"block";
+  d.classList.toggle('show');
 }
 
 document.body.onclick=function(){
-  document.querySelectorAll('.dropdown').forEach(d=>d.style.display="none");
+  document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('show'));
 }
 </script>
 
