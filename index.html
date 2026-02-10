@@ -4,51 +4,76 @@
 <meta charset="UTF-8">
 <title>PI Format</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
 body{
     font-family: Arial, sans-serif;
-    background:#f4f6f8;
+    background:#e9eef3;
     margin:0;
     padding:10px;
 }
-.container{
-    background:#fff;
-    padding:12px;
-    border-radius:8px;
-}
-.row{display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
+
+/* COMMON */
 .box{
-    border:1px solid #ccc;
-    border-radius:6px;
-    padding:8px;
+    border-radius:8px;
+    padding:10px;
+    color:#222;
 }
-h4{margin:0 0 6px;font-size:14px;color:#333}
-label{font-size:12px;}
+.row{
+    display:flex;
+    gap:10px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+}
+h4{
+    margin:0 0 8px;
+    font-size:14px;
+}
+label{
+    font-size:12px;
+    font-weight:600;
+}
 input,select{
     width:100%;
-    padding:4px;
+    padding:5px;
     font-size:12px;
-    margin-bottom:5px;
+    margin-bottom:6px;
+    border-radius:4px;
+    border:1px solid #999;
 }
-.small{width:48%}
-.half{width:50%}
-.third{width:33%}
-.quarter{width:25%}
 
+/* COLOURS */
+.bill{background:#e3f2fd;border:1px solid #64b5f6}
+.ship{background:#fce4ec;border:1px solid #f06292}
+.wastage{background:#fff3e0;border:1px solid #ffb74d}
+.desc{background:#e8f5e9;border:1px solid #81c784}
+.other{background:#ede7f6;border:1px solid #9575cd}
+.summary{background:#e0f7fa;border:1px solid #4dd0e1}
+
+/* SIZES */
+.half{width:48%}
+.small{width:28%}
+.large{width:68%}
+
+/* TABLE */
 table{
     width:100%;
     border-collapse:collapse;
     font-size:12px;
 }
 th,td{
-    border:1px solid #bbb;
+    border:1px solid #666;
     padding:4px;
     text-align:center;
 }
-th{background:#f0f0f0}
-.checkbox-row{
+th{
+    background:#c8e6c9;
+    font-weight:700;
+}
+
+.check-row{
     display:flex;
-    gap:12px;
+    gap:14px;
     flex-wrap:wrap;
     font-size:12px;
 }
@@ -56,17 +81,17 @@ th{background:#f0f0f0}
 </head>
 
 <body>
-<div class="container">
 
 <!-- BILL TO / SHIP TO -->
 <div class="row">
-    <div class="box half">
+    <div class="box bill half">
         <h4>Bill To</h4>
         <label>Name</label><input>
         <label>Address</label><input>
         <label>GSTIN</label><input>
     </div>
-    <div class="box half">
+
+    <div class="box ship half">
         <h4>Ship To</h4>
         <label>Name</label><input>
         <label>Address</label><input>
@@ -75,38 +100,45 @@ th{background:#f0f0f0}
 </div>
 
 <!-- WASTAGE MODE -->
-<div class="box">
+<div class="box wastage">
 <h4>Wastage Mode</h4>
-<div class="checkbox-row">
+
+<div class="check-row">
 <label><input type="checkbox"> Round Off</label>
 <label><input type="checkbox"> +MM (L1)(L2)</label>
 <label><input type="checkbox"> Even IN</label>
 <label><input type="checkbox"> Even CM</label>
 </div>
+
 <br>
-<div class="checkbox-row">
-<label>Edge Finish:</label>
+
+<div class="check-row">
+<b>Edge Finish:</b>
 <label><input type="checkbox"> Polish</label>
 <label><input type="checkbox"> Rough Grinding</label>
 </div>
+
 <br>
+
 <label>I/P Unit</label>
 <select>
 <option value="">Manual Select</option>
 <option>MM</option>
 <option>Inch</option>
 </select>
+
 </div>
 
-<!-- DESCRIPTION TABLE -->
-<div class="box" style="margin-top:10px;">
+<!-- DESCRIPTION -->
+<div class="box desc" style="margin-top:10px;">
 <h4>Description</h4>
+
 <table>
 <thead>
 <tr>
-<th>Desc</th>
-<th>Width</th>
-<th>Height</th>
+<th>Description</th>
+<th>W</th>
+<th>H</th>
 <th>Qty</th>
 <th>Actual Rft</th>
 <th>Chargeable Rft</th>
@@ -115,6 +147,7 @@ th{background:#f0f0f0}
 <th>Amount</th>
 </tr>
 </thead>
+
 <tbody>
 <tr>
 <td><input></td>
@@ -129,18 +162,20 @@ th{background:#f0f0f0}
 </tr>
 </tbody>
 </table>
+
 <br>
-<div class="checkbox-row">
+
+<div class="check-row">
 <label><input type="checkbox"> Area</label>
 <label><input type="checkbox"> Other Fab</label>
 </div>
+
 </div>
 
-<!-- CHARGES + SUMMARY -->
+<!-- OTHER CHARGES + SUMMARY -->
 <div class="row">
 
-<!-- OTHER CHARGES (EXTRA SMALL) -->
-<div class="box quarter">
+<div class="box other small">
 <h4>Other Charges</h4>
 <label>Charge Name</label><input>
 <label>Qty</label><input>
@@ -148,8 +183,7 @@ th{background:#f0f0f0}
 <label>Amount</label><input>
 </div>
 
-<!-- SUMMARY -->
-<div class="box half">
+<div class="box summary large">
 <h4>Summary</h4>
 <label>Sub Total</label><input>
 <label>CGST</label><input>
@@ -161,6 +195,5 @@ th{background:#f0f0f0}
 
 </div>
 
-</div>
 </body>
 </html>
