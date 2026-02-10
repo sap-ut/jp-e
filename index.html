@@ -2,80 +2,73 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>PI Format</title>
+<title>PI Format – Final</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    background:#e9eef3;
     margin:0;
     padding:10px;
-}
-
-/* COMMON */
-.box{
-    border-radius:8px;
-    padding:10px;
-    color:#222;
+    background:#f0f2f5;
+    font-family: Arial, sans-serif;
+    font-size:12px;
 }
 .row{
     display:flex;
-    gap:10px;
-    margin-bottom:10px;
+    gap:8px;
+    margin-bottom:8px;
     flex-wrap:wrap;
 }
+.box{
+    border-radius:6px;
+    padding:8px;
+    border:1px solid #999;
+}
 h4{
-    margin:0 0 8px;
-    font-size:14px;
+    margin:0 0 6px;
+    font-size:13px;
 }
 label{
-    font-size:12px;
     font-weight:600;
 }
 input,select{
     width:100%;
-    padding:5px;
+    padding:4px;
+    margin-bottom:5px;
     font-size:12px;
-    margin-bottom:6px;
-    border-radius:4px;
-    border:1px solid #999;
 }
 
-/* COLOURS */
-.bill{background:#e3f2fd;border:1px solid #64b5f6}
-.ship{background:#fce4ec;border:1px solid #f06292}
-.wastage{background:#fff3e0;border:1px solid #ffb74d}
-.desc{background:#e8f5e9;border:1px solid #81c784}
-.other{background:#ede7f6;border:1px solid #9575cd}
-.summary{background:#e0f7fa;border:1px solid #4dd0e1}
+/* COLOURS ONLY */
+.bill{background:#e3f2fd}
+.ship{background:#fce4ec}
+.wastage{background:#fff8e1}
+.desc{background:#e8f5e9}
+.other{background:#ede7f6}
+.summary{background:#e0f7fa}
 
-/* SIZES */
-.half{width:48%}
-.small{width:28%}
-.large{width:68%}
+/* WIDTHS (SAME FLOW) */
+.half{width:49%}
+.full{width:100%}
+.otherSmall{width:26%}
+.summaryBig{width:72%}
 
 /* TABLE */
 table{
     width:100%;
     border-collapse:collapse;
-    font-size:12px;
 }
 th,td{
-    border:1px solid #666;
+    border:1px solid #777;
     padding:4px;
     text-align:center;
 }
 th{
-    background:#c8e6c9;
-    font-weight:700;
+    background:#dcedc8;
 }
-
 .check-row{
     display:flex;
-    gap:14px;
+    gap:12px;
     flex-wrap:wrap;
-    font-size:12px;
 }
 </style>
 </head>
@@ -100,7 +93,7 @@ th{
 </div>
 
 <!-- WASTAGE MODE -->
-<div class="box wastage">
+<div class="box wastage full">
 <h4>Wastage Mode</h4>
 
 <div class="check-row">
@@ -126,19 +119,18 @@ th{
 <option>MM</option>
 <option>Inch</option>
 </select>
-
 </div>
 
 <!-- DESCRIPTION -->
-<div class="box desc" style="margin-top:10px;">
+<div class="box desc full">
 <h4>Description</h4>
 
 <table>
 <thead>
 <tr>
 <th>Description</th>
-<th>W</th>
-<th>H</th>
+<th>Width</th>
+<th>Height</th>
 <th>Qty</th>
 <th>Actual Rft</th>
 <th>Chargeable Rft</th>
@@ -147,7 +139,6 @@ th{
 <th>Amount</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td><input></td>
@@ -169,13 +160,12 @@ th{
 <label><input type="checkbox"> Area</label>
 <label><input type="checkbox"> Other Fab</label>
 </div>
-
 </div>
 
 <!-- OTHER CHARGES + SUMMARY -->
 <div class="row">
 
-<div class="box other small">
+<div class="box other otherSmall">
 <h4>Other Charges</h4>
 <label>Charge Name</label><input>
 <label>Qty</label><input>
@@ -183,7 +173,7 @@ th{
 <label>Amount</label><input>
 </div>
 
-<div class="box summary large">
+<div class="box summary summaryBig">
 <h4>Summary</h4>
 <label>Sub Total</label><input>
 <label>CGST</label><input>
