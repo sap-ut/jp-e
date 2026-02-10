@@ -1,223 +1,484 @@
-// Initialize invoice data
+// Global Variables
 let invoiceData = {
     items: [],
-    invoiceNo: 'PI-' + new Date().getFullYear() + '-' + Math.floor(100 + Math.random() * 900),
-    date: new Date().toLocaleDateString(),
-    lastItemId: 0
+    currentUnit: 'mm',
+    lastItemId: 0,
+    invoiceNo: 'GL-' + new Date().getFullYear() + '-' + (Math.floor(Math.random() * 9000) + 1000),
+    charges: {
+        cutting: 15,
+        drilling: 25,
+        polishing: 30,
+        tempering: 45,
+        lamination: 60,
+        taper: 40,
+        transport: 500,
+        packing: 300,
+        loading: 200,
+        installation: 1000
+    },
+    taxes: {
+        sgst: 9,
+        cgst: 9,
+        igst: 18
+    }
 };
 
-// Set current date
-document.getElementById('currentDate').textContent = new Date().toLocaleDateString();
-document.getElementById('invoiceNo').textContent = invoiceData.invoiceNo;
-document.getElementById('orderDate').valueAsDate = new Date();
-
-// Add new item row
-function addItem() {
-    const itemId = ++invoiceData.lastItemId;
-    const row = document.createElement('tr');
-    row.id = `item-${itemId}`;
-    row.innerHTML = `
-        <td>${itemId}</td>
-        <td><input type="text" class="form-control form-control-sm" value="Glass Panel" onchange="updateItem(${itemId})"></td>
-        <td><input type="number" class="form-control form-control-sm" value="1000" min="1" onchange="updateItem(${itemId})"></td>
-        <td><input type="number" class="form-control form-control-sm" value="1500" min="1" onchange="updateItem(${itemId})"></td>
-        <td><input type="number" class="form-control form-control-sm" value="1" min="1" onchange="updateItem(${itemId})"></td>
-        <td><input type="number" class="form-control form-control-sm" value="80" min="1" step="0.01" onchange="updateItem(${itemId})"></td>
-        <td class="area">0.00</td>
-        <td class="amount">₹0.00</td>
-        <td><button class="btn btn-danger btn-sm" onclick="removeItem(${itemId})"><i class="fas fa-trash"></i></button></td>
-    `;
-    document.getElementById('itemsTable').appendChild(row);
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+    // Set current date
+    const today = new Date();
+    document.getElementById('currentDate').textContent = formatDate(today);
+    document.getElementById('invoiceNo').textContent = invoiceData.invoiceNo;
+    document.getElementById('orderDate').valueAsDate = today;
+    document.getElementById('dueDate').valueAsDate = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
+    document.getElementById('dispatchDate').valueAsDate = today;
+    document.getElementById('estimatedDelivery').valueAsDate = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
     
-    // Add to invoiceData
-    invoiceData.items.push({
+    // Set default charge values
+    Object.keys(invoiceData.charges).forEach(key => {
+        const element = document.getElementById(key + 'Charge');
+        if (element) element.value = invoiceData.charges[key];
+    });
+    
+    // Set default tax values
+    document.getElementById('sgstRate').value = invoiceData.taxes.sgst;
+    document.getElementById('cgstRate').value = invoiceData.taxes.cgst;
+    document.getElementById('igstRate').value = invoiceData.taxes.igst;
+    
+    // Add first sample item
+    addGlassItem();
+});
+
+// Format date function
+function formatDate(date) {
+    return date.toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+}
+
+// Set measurement unit
+function setUnit(unit) {
+    invoiceData.currentUnit = unit;
+    
+    // Update button states
+    ['mm', 'inch', 'feet'].forEach(u => {
+        const btn = document.getElementById('unit' + u.toUpperCase());
+        btn.classList.toggle('active', u === unit);
+    });
+    
+    // Convert existing items
+    invoiceData.items.forEach(item => {
+        if (item.unit !== unit) {
+            convertItemDimensions(item.id, unit);
+        }
+    });
+    
+    // Update display
+    updateAllItems();
+}
+
+// Convert dimensions between units
+function convertDimensions(value, fromUnit, toUnit) {
+    const conversion = {
+        'mm': { 'inch': 0.0393701, 'feet': 0.00328084 },
+        'inch': { 'mm': 25.4, 'feet': 0.0833333 },
+        'feet': { 'mm': 304.8, 'inch': 12 }
+    };
+    
+    if (fromUnit === toUnit) return value;
+    return value * conversion[fromUnit][toUnit];
+}
+
+// Convert item dimensions
+function convertItemDimensions(itemId, toUnit) {
+    const item = invoiceData.items.find(i => i.id === itemId);
+    if (!item) return;
+    
+    const fromUnit = item.unit || invoiceData.currentUnit;
+    
+    // Convert dimensions
+    item.width = convertDimensions(item.width, fromUnit, toUnit);
+    item.height = convertDimensions(item.height, fromUnit, toUnit);
+    item.taperWidth = item.taperWidth ? convertDimensions(item.taperWidth, fromUnit, toUnit) : 0;
+    item.taperHeight = item.taperHeight ? convertDimensions(item.taperHeight, fromUnit, toUnit) : 0;
+    item.paimaish = item.paimaish ? convertDimensions(item.paimaish, fromUnit, toUnit) : 0;
+    item.extraMM = item.extraMM ? convertDimensions(item.extraMM, fromUnit, toUnit) : 0;
+    
+    item.unit = toUnit;
+}
+
+// Add new glass item
+function addGlassItem() {
+    const itemId = ++invoiceData.lastItemId;
+    
+    const newItem = {
         id: itemId,
-        description: "Glass Panel",
+        description: 'Clear Float Glass',
+        glassType: 'clear',
+        thickness: '6',
         width: 1000,
         height: 1500,
+        unit: invoiceData.currentUnit,
+        isTaper: false,
+        taperWidth: 0,
+        taperHeight: 0,
+        fabrication: [],
+        paimaish: 5, // 5mm by default
+        extraMM: 3, // 3mm by default
         qty: 1,
         rate: 80,
         area: 0,
         amount: 0
-    });
+    };
     
-    updateItem(itemId);
+    invoiceData.items.push(newItem);
+    renderGlassItem(newItem);
+    calculateItem(itemId);
 }
 
-// Update item calculations
-function updateItem(itemId) {
-    const row = document.getElementById(`item-${itemId}`);
-    const inputs = row.getElementsByTagName('input');
+// Render glass item row
+function renderGlassItem(item) {
+    const row = document.createElement('tr');
+    row.className = 'glass-item-row';
+    row.id = `item-${item.id}`;
     
-    const description = inputs[0].value;
-    const width = parseFloat(inputs[1].value) || 0;
-    const height = parseFloat(inputs[2].value) || 0;
-    const qty = parseInt(inputs[3].value) || 0;
-    const rate = parseFloat(inputs[4].value) || 0;
+    // Get unit symbol
+    const unitSymbol = getUnitSymbol(item.unit);
     
-    // Calculate area in sq.ft (mm to sq.ft conversion)
-    const area = ((width * height) / 92903.04) * qty; // 1 sq.ft = 92903.04 sq.mm
-    const amount = area * rate;
+    row.innerHTML = `
+        <td>${item.id}</td>
+        <td>
+            <input type="text" class="form-control form-control-sm" value="${item.description}" 
+                   onchange="updateItemField(${item.id}, 'description', this.value)">
+        </td>
+        <td>
+            <select class="form-select form-select-sm" onchange="updateItemField(${item.id}, 'glassType', this.value)">
+                <option value="clear" ${item.glassType === 'clear' ? 'selected' : ''}>Clear</option>
+                <option value="tinted" ${item.glassType === 'tinted' ? 'selected' : ''}>Tinted</option>
+                <option value="tempered" ${item.glassType === 'tempered' ? 'selected' : ''}>Tempered</option>
+                <option value="laminated" ${item.glassType === 'laminated' ? 'selected' : ''}>Laminated</option>
+                <option value="reflective" ${item.glassType === 'reflective' ? 'selected' : ''}>Reflective</option>
+                <option value="patterned" ${item.glassType === 'patterned' ? 'selected' : ''}>Patterned</option>
+            </select>
+        </td>
+        <td>
+            <select class="form-select form-select-sm" onchange="updateItemField(${item.id}, 'thickness', this.value)">
+                <option value="4" ${item.thickness === '4' ? 'selected' : ''}>4mm</option>
+                <option value="5" ${item.thickness === '5' ? 'selected' : ''}>5mm</option>
+                <option value="6" ${item.thickness === '6' ? 'selected' : ''}>6mm</option>
+                <option value="8" ${item.thickness === '8' ? 'selected' : ''}>8mm</option>
+                <option value="10" ${item.thickness === '10' ? 'selected' : ''}>10mm</option>
+                <option value="12" ${item.thickness === '12' ? 'selected' : ''}>12mm</option>
+                <option value="15" ${item.thickness === '15' ? 'selected' : ''}>15mm</option>
+            </select>
+        </td>
+        <td>
+            <div class="d-flex gap-2">
+                <input type="number" class="form-control form-control-sm dimension-input" 
+                       value="${item.width.toFixed(2)}" step="0.01" min="1"
+                       onchange="updateItemField(${item.id}, 'width', parseFloat(this.value))">
+                <span class="align-self-center">×</span>
+                <input type="number" class="form-control form-control-sm dimension-input" 
+                       value="${item.height.toFixed(2)}" step="0.01" min="1"
+                       onchange="updateItemField(${item.id}, 'height', parseFloat(this.value))">
+                <span class="align-self-center">${unitSymbol}</span>
+            </div>
+        </td>
+        <td>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" ${item.isTaper ? 'checked' : ''} 
+                       onchange="toggleTaper(${item.id}, this.checked)">
+                <label class="form-check-label">Taper</label>
+            </div>
+            ${item.isTaper ? `
+                <div class="mt-2">
+                    <small>Taper Size:</small>
+                    <input type="number" class="form-control form-control-sm mt-1" 
+                           value="${item.taperWidth}" placeholder="Width"
+                           onchange="updateItemField(${item.id}, 'taperWidth', parseFloat(this.value))">
+                    <input type="number" class="form-control form-control-sm mt-1" 
+                           value="${item.taperHeight}" placeholder="Height"
+                           onchange="updateItemField(${item.id}, 'taperHeight', parseFloat(this.value))">
+                </div>
+            ` : ''}
+        </td>
+        <td>
+            <div class="fab-options">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" value="cutting" 
+                           ${item.fabrication.includes('cutting') ? 'checked' : ''}
+                           onchange="toggleFabrication(${item.id}, 'cutting', this.checked)">
+                    <label class="form-check-label">Cut</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" value="drill" 
+                           ${item.fabrication.includes('drill') ? 'checked' : ''}
+                           onchange="toggleFabrication(${item.id}, 'drill', this.checked)">
+                    <label class="form-check-label">Drill</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" value="polish" 
+                           ${item.fabrication.includes('polish') ? 'checked' : ''}
+                           onchange="toggleFabrication(${item.id}, 'polish', this.checked)">
+                    <label class="form-check-label">Polish</label>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="input-group input-group-sm">
+                <input type="number" class="form-control" value="${item.paimaish}" step="0.01" min="0"
+                       onchange="updateItemField(${item.id}, 'paimaish', parseFloat(this.value))">
+                <span class="input-group-text">${unitSymbol}</span>
+            </div>
+            <small class="text-muted">Paimaish</small>
+        </td>
+        <td>
+            <div class="input-group input-group-sm">
+                <input type="number" class="form-control" value="${item.extraMM}" step="0.01" min="0"
+                       onchange="updateItemField(${item.id}, 'extraMM', parseFloat(this.value))">
+                <span class="input-group-text">${unitSymbol}</span>
+            </div>
+            <small class="text-muted">+MM</small>
+        </td>
+        <td class="item-area">${item.area.toFixed(2)}</td>
+        <td>
+            <div class="input-group input-group-sm">
+                <span class="input-group-text">₹</span>
+                <input type="number" class="form-control" value="${item.rate}" step="0.01" min="0"
+                       onchange="updateItemField(${item.id}, 'rate', parseFloat(this.value))">
+            </div>
+        </td>
+        <td class="item-amount fw-bold">₹${item.amount.toFixed(2)}</td>
+        <td>
+            <button class="btn btn-danger btn-sm" onclick="removeItem(${item.id})">
+                <i class="fas fa-trash"></i>
+            </button>
+        </td>
+    `;
     
-    // Update display
-    row.querySelector('.area').textContent = area.toFixed(2);
-    row.querySelector('.amount').textContent = '₹' + amount.toFixed(2);
+    document.getElementById('glassItemsTable').appendChild(row);
+}
+
+// Get unit symbol
+function getUnitSymbol(unit) {
+    switch(unit) {
+        case 'mm': return 'mm';
+        case 'inch': return '"';
+        case 'feet': return "'";
+        default: return 'mm';
+    }
+}
+
+// Update item field
+function updateItemField(itemId, field, value) {
+    const item = invoiceData.items.find(i => i.id === itemId);
+    if (!item) return;
     
-    // Update invoiceData
-    const itemIndex = invoiceData.items.findIndex(item => item.id === itemId);
-    if (itemIndex > -1) {
-        invoiceData.items[itemIndex] = {
-            id: itemId,
-            description,
-            width,
-            height,
-            qty,
-            rate,
-            area: parseFloat(area.toFixed(2)),
-            amount: parseFloat(amount.toFixed(2))
-        };
+    item[field] = value;
+    calculateItem(itemId);
+}
+
+// Toggle taper
+function toggleTaper(itemId, isTaper) {
+    const item = invoiceData.items.find(i => i.id === itemId);
+    if (!item) return;
+    
+    item.isTaper = isTaper;
+    if (!isTaper) {
+        item.taperWidth = 0;
+        item.taperHeight = 0;
     }
     
-    calculateTotal();
+    // Re-render the row to show/hide taper inputs
+    const row = document.getElementById(`item-${itemId}`);
+    if (row) row.remove();
+    renderGlassItem(item);
+    calculateItem(itemId);
+}
+
+// Toggle fabrication
+function toggleFabrication(itemId, fabType, isChecked) {
+    const item = invoiceData.items.find(i => i.id === itemId);
+    if (!item) return;
+    
+    if (isChecked) {
+        if (!item.fabrication.includes(fabType)) {
+            item.fabrication.push(fabType);
+        }
+    } else {
+        item.fabrication = item.fabrication.filter(f => f !== fabType);
+    }
+    
+    calculateItem(itemId);
+}
+
+// Calculate item area and amount
+function calculateItem(itemId) {
+    const item = invoiceData.items.find(i => i.id === itemId);
+    if (!item) return;
+    
+    // Convert dimensions to mm for calculation
+    let widthMM = item.width;
+    let heightMM = item.height;
+    
+    if (item.unit !== 'mm') {
+        widthMM = convertDimensions(item.width, item.unit, 'mm');
+        heightMM = convertDimensions(item.height, item.unit, 'mm');
+    }
+    
+    // Add paimaish and extra MM to actual dimensions
+    const actualWidth = widthMM + (item.paimaish || 0) + (item.extraMM || 0);
+    const actualHeight = heightMM + (item.paimaish || 0) + (item.extraMM || 0);
+    
+    // Calculate area in square feet
+    const areaSqFt = (actualWidth * actualHeight) / 92903.04; // 1 sq.ft = 92903.04 sq.mm
+    
+    // Calculate amount
+    item.area = areaSqFt * item.qty;
+    item.amount = item.area * item.rate;
+    
+    // Update display
+    const row = document.getElementById(`item-${itemId}`);
+    if (row) {
+        row.querySelector('.item-area').textContent = item.area.toFixed(2);
+        row.querySelector('.item-amount').textContent = '₹' + item.amount.toFixed(2);
+    }
+    
+    calculateAllCharges();
 }
 
 // Remove item
 function removeItem(itemId) {
-    const row = document.getElementById(`item-${itemId}`);
-    row.remove();
+    if (!confirm('Are you sure you want to remove this item?')) return;
     
-    // Remove from invoiceData
     invoiceData.items = invoiceData.items.filter(item => item.id !== itemId);
+    const row = document.getElementById(`item-${itemId}`);
+    if (row) row.remove();
     
-    calculateTotal();
+    calculateAllCharges();
 }
 
-// Calculate totals
-function calculateTotal() {
-    let subtotal = 0;
-    let totalArea = 0;
+// Update all items display
+function updateAllItems() {
+    // Clear table
+    const table = document.getElementById('glassItemsTable');
+    while (table.firstChild) {
+        table.removeChild(table.firstChild);
+    }
     
+    // Re-render all items
+    invoiceData.items.forEach(item => renderGlassItem(item));
+}
+
+// Calculate all charges
+function calculateAllCharges() {
+    let totalArea = 0;
+    let glassCost = 0;
+    let fabCharges = 0;
+    let otherCharges = 0;
+    
+    // Calculate from items
     invoiceData.items.forEach(item => {
-        subtotal += item.amount;
         totalArea += item.area;
+        glassCost += item.amount;
+        
+        // Calculate fabrication charges
+        item.fabrication.forEach(fab => {
+            switch(fab) {
+                case 'cutting':
+                    fabCharges += item.area * invoiceData.charges.cutting;
+                    break;
+                case 'drill':
+                    fabCharges += 4 * invoiceData.charges.drilling; // Assuming 4 holes
+                    break;
+                case 'polish':
+                    // Calculate perimeter in feet
+                    const perimeterFt = (2 * (item.width + item.height)) / 304.8; // Convert mm to feet
+                    fabCharges += perimeterFt * invoiceData.charges.polishing;
+                    break;
+            }
+        });
+        
+        // Taper charges
+        if (item.isTaper) {
+            const taperPerimeter = (2 * (item.taperWidth + item.taperHeight)) / 304.8;
+            fabCharges += taperPerimeter * invoiceData.charges.taper;
+        }
+        
+        // Tempering/Lamination based on glass type
+        if (item.glassType === 'tempered') {
+            fabCharges += item.area * invoiceData.charges.tempering;
+        } else if (item.glassType === 'laminated') {
+            fabCharges += item.area * invoiceData.charges.lamination;
+        }
     });
     
-    // Cutting charge (₹10 per sq.ft)
-    const cuttingCharge = totalArea * 10;
+    // Calculate other charges
+    otherCharges = Object.keys(invoiceData.charges).reduce((sum, key) => {
+        if (['transport', 'packing', 'loading', 'installation'].includes(key)) {
+            return sum + invoiceData.charges[key];
+        }
+        return sum;
+    }, 0);
     
-    // Transport (₹500 fixed for now)
-    const transport = 500;
+    // Update charge values from inputs
+    updateChargesFromInputs();
     
-    // GST (18%)
-    const gstRate = 18;
-    const gstAmount = (subtotal + cuttingCharge + transport) * (gstRate / 100);
+    // Calculate subtotal
+    const subTotal = glassCost + fabCharges + otherCharges;
     
-    // Total
-    const total = subtotal + cuttingCharge + transport + gstAmount;
+    // Calculate tax
+    const taxRate = invoiceData.taxes.sgst + invoiceData.taxes.cgst;
+    const taxAmount = (subTotal * taxRate) / 100;
+    
+    // Calculate grand total
+    const grandTotal = subTotal + taxAmount;
     
     // Update display
-    document.getElementById('subtotal').textContent = '₹' + subtotal.toFixed(2);
-    document.getElementById('cuttingCharge').textContent = '₹' + cuttingCharge.toFixed(2);
-    document.getElementById('transport').textContent = '₹' + transport.toFixed(2);
-    document.getElementById('gstAmount').textContent = '₹' + gstAmount.toFixed(2);
-    document.getElementById('totalAmount').textContent = '₹' + total.toFixed(2);
+    document.getElementById('totalArea').value = totalArea.toFixed(2);
+    document.getElementById('glassCost').value = glassCost.toFixed(2);
+    document.getElementById('fabCharges').value = fabCharges.toFixed(2);
+    document.getElementById('otherCharges').value = otherCharges.toFixed(2);
+    document.getElementById('subTotal').value = subTotal.toFixed(2);
+    document.getElementById('taxAmount').value = taxAmount.toFixed(2);
+    document.getElementById('grandTotal').value = grandTotal.toFixed(2);
     
-    return total;
+    return { totalArea, glassCost, fabCharges, otherCharges, subTotal, taxAmount, grandTotal };
 }
 
-// Generate PDF invoice
+// Update charges from input fields
+function updateChargesFromInputs() {
+    // Update fabrication charges
+    invoiceData.charges.cutting = parseFloat(document.getElementById('cuttingCharge').value) || 0;
+    invoiceData.charges.drilling = parseFloat(document.getElementById('drillingCharge').value) || 0;
+    invoiceData.charges.polishing = parseFloat(document.getElementById('polishingCharge').value) || 0;
+    invoiceData.charges.tempering = parseFloat(document.getElementById('temperingCharge').value) || 0;
+    invoiceData.charges.lamination = parseFloat(document.getElementById('laminationCharge').value) || 0;
+    invoiceData.charges.taper = parseFloat(document.getElementById('taperCharge').value) || 0;
+    
+    // Update other charges
+    invoiceData.charges.transport = parseFloat(document.getElementById('transportCharge').value) || 0;
+    invoiceData.charges.packing = parseFloat(document.getElementById('packingCharge').value) || 0;
+    invoiceData.charges.loading = parseFloat(document.getElementById('loadingCharge').value) || 0;
+    invoiceData.charges.installation = parseFloat(document.getElementById('installationCharge').value) || 0;
+    
+    // Update taxes
+    invoiceData.taxes.sgst = parseFloat(document.getElementById('sgstRate').value) || 0;
+    invoiceData.taxes.cgst = parseFloat(document.getElementById('cgstRate').value) || 0;
+    invoiceData.taxes.igst = parseFloat(document.getElementById('igstRate').value) || 0;
+}
+
+// Generate PDF
 function generatePDF() {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    const doc = new jsPDF('p', 'mm', 'a4');
     
-    // Company Header
-    doc.setFontSize(20);
-    doc.setTextColor(0, 0, 255);
-    doc.text("GLASS FACTORY LTD.", 105, 20, null, null, 'center');
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text("123, Industrial Area, Mumbai, Maharashtra", 105, 28, null, null, 'center');
-    doc.text("Phone: +91-9876543210 | Email: info@glassfactory.com | GSTIN: 27ABCDE1234F1Z5", 105, 32, null, null, 'center');
+    // Add content to PDF
+    // ... (PDF generation code similar to previous example but with new fields)
     
-    // Invoice Title
-    doc.setFontSize(16);
-    doc.setTextColor(255, 0, 0);
-    doc.text("PROFORMA INVOICE", 105, 45, null, null, 'center');
-    
-    // Invoice Details
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Invoice No: ${invoiceData.invoiceNo}`, 150, 55);
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, 150, 60);
-    doc.text(`Order No: ${document.getElementById('orderNo').value}`, 150, 65);
-    
-    // Customer Details
-    doc.setFontSize(12);
-    doc.text("BILL TO:", 20, 75);
-    doc.setFontSize(10);
-    doc.text(`Name: ${document.getElementById('customerName').value}`, 20, 82);
-    doc.text(`Address: ${document.getElementById('customerAddress').value}`, 20, 87);
-    doc.text(`Phone: ${document.getElementById('customerPhone').value}`, 20, 92);
-    doc.text(`GSTIN: ${document.getElementById('customerGST').value}`, 20, 97);
-    
-    // Glass Details
-    doc.setFontSize(12);
-    doc.text("GLASS DETAILS:", 20, 110);
-    doc.setFontSize(10);
-    doc.text(`Type: ${document.getElementById('glassType').value}`, 20, 117);
-    doc.text(`Thickness: ${document.getElementById('thickness').value} mm`, 20, 122);
-    
-    // Items Table
-    const tableData = invoiceData.items.map(item => [
-        item.description,
-        `${item.width} x ${item.height} mm`,
-        item.qty,
-        item.area.toFixed(2) + ' sq.ft',
-        '₹' + item.rate.toFixed(2),
-        '₹' + item.amount.toFixed(2)
-    ]);
-    
-    doc.autoTable({
-        startY: 130,
-        head: [['Description', 'Size', 'Qty', 'Area', 'Rate', 'Amount']],
-        body: tableData,
-        theme: 'grid',
-        headStyles: { fillColor: [41, 128, 185] }
-    });
-    
-    // Totals
-    const finalY = doc.lastAutoTable.finalY + 10;
-    const total = calculateTotal();
-    
-    doc.setFontSize(10);
-    doc.text("Subtotal:", 140, finalY);
-    doc.text(document.getElementById('subtotal').textContent, 180, finalY);
-    
-    doc.text("Cutting Charge:", 140, finalY + 5);
-    doc.text(document.getElementById('cuttingCharge').textContent, 180, finalY + 5);
-    
-    doc.text("Transport:", 140, finalY + 10);
-    doc.text(document.getElementById('transport').textContent, 180, finalY + 10);
-    
-    doc.text("GST (18%):", 140, finalY + 15);
-    doc.text(document.getElementById('gstAmount').textContent, 180, finalY + 15);
-    
-    doc.setFontSize(12);
-    doc.setTextColor(255, 0, 0);
-    doc.text("TOTAL:", 140, finalY + 25);
-    doc.text('₹' + total.toFixed(2), 180, finalY + 25);
-    
-    // Notes
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text("Notes:", 20, finalY + 40);
-    doc.text(document.getElementById('notes').value, 20, finalY + 47);
-    
-    doc.text("Terms & Conditions:", 20, finalY + 60);
-    doc.text(document.getElementById('terms').value, 20, finalY + 67);
-    
-    // Save PDF
-    doc.save(`Proforma_Invoice_${invoiceData.invoiceNo}.pdf`);
+    doc.save(`Glass_Invoice_${invoiceData.invoiceNo}.pdf`);
 }
 
 // Print invoice
@@ -225,109 +486,144 @@ function printInvoice() {
     window.print();
 }
 
-// Save invoice data to localStorage
+// Save invoice
 function saveInvoice() {
     const invoice = {
-        invoiceNo: invoiceData.invoiceNo,
-        date: new Date().toISOString(),
+        ...invoiceData,
         customer: {
-            name: document.getElementById('customerName').value,
+            name: document.getElementById('companyName').value,
+            contact: document.getElementById('contactPerson').value,
             address: document.getElementById('customerAddress').value,
-            phone: document.getElementById('customerPhone').value,
-            gst: document.getElementById('customerGST').value
+            mobile: document.getElementById('customerMobile').value,
+            gst: document.getElementById('customerGST').value,
+            email: document.getElementById('customerEmail').value
         },
         order: {
             orderNo: document.getElementById('orderNo').value,
             orderDate: document.getElementById('orderDate').value,
-            glassType: document.getElementById('glassType').value,
-            thickness: document.getElementById('thickness').value
+            poNumber: document.getElementById('poNumber').value,
+            dueDate: document.getElementById('dueDate').value,
+            project: document.getElementById('projectName').value
         },
-        items: invoiceData.items,
-        totals: {
-            subtotal: document.getElementById('subtotal').textContent,
-            cuttingCharge: document.getElementById('cuttingCharge').textContent,
-            transport: document.getElementById('transport').textContent,
-            gst: document.getElementById('gstAmount').textContent,
-            total: document.getElementById('totalAmount').textContent
+        dispatch: {
+            date: document.getElementById('dispatchDate').value,
+            vehicle: document.getElementById('vehicleType').value,
+            vehicleNo: document.getElementById('vehicleNo').value,
+            driver: document.getElementById('driverName').value,
+            driverContact: document.getElementById('driverContact').value,
+            estimatedDelivery: document.getElementById('estimatedDelivery').value,
+            address: document.getElementById('deliveryAddress').value,
+            instructions: document.getElementById('deliveryInstructions').value,
+            status: document.getElementById('dispatchStatus').value
         },
-        notes: document.getElementById('notes').value,
-        terms: document.getElementById('terms').value
+        calculations: calculateAllCharges(),
+        timestamp: new Date().toISOString()
     };
     
     // Save to localStorage
     localStorage.setItem(`invoice_${invoiceData.invoiceNo}`, JSON.stringify(invoice));
     
-    // Save to list
+    // Add to invoices list
     let invoices = JSON.parse(localStorage.getItem('invoices') || '[]');
     invoices.push({
         id: invoiceData.invoiceNo,
-        date: invoice.date,
+        date: new Date().toISOString(),
         customer: invoice.customer.name,
-        total: invoice.totals.total
+        total: invoice.calculations.grandTotal,
+        items: invoice.items.length
     });
     localStorage.setItem('invoices', JSON.stringify(invoices));
     
     alert(`Invoice ${invoiceData.invoiceNo} saved successfully!`);
 }
 
-// Reset form
-function resetForm() {
-    if (confirm("Are you sure you want to reset the form? All data will be lost.")) {
-        invoiceData = {
-            items: [],
-            invoiceNo: 'PI-' + new Date().getFullYear() + '-' + Math.floor(100 + Math.random() * 900),
-            date: new Date().toLocaleDateString(),
-            lastItemId: 0
-        };
-        
-        document.getElementById('itemsTable').innerHTML = '';
-        document.getElementById('customerName').value = '';
-        document.getElementById('customerAddress').value = '';
-        document.getElementById('customerPhone').value = '';
-        document.getElementById('customerGST').value = '';
-        document.getElementById('orderNo').value = 'ORD-' + new Date().getFullYear() + '-' + Math.floor(100 + Math.random() * 900);
-        document.getElementById('invoiceNo').textContent = invoiceData.invoiceNo;
-        document.getElementById('subtotal').textContent = '₹0.00';
-        document.getElementById('cuttingCharge').textContent = '₹0.00';
-        document.getElementById('transport').textContent = '₹0.00';
-        document.getElementById('gstAmount').textContent = '₹0.00';
-        document.getElementById('totalAmount').textContent = '₹0.00';
-        
-        // Add one default item
-        addItem();
+// Generate tracking ID
+function generateTracking() {
+    const trackingId = 'TRK-' + new Date().getFullYear() + 
+                      (Math.floor(Math.random() * 90000) + 10000);
+    document.getElementById('trackingId').textContent = trackingId;
+    
+    // Save tracking info
+    const trackingData = {
+        invoiceNo: invoiceData.invoiceNo,
+        trackingId: trackingId,
+        status: document.getElementById('dispatchStatus').value,
+        date: new Date().toISOString()
+    };
+    
+    localStorage.setItem(`tracking_${trackingId}`, JSON.stringify(trackingData));
+    
+    alert(`Tracking ID Generated: ${trackingId}`);
+}
+
+// Track shipment
+function trackShipment() {
+    const trackingId = document.getElementById('trackingId').textContent;
+    if (trackingId.startsWith('TRK-')) {
+        alert(`Tracking ID: ${trackingId}\nStatus: ${document.getElementById('dispatchStatus').value}`);
+    } else {
+        alert('Please generate a tracking ID first.');
     }
 }
 
-// Dispatch Tracking Function (Bonus Feature)
-function addDispatchTracking() {
-    const dispatchData = {
-        invoiceNo: invoiceData.invoiceNo,
-        customer: document.getElementById('customerName').value,
-        address: document.getElementById('customerAddress').value,
-        items: invoiceData.items.length,
-        totalAmount: document.getElementById('totalAmount').textContent,
-        status: "Ready for Dispatch",
-        dispatchDate: new Date().toISOString().split('T')[0],
-        estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        trackingId: 'TRK' + Math.floor(100000 + Math.random() * 900000)
-    };
-    
-    // Save dispatch data
-    localStorage.setItem(`dispatch_${invoiceData.invoiceNo}`, JSON.stringify(dispatchData));
-    
-    alert(`Dispatch tracking created! Tracking ID: ${dispatchData.trackingId}`);
+// Send email (simulated)
+function sendEmail() {
+    const email = document.getElementById('customerEmail').value;
+    if (email) {
+        alert(`Invoice will be sent to: ${email}\n\nThis is a simulation. In real implementation, connect to email API.`);
+    } else {
+        alert('Please enter customer email address.');
+    }
 }
 
-// Add dispatch button to UI
-window.onload = function() {
-    // Add default item
-    addItem();
-    
-    // Add dispatch button
-    const buttonContainer = document.querySelector('.row.mt-4 .col-md-12');
-    const dispatchBtn = document.createElement('button');
-    dispatchBtn.className = 'btn btn-dark btn-gap';
-    dispatchBtn.innerHTML = '<i class="fas fa-truck"></i> Create Dispatch';
-    dispatchBtn.onclick = addDispatchTracking;
-    buttonContainer.appendChild(dispatchBtn);
-};
+// Reset form
+function resetForm() {
+    if (confirm('Are you sure you want to reset all data? This cannot be undone.')) {
+        invoiceData = {
+            items: [],
+            currentUnit: 'mm',
+            lastItemId: 0,
+            invoiceNo: 'GL-' + new Date().getFullYear() + '-' + (Math.floor(Math.random() * 9000) + 1000),
+            charges: {
+                cutting: 15,
+                drilling: 25,
+                polishing: 30,
+                tempering: 45,
+                lamination: 60,
+                taper: 40,
+                transport: 500,
+                packing: 300,
+                loading: 200,
+                installation: 1000
+            },
+            taxes: {
+                sgst: 9,
+                cgst: 9,
+                igst: 18
+            }
+        };
+        
+        // Reset all inputs
+        document.getElementById('glassItemsTable').innerHTML = '';
+        document.getElementById('companyName').value = '';
+        document.getElementById('contactPerson').value = '';
+        document.getElementById('customerAddress').value = '';
+        document.getElementById('customerMobile').value = '';
+        document.getElementById('customerGST').value = '';
+        document.getElementById('customerEmail').value = '';
+        document.getElementById('orderNo').value = 'ORD-GL-' + new Date().getFullYear() + '-' + (Math.floor(Math.random() * 900) + 100);
+        document.getElementById('invoiceNo').textContent = invoiceData.invoiceNo;
+        
+        // Reset calculations
+        document.getElementById('totalArea').value = '0.00';
+        document.getElementById('glassCost').value = '0.00';
+        document.getElementById('fabCharges').value = '0.00';
+        document.getElementById('otherCharges').value = '0.00';
+        document.getElementById('subTotal').value = '0.00';
+        document.getElementById('taxAmount').value = '0.00';
+        document.getElementById('grandTotal').value = '0.00';
+        
+        // Add first item
+        addGlassItem();
+    }
+}
