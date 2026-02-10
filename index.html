@@ -12,7 +12,7 @@ body{
   background:#e6e9ee;
 }
 .app{
-  width:1400px;
+  width:1550px;
   margin:10px auto;
   background:#fff;
   border:1px solid #9aa3ad;
@@ -27,23 +27,22 @@ body{
   display:flex;
   border-bottom:1px solid #9aa3ad;
 }
-.left, .right{
-  padding:8px;
-}
 .left{
   width:55%;
+  padding:8px;
   border-right:1px solid #9aa3ad;
 }
 .right{
   width:45%;
+  padding:8px;
   display:flex;
   gap:10px;
 }
 .row{
   display:flex;
   gap:6px;
-  margin-bottom:6px;
   align-items:center;
+  margin-bottom:6px;
 }
 label{
   font-size:12px;
@@ -58,28 +57,30 @@ input, select{
 .mid{width:110px}
 .long{width:180px}
 
+/* blocks */
 .block{
   border:1px solid #9aa3ad;
   padding:6px;
+  margin-top:6px;
 }
 .block-title{
   font-size:12px;
   font-weight:600;
   margin-bottom:4px;
+  background:#eef1f5;
+  padding:3px;
 }
 
-/* WASTAGE */
+/* wastage */
 .wastage{
   display:flex;
+  flex-wrap:wrap;
   gap:14px;
   align-items:center;
   font-size:12px;
 }
-.wastage input[type="checkbox"]{
-  margin-right:4px;
-}
 
-/* BILL / SHIP */
+/* address */
 .addr{
   flex:1;
   border:1px solid #9aa3ad;
@@ -93,14 +94,14 @@ input, select{
   border:1px solid #9aa3ad;
 }
 
-/* TABLE */
+/* table */
 .table-wrap{
   overflow-x:auto;
 }
 table{
   border-collapse:collapse;
   width:100%;
-  min-width:1600px;
+  min-width:1700px;
 }
 th, td{
   border:1px solid #9aa3ad;
@@ -117,12 +118,35 @@ th{
 .grp-fast{background:#fff0d9}
 .grp-rate{background:#e4ffe9}
 
-tfoot td{
-  background:#f7f8fa;
-  font-weight:600;
+/* bottom charges */
+.bottom{
+  display:flex;
+  gap:10px;
+  padding:8px;
+  border-top:1px solid #9aa3ad;
+}
+.charges, .summary{
+  border:1px solid #9aa3ad;
+  padding:6px;
+}
+.charges{
+  width:60%;
+}
+.summary{
+  width:40%;
+}
+.charges .row, .summary .row{
+  justify-content:space-between;
+}
+.summary input{
+  text-align:right;
+}
+.grand{
+  font-weight:700;
+  background:#e4ffe9;
 }
 
-/* FOOTER */
+/* footer */
 .footer{
   display:flex;
   justify-content:space-between;
@@ -143,22 +167,21 @@ tfoot td{
 
 <div class="header">New Proforma</div>
 
+<!-- TOP -->
 <div class="top">
-  <!-- LEFT -->
   <div class="left">
     <div class="row">
       <label>Date</label><input class="mid">
       <label>PI No</label><input class="mid">
       <label>UOM</label>
-      <select class="mid">
-        <option>Sq.Mt</option>
-        <option>Sq.Ft</option>
-      </select>
+      <select class="mid"><option>Sq.Mt</option></select>
       <label>GST</label>
-      <select class="mid">
-        <option>CGST/SGST</option>
-        <option>IGST</option>
-      </select>
+      <select class="mid"><option>CGST/SGST</option></select>
+    </div>
+
+    <div class="row">
+      <label>Area</label><input class="mid">
+      <label>Other Fab</label><input class="mid">
     </div>
 
     <div class="block">
@@ -167,92 +190,92 @@ tfoot td{
         <label><input type="checkbox"> +MM</label>
         <label>L1 <input class="small"></label>
         <label>L2 <input class="small"></label>
-
         <label><input type="checkbox"> Even IN</label>
         <label><input type="checkbox"> Even CM</label>
+        <label>Edge Finish</label>
+        <select class="mid">
+          <option>Flat Polish</option>
+          <option>Pencil</option>
+          <option>Bevel</option>
+        </select>
       </div>
     </div>
   </div>
 
-  <!-- RIGHT -->
   <div class="right">
     <div class="addr">
       <h4>Bill To</h4>
-      <input class="long" placeholder="Name"><br>
-      <input class="long" placeholder="Address"><br>
+      <input class="long"><br>
+      <input class="long"><br>
       <div class="row">
-        <input class="mid" placeholder="City">
-        <input class="mid" placeholder="State">
+        <input class="mid">
+        <input class="mid">
       </div>
-      <input class="long" placeholder="GSTIN">
     </div>
-
     <div class="addr">
       <h4>Ship To</h4>
-      <input class="long" placeholder="Name"><br>
-      <input class="long" placeholder="Address"><br>
+      <input class="long"><br>
+      <input class="long"><br>
       <div class="row">
-        <input class="mid" placeholder="City">
-        <input class="mid" placeholder="State">
+        <input class="mid">
+        <input class="mid">
       </div>
-      <input class="long" placeholder="GSTIN">
     </div>
   </div>
 </div>
 
+<!-- TABLE -->
 <div class="table-wrap">
 <table>
 <thead>
 <tr>
   <th rowspan="2">Type</th>
-  <th rowspan="2">Item Description</th>
-
+  <th rowspan="2">Description</th>
+  <th rowspan="2">Actual RFT</th>
+  <th rowspan="2">Chargeable RFT</th>
   <th colspan="2" class="grp-actual">Actual (IN)</th>
   <th colspan="2" class="grp-charge">Chargeable (IN)</th>
-
   <th rowspan="2">Qty</th>
-
   <th colspan="5" class="grp-fast">Fast Process</th>
-
   <th rowspan="2">Sq.Mt</th>
   <th rowspan="2" class="grp-rate">Rate</th>
   <th rowspan="2">Amount</th>
 </tr>
 <tr>
-  <th class="grp-actual">W</th>
-  <th class="grp-actual">H</th>
-  <th class="grp-charge">W</th>
-  <th class="grp-charge">H</th>
-
-  <th>H</th>
-  <th>C</th>
-  <th>SP</th>
-  <th>BH</th>
-  <th>CSK</th>
+  <th class="grp-actual">W</th><th class="grp-actual">H</th>
+  <th class="grp-charge">W</th><th class="grp-charge">H</th>
+  <th>H</th><th>C</th><th>SP</th><th>BH</th><th>CSK</th>
 </tr>
 </thead>
-
 <tbody>
-<tr>
-  <td>T-DRW</td>
-  <td>10MM CLEAR TOUGHENED</td>
-  <td></td><td></td>
-  <td></td><td></td>
-  <td></td>
-  <td></td><td></td><td></td><td></td><td></td>
-  <td></td>
-  <td></td>
-  <td></td>
-</tr>
+<tr><td colspan="17">&nbsp;</td></tr>
 </tbody>
-
-<tfoot>
-<tr>
-  <td colspan="14" style="text-align:right">Grand Total</td>
-  <td></td>
-</tr>
-</tfoot>
 </table>
+</div>
+
+<!-- BOTTOM CHARGES -->
+<div class="bottom">
+  <div class="charges">
+    <div class="block-title">Other Charges</div>
+    <div class="row"><label>Holes</label><input class="mid"></div>
+    <div class="row"><label>Cutout</label><input class="mid"></div>
+    <div class="row"><label>Shape Cut</label><input class="mid"></div>
+    <div class="row"><label>Big Hole</label><input class="mid"></div>
+    <div class="row"><label>Edge Finish</label><input class="mid"></div>
+    <div class="row"><label>Packing</label><input class="mid"></div>
+    <div class="row"><label>Freight</label><input class="mid"></div>
+    <div class="row"><label>Extra</label><input class="mid"></div>
+  </div>
+
+  <div class="summary">
+    <div class="block-title">Summary</div>
+    <div class="row"><label>Sub Total</label><input class="mid"></div>
+    <div class="row"><label>CGST</label><input class="mid"></div>
+    <div class="row"><label>SGST</label><input class="mid"></div>
+    <div class="row"><label>IGST</label><input class="mid"></div>
+    <div class="row"><label>Round Off</label><input class="mid"></div>
+    <div class="row grand"><label>Grand Total</label><input class="mid"></div>
+  </div>
 </div>
 
 <div class="footer">
@@ -262,9 +285,6 @@ tfoot td{
     <button>UPDATE</button>
     <button>CLEAR</button>
     <button>CLOSE</button>
-  </div>
-  <div>
-    Act Sq.Mt: ___ | Chg Sq.Mt: ___ | Qty: ___
   </div>
 </div>
 
