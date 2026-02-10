@@ -2,226 +2,272 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Proforma Invoice</title>
+<title>Proforma Invoice – UI Clone</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
+*{box-sizing:border-box}
 body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f8;
-    margin:0;
-    padding:10px;
+  margin:0;
+  font-family:Segoe UI, Arial, sans-serif;
+  background:#e6e9ee;
 }
-h3{margin:6px 0}
-.container{
-    background:#fff;
-    padding:10px;
-    border-radius:6px;
+.app{
+  width:1400px;
+  margin:10px auto;
+  background:#fff;
+  border:1px solid #9aa3ad;
 }
-.flex{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
+.header{
+  padding:6px 10px;
+  border-bottom:1px solid #9aa3ad;
+  background:#f2f4f7;
+  font-weight:600;
 }
-.box{
-    border:1px solid #ccc;
-    padding:8px;
-    border-radius:4px;
+.top{
+  display:flex;
+  border-bottom:1px solid #9aa3ad;
 }
-.box label{
-    font-size:12px;
+.left, .right{
+  padding:8px;
+}
+.left{
+  width:55%;
+  border-right:1px solid #9aa3ad;
+}
+.right{
+  width:45%;
+  display:flex;
+  gap:10px;
+}
+.row{
+  display:flex;
+  gap:6px;
+  margin-bottom:6px;
+  align-items:center;
+}
+label{
+  font-size:12px;
+  white-space:nowrap;
 }
 input, select{
-    width:100%;
-    padding:4px;
-    font-size:13px;
+  height:22px;
+  font-size:12px;
+  padding:2px 4px;
 }
-.small{width:70px}
-.wastage label{
-    display:flex;
-    align-items:center;
-    gap:5px;
-    font-size:13px;
-    margin-bottom:4px;
+.small{width:60px}
+.mid{width:110px}
+.long{width:180px}
+
+.block{
+  border:1px solid #9aa3ad;
+  padding:6px;
 }
+.block-title{
+  font-size:12px;
+  font-weight:600;
+  margin-bottom:4px;
+}
+
+/* WASTAGE */
+.wastage{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  font-size:12px;
+}
+.wastage input[type="checkbox"]{
+  margin-right:4px;
+}
+
+/* BILL / SHIP */
+.addr{
+  flex:1;
+  border:1px solid #9aa3ad;
+  padding:6px;
+}
+.addr h4{
+  margin:0 0 4px 0;
+  font-size:12px;
+  background:#eef1f5;
+  padding:3px;
+  border:1px solid #9aa3ad;
+}
+
+/* TABLE */
 .table-wrap{
-    overflow-x:auto;
-    margin-top:10px;
+  overflow-x:auto;
 }
 table{
-    border-collapse:collapse;
-    min-width:1200px;
+  border-collapse:collapse;
+  width:100%;
+  min-width:1600px;
 }
 th, td{
-    border:1px solid #bbb;
-    padding:4px;
-    text-align:center;
-    font-size:12px;
+  border:1px solid #9aa3ad;
+  font-size:11px;
+  padding:3px;
+  text-align:center;
 }
 th{
-    background:#e9ecef;
+  background:#eef1f5;
+  font-weight:600;
 }
-.bg-actual{background:#eef7ff}
-.bg-charge{background:#d9f2ff}
-.bg-rate{background:#d9ffe8}
-.right-box{
-    flex:1;
-    min-width:300px;
+.grp-actual{background:#e9f2ff}
+.grp-charge{background:#dff5ff}
+.grp-fast{background:#fff0d9}
+.grp-rate{background:#e4ffe9}
+
+tfoot td{
+  background:#f7f8fa;
+  font-weight:600;
 }
-.left-box{
-    flex:1;
-    min-width:300px;
+
+/* FOOTER */
+.footer{
+  display:flex;
+  justify-content:space-between;
+  padding:6px;
+  border-top:1px solid #9aa3ad;
+  background:#f2f4f7;
+}
+.btns button{
+  height:26px;
+  font-size:12px;
+  margin-right:4px;
 }
 </style>
 </head>
 
 <body>
-<div class="container">
+<div class="app">
 
-<h3>New Proforma</h3>
+<div class="header">New Proforma</div>
 
-<div class="flex">
-    <!-- LEFT -->
-    <div class="left-box box">
-        <div class="flex">
-            <div>
-                <label>Date</label>
-                <input type="date" id="pidate">
-            </div>
-            <div>
-                <label>PI No</label>
-                <input value="PI-4570">
-            </div>
-            <div>
-                <label>UOM</label>
-                <select>
-                    <option>Sq.Mt</option>
-                    <option>Sq.Ft</option>
-                </select>
-            </div>
-        </div>
-
-        <h4>Wastage Mode</h4>
-        <div class="wastage">
-            <label>
-                <input type="checkbox" id="mmCheck"> +MM
-                L1 <input class="small" id="l1" value="0">
-                L2 <input class="small" id="l2" value="0">
-            </label>
-            <label>
-                <input type="checkbox" id="evenIn"> Even IN
-            </label>
-            <label>
-                <input type="checkbox" id="evenCm"> Even CM
-            </label>
-        </div>
+<div class="top">
+  <!-- LEFT -->
+  <div class="left">
+    <div class="row">
+      <label>Date</label><input class="mid">
+      <label>PI No</label><input class="mid">
+      <label>UOM</label>
+      <select class="mid">
+        <option>Sq.Mt</option>
+        <option>Sq.Ft</option>
+      </select>
+      <label>GST</label>
+      <select class="mid">
+        <option>CGST/SGST</option>
+        <option>IGST</option>
+      </select>
     </div>
 
-    <!-- RIGHT -->
-    <div class="right-box box">
-        <h4>Bill To</h4>
-        <input placeholder="Name">
-        <input placeholder="Address">
-        <div class="flex">
-            <input placeholder="City">
-            <input placeholder="State">
-        </div>
+    <div class="block">
+      <div class="block-title">Wastage Mode</div>
+      <div class="wastage">
+        <label><input type="checkbox"> +MM</label>
+        <label>L1 <input class="small"></label>
+        <label>L2 <input class="small"></label>
 
-        <h4>Ship To</h4>
-        <input placeholder="Name">
-        <input placeholder="Address">
-        <div class="flex">
-            <input placeholder="City">
-            <input placeholder="State">
-        </div>
+        <label><input type="checkbox"> Even IN</label>
+        <label><input type="checkbox"> Even CM</label>
+      </div>
     </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <div class="addr">
+      <h4>Bill To</h4>
+      <input class="long" placeholder="Name"><br>
+      <input class="long" placeholder="Address"><br>
+      <div class="row">
+        <input class="mid" placeholder="City">
+        <input class="mid" placeholder="State">
+      </div>
+      <input class="long" placeholder="GSTIN">
+    </div>
+
+    <div class="addr">
+      <h4>Ship To</h4>
+      <input class="long" placeholder="Name"><br>
+      <input class="long" placeholder="Address"><br>
+      <div class="row">
+        <input class="mid" placeholder="City">
+        <input class="mid" placeholder="State">
+      </div>
+      <input class="long" placeholder="GSTIN">
+    </div>
+  </div>
 </div>
 
 <div class="table-wrap">
 <table>
 <thead>
 <tr>
-    <th>Type</th>
-    <th>Item Desc</th>
-    <th colspan="2">Actual (IN)</th>
-    <th colspan="2">Chargeable (IN)</th>
-    <th>Qty</th>
-    <th>Sq.Mt</th>
-    <th>Rate</th>
-    <th>Amount</th>
+  <th rowspan="2">Type</th>
+  <th rowspan="2">Item Description</th>
+
+  <th colspan="2" class="grp-actual">Actual (IN)</th>
+  <th colspan="2" class="grp-charge">Chargeable (IN)</th>
+
+  <th rowspan="2">Qty</th>
+
+  <th colspan="5" class="grp-fast">Fast Process</th>
+
+  <th rowspan="2">Sq.Mt</th>
+  <th rowspan="2" class="grp-rate">Rate</th>
+  <th rowspan="2">Amount</th>
 </tr>
 <tr>
-    <th></th>
-    <th></th>
-    <th class="bg-actual">W</th>
-    <th class="bg-actual">H</th>
-    <th class="bg-charge">W</th>
-    <th class="bg-charge">H</th>
-    <th></th>
-    <th></th>
-    <th class="bg-rate"></th>
-    <th></th>
+  <th class="grp-actual">W</th>
+  <th class="grp-actual">H</th>
+  <th class="grp-charge">W</th>
+  <th class="grp-charge">H</th>
+
+  <th>H</th>
+  <th>C</th>
+  <th>SP</th>
+  <th>BH</th>
+  <th>CSK</th>
 </tr>
 </thead>
+
 <tbody>
 <tr>
-    <td>T-DRW</td>
-    <td>10MM CLEAR TOUGHENED</td>
-    <td><input value="100" oninput="calcRow(this)"></td>
-    <td><input value="32" oninput="calcRow(this)"></td>
-    <td><input readonly></td>
-    <td><input readonly></td>
-    <td><input value="1" oninput="calcRow(this)"></td>
-    <td></td>
-    <td><input value="1270"></td>
-    <td></td>
+  <td>T-DRW</td>
+  <td>10MM CLEAR TOUGHENED</td>
+  <td></td><td></td>
+  <td></td><td></td>
+  <td></td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td></td>
+  <td></td>
+  <td></td>
 </tr>
 </tbody>
+
+<tfoot>
+<tr>
+  <td colspan="14" style="text-align:right">Grand Total</td>
+  <td></td>
+</tr>
+</tfoot>
 </table>
 </div>
 
+<div class="footer">
+  <div class="btns">
+    <button>NEW</button>
+    <button>SAVE</button>
+    <button>UPDATE</button>
+    <button>CLEAR</button>
+    <button>CLOSE</button>
+  </div>
+  <div>
+    Act Sq.Mt: ___ | Chg Sq.Mt: ___ | Qty: ___
+  </div>
 </div>
 
-<script>
-function roundEven(val){
-    return Math.ceil(val / 2) * 2;
-}
-
-function calcRow(el){
-    let row = el.closest("tr");
-    let aw = parseFloat(row.cells[2].children[0].value)||0;
-    let ah = parseFloat(row.cells[3].children[0].value)||0;
-
-    let cw = aw;
-    let ch = ah;
-
-    if(document.getElementById("mmCheck").checked){
-        cw += parseFloat(l1.value)||0;
-        ch += parseFloat(l2.value)||0;
-    }
-
-    if(document.getElementById("evenIn").checked){
-        cw = roundEven(cw);
-        ch = roundEven(ch);
-    }
-
-    if(document.getElementById("evenCm").checked){
-        cw = roundEven(cw * 2.54) / 2.54;
-        ch = roundEven(ch * 2.54) / 2.54;
-    }
-
-    row.cells[4].children[0].value = cw.toFixed(2);
-    row.cells[5].children[0].value = ch.toFixed(2);
-
-    let qty = parseFloat(row.cells[6].children[0].value)||0;
-    let sqm = ((cw * ch) / 1550) * qty;
-    row.cells[7].innerText = sqm.toFixed(3);
-
-    let rate = parseFloat(row.cells[8].children[0].value)||0;
-    row.cells[9].innerText = (sqm * rate).toFixed(2);
-}
-
-document.getElementById("pidate").valueAsDate = new Date();
-</script>
-
+</div>
 </body>
 </html>
