@@ -2,188 +2,110 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>PI Format – Final</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glass Proforma Invoice</title>
 <style>
-body{
-    margin:0;
-    padding:10px;
-    background:#f0f2f5;
-    font-family: Arial, sans-serif;
-    font-size:12px;
-}
-.row{
-    display:flex;
-    gap:8px;
-    margin-bottom:8px;
-    flex-wrap:wrap;
-}
-.box{
-    border-radius:6px;
-    padding:8px;
-    border:1px solid #999;
-}
-h4{
-    margin:0 0 6px;
-    font-size:13px;
-}
-label{
-    font-weight:600;
-}
-input,select{
-    width:100%;
-    padding:4px;
-    margin-bottom:5px;
-    font-size:12px;
-}
-
-/* COLOURS ONLY */
-.bill{background:#e3f2fd}
-.ship{background:#fce4ec}
-.wastage{background:#fff8e1}
-.desc{background:#e8f5e9}
-.other{background:#ede7f6}
-.summary{background:#e0f7fa}
-
-/* WIDTHS (SAME FLOW) */
-.half{width:49%}
-.full{width:100%}
-.otherSmall{width:26%}
-.summaryBig{width:72%}
-
-/* TABLE */
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-th,td{
-    border:1px solid #777;
-    padding:4px;
-    text-align:center;
-}
-th{
-    background:#dcedc8;
-}
-.check-row{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-}
+body{font-family:Arial;background:#f4f6f8;margin:0;padding:10px}
+.container{max-width:1100px;margin:auto;background:#fff;padding:15px;border-radius:8px}
+h2{margin:0 0 10px}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #ddd;padding:6px;text-align:center;font-size:14px}
+th{background:#0d6efd;color:#fff}
+input,select{width:100%;padding:4px}
+.total-box{text-align:right;margin-top:10px;font-size:16px}
+button{padding:6px 12px;margin:5px;border:none;border-radius:4px;cursor:pointer}
+.add{background:#198754;color:#fff}
 </style>
 </head>
 
 <body>
+<div class="container">
+<h2>Proforma Invoice (Smart Glazier Style)</h2>
 
-<!-- BILL TO / SHIP TO -->
-<div class="row">
-    <div class="box bill half">
-        <h4>Bill To</h4>
-        <label>Name</label><input>
-        <label>Address</label><input>
-        <label>GSTIN</label><input>
-    </div>
-
-    <div class="box ship half">
-        <h4>Ship To</h4>
-        <label>Name</label><input>
-        <label>Address</label><input>
-        <label>GSTIN</label><input>
-    </div>
-</div>
-
-<!-- WASTAGE MODE -->
-<div class="box wastage full">
-<h4>Wastage Mode</h4>
-
-<div class="check-row">
-<label><input type="checkbox"> Round Off</label>
-<label><input type="checkbox"> +MM (L1)(L2)</label>
-<label><input type="checkbox"> Even IN</label>
-<label><input type="checkbox"> Even CM</label>
-</div>
-
-<br>
-
-<div class="check-row">
-<b>Edge Finish:</b>
-<label><input type="checkbox"> Polish</label>
-<label><input type="checkbox"> Rough Grinding</label>
-</div>
-
-<br>
-
-<label>I/P Unit</label>
-<select>
-<option value="">Manual Select</option>
-<option>MM</option>
-<option>Inch</option>
-</select>
-</div>
-
-<!-- DESCRIPTION -->
-<div class="box desc full">
-<h4>Description</h4>
-
-<table>
+<table id="table">
 <thead>
 <tr>
-<th>Description</th>
+<th>Glass Type</th>
+<th>Unit</th>
 <th>Width</th>
 <th>Height</th>
 <th>Qty</th>
-<th>Actual Rft</th>
-<th>Chargeable Rft</th>
-<th>Area</th>
-<th>Rate</th>
+<th>Rate / SQM</th>
+<th>SQM</th>
 <th>Amount</th>
+<th>X</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><input></td>
-<td><input></td>
-<td><input></td>
-<td><input></td>
-<td><input></td>
-<td><input></td>
-<td><input></td>
-<td><input></td>
-<td><input></td>
+<td><input value="Toughened Glass"></td>
+<td>
+<select onchange="calc()">
+<option value="mm">mm</option>
+<option value="inch">inch</option>
+</select>
+</td>
+<td><input type="number" value="1000" oninput="calc()"></td>
+<td><input type="number" value="2000" oninput="calc()"></td>
+<td><input type="number" value="1" oninput="calc()"></td>
+<td><input type="number" value="150" oninput="calc()"></td>
+<td class="sqm">0</td>
+<td class="amt">0</td>
+<td><button onclick="delRow(this)">❌</button></td>
 </tr>
 </tbody>
 </table>
 
-<br>
+<button class="add" onclick="addRow()">+ Add Row</button>
 
-<div class="check-row">
-<label><input type="checkbox"> Area</label>
-<label><input type="checkbox"> Other Fab</label>
+<div class="total-box">
+<p>Subtotal: ₹ <span id="sub">0</span></p>
+<p>GST 18%: ₹ <span id="gst">0</span></p>
+<p><b>Grand Total: ₹ <span id="grand">0</span></b></p>
 </div>
 </div>
 
-<!-- OTHER CHARGES + SUMMARY -->
-<div class="row">
+<script>
+function calc(){
+let rows=document.querySelectorAll("#table tbody tr");
+let subtotal=0;
 
-<div class="box other otherSmall">
-<h4>Other Charges</h4>
-<label>Charge Name</label><input>
-<label>Qty</label><input>
-<label>Rate</label><input>
-<label>Amount</label><input>
-</div>
+rows.forEach(r=>{
+let unit=r.cells[1].children[0].value;
+let w=parseFloat(r.cells[2].children[0].value)||0;
+let h=parseFloat(r.cells[3].children[0].value)||0;
+let q=parseFloat(r.cells[4].children[0].value)||0;
+let rate=parseFloat(r.cells[5].children[0].value)||0;
 
-<div class="box summary summaryBig">
-<h4>Summary</h4>
-<label>Sub Total</label><input>
-<label>CGST</label><input>
-<label>SGST</label><input>
-<label>IGST</label><input>
-<label>Round Off</label><input>
-<label><b>Grand Total</b></label><input>
-</div>
+if(unit==="inch"){ w*=25.4; h*=25.4; }
 
-</div>
+let sqm=(w*h*q)/1000000;
+let amt=sqm*rate;
 
+r.querySelector(".sqm").innerText=sqm.toFixed(3);
+r.querySelector(".amt").innerText=amt.toFixed(2);
+
+subtotal+=amt;
+});
+
+let gst=subtotal*0.18;
+document.getElementById("sub").innerText=subtotal.toFixed(2);
+document.getElementById("gst").innerText=gst.toFixed(2);
+document.getElementById("grand").innerText=(subtotal+gst).toFixed(2);
+}
+
+function addRow(){
+let tr=document.querySelector("#table tbody tr").cloneNode(true);
+tr.querySelectorAll("input").forEach(i=>i.value="");
+document.querySelector("#table tbody").appendChild(tr);
+}
+
+function delRow(btn){
+btn.parentElement.parentElement.remove();
+calc();
+}
+
+calc();
+</script>
 </body>
 </html>
