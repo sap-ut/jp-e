@@ -1,164 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Proforma Invoice – UI Clone</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Segoe UI, Arial, sans-serif;
-  background:#e6e9ee;
-}
-.app{
-  width:1550px;
-  margin:10px auto;
-  background:#fff;
-  border:1px solid #9aa3ad;
-}
-.header{
-  padding:6px 10px;
-  border-bottom:1px solid #9aa3ad;
-  background:#f2f4f7;
-  font-weight:600;
-}
-.top{
-  display:flex;
-  border-bottom:1px solid #9aa3ad;
-}
-.left{
-  width:55%;
-  padding:8px;
-  border-right:1px solid #9aa3ad;
-}
-.right{
-  width:45%;
-  padding:8px;
-  display:flex;
-  gap:10px;
-}
-.row{
-  display:flex;
-  gap:6px;
-  align-items:center;
-  margin-bottom:6px;
-}
-label{
-  font-size:12px;
-  white-space:nowrap;
-}
-input, select{
-  height:22px;
-  font-size:12px;
-  padding:2px 4px;
-}
-.small{width:60px}
-.mid{width:110px}
-.long{width:180px}
+body{margin:0;font-family:Segoe UI,Arial;background:#e6e9ee}
+.app{width:1550px;margin:10px auto;background:#fff;border:1px solid #9aa3ad}
+.header{padding:6px 10px;background:#f2f4f7;border-bottom:1px solid #9aa3ad;font-weight:600}
+.row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+label{font-size:12px;min-width:70px}
+input,select{height:22px;font-size:12px;padding:2px 4px}
+.small{width:60px}.mid{width:110px}.long{width:180px}
 
-/* blocks */
-.block{
-  border:1px solid #9aa3ad;
-  padding:6px;
-  margin-top:6px;
-}
-.block-title{
-  font-size:12px;
-  font-weight:600;
-  margin-bottom:4px;
-  background:#eef1f5;
-  padding:3px;
-}
+.top{display:flex;border-bottom:1px solid #9aa3ad}
+.left{width:55%;padding:8px;border-right:1px solid #9aa3ad}
+.right{width:45%;padding:8px;display:flex;gap:10px}
 
-/* wastage */
-.wastage{
-  display:flex;
-  flex-wrap:wrap;
-  gap:14px;
-  align-items:center;
-  font-size:12px;
-}
+.block{border:1px solid #9aa3ad;padding:6px;margin-top:6px}
+.block-title{background:#eef1f5;font-size:12px;font-weight:600;padding:3px;margin-bottom:4px}
 
-/* address */
-.addr{
-  flex:1;
-  border:1px solid #9aa3ad;
-  padding:6px;
-}
-.addr h4{
-  margin:0 0 4px 0;
-  font-size:12px;
-  background:#eef1f5;
-  padding:3px;
-  border:1px solid #9aa3ad;
-}
+.wastage{display:flex;flex-wrap:wrap;gap:12px;font-size:12px}
 
-/* table */
-.table-wrap{
-  overflow-x:auto;
-}
-table{
-  border-collapse:collapse;
-  width:100%;
-  min-width:1700px;
-}
-th, td{
-  border:1px solid #9aa3ad;
-  font-size:11px;
-  padding:3px;
-  text-align:center;
-}
-th{
-  background:#eef1f5;
-  font-weight:600;
-}
-.grp-actual{background:#e9f2ff}
-.grp-charge{background:#dff5ff}
-.grp-fast{background:#fff0d9}
-.grp-rate{background:#e4ffe9}
+.addr{flex:1;border:1px solid #9aa3ad;padding:6px}
+.addr h4{margin:0 0 4px;font-size:12px;background:#eef1f5;padding:3px}
 
-/* bottom charges */
-.bottom{
-  display:flex;
-  gap:10px;
-  padding:8px;
-  border-top:1px solid #9aa3ad;
-}
-.charges, .summary{
-  border:1px solid #9aa3ad;
-  padding:6px;
-}
-.charges{
-  width:60%;
-}
-.summary{
-  width:40%;
-}
-.charges .row, .summary .row{
-  justify-content:space-between;
-}
-.summary input{
-  text-align:right;
-}
-.grand{
-  font-weight:700;
-  background:#e4ffe9;
-}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:1700px}
+th,td{border:1px solid #9aa3ad;font-size:11px;padding:3px;text-align:center}
+th{background:#eef1f5}
 
-/* footer */
-.footer{
-  display:flex;
-  justify-content:space-between;
-  padding:6px;
-  border-top:1px solid #9aa3ad;
-  background:#f2f4f7;
-}
-.btns button{
-  height:26px;
-  font-size:12px;
-  margin-right:4px;
-}
+.bottom{display:flex;gap:10px;padding:8px;border-top:1px solid #9aa3ad}
+.charges{width:35%;border:1px solid #9aa3ad;padding:6px}
+.summary{width:30%;border:1px solid #9aa3ad;padding:6px}
+.grand{font-weight:700;background:#e4ffe9}
+
+.footer{display:flex;justify-content:space-between;padding:6px;background:#f2f4f7;border-top:1px solid #9aa3ad}
 </style>
 </head>
 
@@ -167,31 +43,36 @@ th{
 
 <div class="header">New Proforma</div>
 
-<!-- TOP -->
 <div class="top">
   <div class="left">
+
     <div class="row">
       <label>Date</label><input class="mid">
       <label>PI No</label><input class="mid">
-      <label>UOM</label>
-      <select class="mid"><option>Sq.Mt</option></select>
-      <label>GST</label>
-      <select class="mid"><option>CGST/SGST</option></select>
+      <label>UOM</label><select class="mid"><option>Sq.Mt</option></select>
     </div>
 
     <div class="row">
-      <label>Area</label><input class="mid">
-      <label>Other Fab</label><input class="mid">
+      <label><input type="checkbox"> Area</label><input class="mid">
+      <label><input type="checkbox"> Other Fab</label><input class="mid">
     </div>
 
     <div class="block">
       <div class="block-title">Wastage Mode</div>
       <div class="wastage">
+        <label>I/P Unit</label>
+        <select class="mid">
+          <option>INCH</option>
+          <option>MM</option>
+        </select>
+
         <label><input type="checkbox"> +MM</label>
         <label>L1 <input class="small"></label>
         <label>L2 <input class="small"></label>
+
         <label><input type="checkbox"> Even IN</label>
         <label><input type="checkbox"> Even CM</label>
+
         <label>Edge Finish</label>
         <select class="mid">
           <option>Flat Polish</option>
@@ -200,60 +81,49 @@ th{
         </select>
       </div>
     </div>
+
   </div>
 
   <div class="right">
     <div class="addr">
       <h4>Bill To</h4>
-      <input class="long"><br>
-      <input class="long"><br>
-      <div class="row">
-        <input class="mid">
-        <input class="mid">
-      </div>
+      <div class="row"><label>Name</label><input class="long"></div>
+      <div class="row"><label>Address</label><input class="long"></div>
+      <div class="row"><label>City</label><input class="mid"></div>
+      <div class="row"><label>State</label><input class="mid"></div>
+      <div class="row"><label>GSTIN</label><input class="long"></div>
     </div>
+
     <div class="addr">
       <h4>Ship To</h4>
-      <input class="long"><br>
-      <input class="long"><br>
-      <div class="row">
-        <input class="mid">
-        <input class="mid">
-      </div>
+      <div class="row"><label>Name</label><input class="long"></div>
+      <div class="row"><label>Address</label><input class="long"></div>
+      <div class="row"><label>City</label><input class="mid"></div>
+      <div class="row"><label>State</label><input class="mid"></div>
+      <div class="row"><label>GSTIN</label><input class="long"></div>
     </div>
   </div>
 </div>
 
-<!-- TABLE -->
 <div class="table-wrap">
 <table>
 <thead>
 <tr>
-  <th rowspan="2">Type</th>
-  <th rowspan="2">Description</th>
-  <th rowspan="2">Actual RFT</th>
-  <th rowspan="2">Chargeable RFT</th>
-  <th colspan="2" class="grp-actual">Actual (IN)</th>
-  <th colspan="2" class="grp-charge">Chargeable (IN)</th>
-  <th rowspan="2">Qty</th>
-  <th colspan="5" class="grp-fast">Fast Process</th>
-  <th rowspan="2">Sq.Mt</th>
-  <th rowspan="2" class="grp-rate">Rate</th>
-  <th rowspan="2">Amount</th>
+<th>Type</th><th>Description</th><th>Actual RFT</th><th>Chargeable RFT</th>
+<th colspan="2">Actual (IN)</th><th colspan="2">Chargeable (IN)</th>
+<th>Qty</th><th colspan="5">Fast Process</th><th>Sq.Mt</th><th>Rate</th><th>Amount</th>
 </tr>
 <tr>
-  <th class="grp-actual">W</th><th class="grp-actual">H</th>
-  <th class="grp-charge">W</th><th class="grp-charge">H</th>
-  <th>H</th><th>C</th><th>SP</th><th>BH</th><th>CSK</th>
+<th></th><th></th><th></th><th></th>
+<th>W</th><th>H</th><th>W</th><th>H</th>
+<th></th><th>H</th><th>C</th><th>SP</th><th>BH</th><th>CSK</th>
+<th></th><th></th><th></th>
 </tr>
 </thead>
-<tbody>
-<tr><td colspan="17">&nbsp;</td></tr>
-</tbody>
+<tbody><tr><td colspan="17">&nbsp;</td></tr></tbody>
 </table>
 </div>
 
-<!-- BOTTOM CHARGES -->
 <div class="bottom">
   <div class="charges">
     <div class="block-title">Other Charges</div>
@@ -261,10 +131,7 @@ th{
     <div class="row"><label>Cutout</label><input class="mid"></div>
     <div class="row"><label>Shape Cut</label><input class="mid"></div>
     <div class="row"><label>Big Hole</label><input class="mid"></div>
-    <div class="row"><label>Edge Finish</label><input class="mid"></div>
     <div class="row"><label>Packing</label><input class="mid"></div>
-    <div class="row"><label>Freight</label><input class="mid"></div>
-    <div class="row"><label>Extra</label><input class="mid"></div>
   </div>
 
   <div class="summary">
@@ -272,14 +139,12 @@ th{
     <div class="row"><label>Sub Total</label><input class="mid"></div>
     <div class="row"><label>CGST</label><input class="mid"></div>
     <div class="row"><label>SGST</label><input class="mid"></div>
-    <div class="row"><label>IGST</label><input class="mid"></div>
-    <div class="row"><label>Round Off</label><input class="mid"></div>
     <div class="row grand"><label>Grand Total</label><input class="mid"></div>
   </div>
 </div>
 
 <div class="footer">
-  <div class="btns">
+  <div>
     <button>NEW</button>
     <button>SAVE</button>
     <button>UPDATE</button>
