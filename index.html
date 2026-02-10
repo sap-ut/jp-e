@@ -1,643 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Precision Glass - Professional Invoice System</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-blue: #1a365d;
-            --glass-green: #2d936c;
-            --warning-orange: #e67e22;
-            --danger-red: #e74c3c;
-        }
-        body { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px 0;
-        }
-        .glass-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            padding: 30px;
-            margin: 20px auto;
-        }
-        .header-glass {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, #2c5282 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .glass-icon {
-            color: #64b5f6;
-            filter: drop-shadow(0 0 5px rgba(100, 181, 246, 0.5));
-        }
-        .section-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            background: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-        .section-title {
-            color: var(--primary-blue);
-            font-weight: 600;
-            border-left: 4px solid var(--glass-green);
-            padding-left: 15px;
-            margin-bottom: 20px;
-        }
-        .dimension-box {
-            background: #f7fafc;
-            border: 2px dashed #cbd5e0;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 10px 0;
-        }
-        .unit-badge {
-            background: var(--glass-green);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            user-select: none;
-            transition: all 0.3s;
-        }
-        .unit-badge:hover {
-            background: #257953;
-            transform: translateY(-2px);
-        }
-        .unit-badge.active {
-            background: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.2);
-        }
-        .taper-indicator {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            border-radius: 8px;
-            padding: 10px;
-            margin: 5px 0;
-        }
-        .fab-tag {
-            background: var(--glass-green);
-            color: white;
-            padding: 3px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .mm-input-group {
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 10px;
-            background: #f8fafc;
-        }
-        .calculation-highlight {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            border-radius: 10px;
-            padding: 20px;
-            border: 2px solid #90caf9;
-        }
-        .btn-glass {
-            background: linear-gradient(135deg, var(--glass-green) 0%, #34a853 100%);
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .btn-glass:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 7px 14px rgba(45, 147, 108, 0.3);
-            color: white;
-        }
-        .btn-print {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .measurement-row {
-            background: #f0f9ff;
-            border-left: 4px solid #3b82f6;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 6px;
-        }
-        .error-highlight {
-            border: 2px solid var(--danger-red) !important;
-            animation: pulse 0.5s;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-        .glass-item-row {
-            transition: all 0.3s;
-            border-left: 4px solid transparent;
-        }
-        .glass-item-row:hover {
-            border-left-color: var(--glass-green);
-            background: #f7fafc;
-        }
-        .total-box {
-            background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .tab-content {
-            border: 1px solid #dee2e6;
-            border-top: none;
-            padding: 20px;
-            border-radius: 0 0 8px 8px;
-        }
-        .nav-tabs .nav-link.active {
-            background: var(--primary-blue);
-            color: white;
-            border-color: var(--primary-blue);
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Proforma Invoice</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f8;
+    margin:0;
+    padding:10px;
+}
+h3{margin:6px 0}
+.container{
+    background:#fff;
+    padding:10px;
+    border-radius:6px;
+}
+.flex{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+.box{
+    border:1px solid #ccc;
+    padding:8px;
+    border-radius:4px;
+}
+.box label{
+    font-size:12px;
+}
+input, select{
+    width:100%;
+    padding:4px;
+    font-size:13px;
+}
+.small{width:70px}
+.wastage label{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    font-size:13px;
+    margin-bottom:4px;
+}
+.table-wrap{
+    overflow-x:auto;
+    margin-top:10px;
+}
+table{
+    border-collapse:collapse;
+    min-width:1200px;
+}
+th, td{
+    border:1px solid #bbb;
+    padding:4px;
+    text-align:center;
+    font-size:12px;
+}
+th{
+    background:#e9ecef;
+}
+.bg-actual{background:#eef7ff}
+.bg-charge{background:#d9f2ff}
+.bg-rate{background:#d9ffe8}
+.right-box{
+    flex:1;
+    min-width:300px;
+}
+.left-box{
+    flex:1;
+    min-width:300px;
+}
+</style>
 </head>
+
 <body>
-    <div class="container-lg">
-        <div class="glass-container">
-            <!-- Professional Header -->
-            <div class="header-glass">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <h1 class="mb-3"><i class="fas fa-glass-whiskey glass-icon me-3"></i>PRECISION GLASS FABRICATION</h1>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p class="mb-1"><i class="fas fa-map-marker-alt me-2"></i>Firozabad Glass Complex, UP</p>
-                                <p class="mb-1"><i class="fas fa-phone me-2"></i>+91-98765 43210</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p class="mb-1"><i class="fas fa-envelope me-2"></i>sales@precisionglass.co.in</p>
-                                <p class="mb-0"><i class="fas fa-gst me-2"></i>GSTIN: 09AABCU1234N1Z5</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 text-end">
-                        <h2 class="mb-3 text-warning">PROFORMA INVOICE</h2>
-                        <div class="bg-white text-dark p-3 rounded d-inline-block">
-                            <p class="mb-1"><strong>PI No:</strong> <span id="invoiceNo" class="text-danger fw-bold">GL-2024-001</span></p>
-                            <p class="mb-1"><strong>Date:</strong> <span id="currentDate"></span></p>
-                            <p class="mb-0"><strong>Validity:</strong> <span class="badge bg-info">30 Days</span></p>
-                        </div>
-                    </div>
-                </div>
+<div class="container">
+
+<h3>New Proforma</h3>
+
+<div class="flex">
+    <!-- LEFT -->
+    <div class="left-box box">
+        <div class="flex">
+            <div>
+                <label>Date</label>
+                <input type="date" id="pidate">
             </div>
-
-            <!-- Main Content with Tabs -->
-            <ul class="nav nav-tabs mb-4" id="invoiceTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer" type="button">
-                        <i class="fas fa-user me-2"></i>Customer
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="items-tab" data-bs-toggle="tab" data-bs-target="#items" type="button">
-                        <i class="fas fa-layer-group me-2"></i>Glass Items
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="charges-tab" data-bs-toggle="tab" data-bs-target="#charges" type="button">
-                        <i class="fas fa-calculator me-2"></i>Charges
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="dispatch-tab" data-bs-toggle="tab" data-bs-target="#dispatch" type="button">
-                        <i class="fas fa-truck me-2"></i>Dispatch
-                    </button>
-                </li>
-            </ul>
-
-            <div class="tab-content" id="invoiceTabsContent">
-                
-                <!-- Customer Tab -->
-                <div class="tab-pane fade show active" id="customer" role="tabpanel">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="section-card">
-                                <h4 class="section-title">Customer Details</h4>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Company Name *</label>
-                                        <input type="text" id="companyName" class="form-control" value="Modern Glass Solutions">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Contact Person</label>
-                                        <input type="text" id="contactPerson" class="form-control" value="Mr. Rajesh Sharma">
-                                    </div>
-                                    <div class="col-12">
-                                        <label class="form-label fw-bold">Address</label>
-                                        <textarea id="customerAddress" class="form-control" rows="2">123, Glass Market, Firozabad, Uttar Pradesh</textarea>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label fw-bold">Mobile *</label>
-                                        <input type="tel" id="customerMobile" class="form-control" value="9876543210">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label fw-bold">GSTIN</label>
-                                        <input type="text" id="customerGST" class="form-control" value="09BBCCS1234N1Z6">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label fw-bold">Email</label>
-                                        <input type="email" id="customerEmail" class="form-control" value="rajesh@modernglass.com">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="section-card">
-                                <h4 class="section-title">Order Details</h4>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Order No *</label>
-                                        <input type="text" id="orderNo" class="form-control" value="ORD-GL-2024-001">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Order Date</label>
-                                        <input type="date" id="orderDate" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">PO Number</label>
-                                        <input type="text" id="poNumber" class="form-control" value="PO-12345">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Due Date</label>
-                                        <input type="date" id="dueDate" class="form-control">
-                                    </div>
-                                    <div class="col-12">
-                                        <label class="form-label fw-bold">Project Name</label>
-                                        <input type="text" id="projectName" class="form-control" value="Residential Tower - Phase 2">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Glass Items Tab -->
-                <div class="tab-pane fade" id="items" role="tabpanel">
-                    <div class="section-card">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4 class="section-title mb-0"><i class="fas fa-cube me-2"></i>Glass Items Specification</h4>
-                            <button class="btn-glass" onclick="addGlassItem()">
-                                <i class="fas fa-plus-circle me-2"></i>Add New Glass Item
-                            </button>
-                        </div>
-                        
-                        <!-- Unit Selection -->
-                        <div class="mb-4">
-                            <label class="form-label fw-bold me-3">Measurement Unit:</label>
-                            <div class="btn-group" role="group">
-                                <button type="button" class="unit-badge active" id="unitMM" onclick="setUnit('mm')">Millimeter (mm)</button>
-                                <button type="button" class="unit-badge" id="unitInch" onclick="setUnit('inch')">Inch (")</button>
-                                <button type="button" class="unit-badge" id="unitFeet" onclick="setUnit('feet')">Feet (')</button>
-                            </div>
-                        </div>
-
-                        <!-- Glass Items Container -->
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Description</th>
-                                        <th>Glass Type</th>
-                                        <th>Thickness</th>
-                                        <th>Dimensions</th>
-                                        <th>Taper</th>
-                                        <th>Fabrication</th>
-                                        <th>Paimaish</th>
-                                        <th>+MM</th>
-                                        <th>Area</th>
-                                        <th>Rate</th>
-                                        <th>Amount</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="glassItemsTable">
-                                    <!-- Items will be added here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Charges Tab -->
-                <div class="tab-pane fade" id="charges" role="tabpanel">
-                    <div class="row">
-                        <!-- Main Charges -->
-                        <div class="col-md-8">
-                            <div class="section-card">
-                                <h4 class="section-title"><i class="fas fa-money-bill-wave me-2"></i>Additional Charges</h4>
-                                
-                                <!-- Fabrication Charges -->
-                                <div class="mb-4">
-                                    <h6 class="fw-bold text-primary mb-3">Fabrication Charges:</h6>
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <label class="form-label">Cutting (per sq.ft)</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">₹</span>
-                                                <input type="number" id="cuttingCharge" class="form-control" value="15" min="0" step="0.01">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Drilling (per hole)</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">₹</span>
-                                                <input type="number" id="drillingCharge" class="form-control" value="25" min="0">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Edge Polish (per ft)</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">₹</span>
-                                                <input type="number" id="polishingCharge" class="form-control" value="30" min="0">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Tempering (per sq.ft)</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">₹</span>
-                                                <input type="number" id="temperingCharge" class="form-control" value="45" min="0">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Lamination (per sq.ft)</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">₹</span>
-                                                <input type="number" id="laminationCharge" class="form-control" value="60" min="0">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Taper Work (per ft)</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">₹</span>
-                                                <input type="number" id="taperCharge" class="form-control" value="40" min="0">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Other Charges -->
-                                <div class="mb-4">
-                                    <h6 class="fw-bold text-primary mb-3">Other Charges:</h6>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Transportation</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">₹</span>
-                                                <input type="number" id="transportCharge" class="form-control" value="500" min="0">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Packing</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">₹</span>
-                                                <input type="number" id="packingCharge" class="form-control" value="300" min="0">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Loading/Unloading</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">₹</span>
-                                                <input type="number" id="loadingCharge" class="form-control" value="200" min="0">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Installation</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">₹</span>
-                                                <input type="number" id="installationCharge" class="form-control" value="1000" min="0">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Tax Section -->
-                                <div>
-                                    <h6 class="fw-bold text-primary mb-3">Tax Settings:</h6>
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <label class="form-label">SGST (%)</label>
-                                            <div class="input-group">
-                                                <input type="number" id="sgstRate" class="form-control" value="9" min="0" max="100" step="0.01">
-                                                <span class="input-group-text">%</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">CGST (%)</label>
-                                            <div class="input-group">
-                                                <input type="number" id="cgstRate" class="form-control" value="9" min="0" max="100" step="0.01">
-                                                <span class="input-group-text">%</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">IGST (%)</label>
-                                            <div class="input-group">
-                                                <input type="number" id="igstRate" class="form-control" value="18" min="0" max="100" step="0.01">
-                                                <span class="input-group-text">%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Calculations -->
-                        <div class="col-md-4">
-                            <div class="calculation-highlight">
-                                <h4 class="section-title text-center">CALCULATION SUMMARY</h4>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Glass Area Total</label>
-                                    <div class="input-group">
-                                        <input type="text" id="totalArea" class="form-control fw-bold" value="0.00" readonly>
-                                        <span class="input-group-text">sq.ft</span>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Glass Cost</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">₹</span>
-                                        <input type="text" id="glassCost" class="form-control" value="0.00" readonly>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Fabrication Charges</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">₹</span>
-                                        <input type="text" id="fabCharges" class="form-control" value="0.00" readonly>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Other Charges</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">₹</span>
-                                        <input type="text" id="otherCharges" class="form-control" value="0.00" readonly>
-                                    </div>
-                                </div>
-
-                                <hr class="my-3">
-
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Sub Total</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">₹</span>
-                                        <input type="text" id="subTotal" class="form-control fw-bold" value="0.00" readonly>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Tax (GST)</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">₹</span>
-                                        <input type="text" id="taxAmount" class="form-control" value="0.00" readonly>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold text-primary fs-5">GRAND TOTAL</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text fs-5">₹</span>
-                                        <input type="text" id="grandTotal" class="form-control fs-5 fw-bold text-danger" value="0.00" readonly>
-                                    </div>
-                                </div>
-
-                                <button class="btn-glass w-100 mt-3" onclick="calculateAllCharges()">
-                                    <i class="fas fa-calculator me-2"></i>Calculate All
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dispatch Tab -->
-                <div class="tab-pane fade" id="dispatch" role="tabpanel">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="section-card">
-                                <h4 class="section-title"><i class="fas fa-truck-loading me-2"></i>Dispatch Details</h4>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Dispatch Date</label>
-                                        <input type="date" id="dispatchDate" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Vehicle Type</label>
-                                        <select id="vehicleType" class="form-select">
-                                            <option value="">Select Vehicle</option>
-                                            <option value="open_truck">Open Truck</option>
-                                            <option value="closed_truck">Closed Truck</option>
-                                            <option value="tempo">Tempo</option>
-                                            <option value="container">Container</option>
-                                            <option value="pickup">Pickup Van</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Vehicle No.</label>
-                                        <input type="text" id="vehicleNo" class="form-control" placeholder="MH-01-AB-1234">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Driver Name</label>
-                                        <input type="text" id="driverName" class="form-control" placeholder="Driver Name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Driver Contact</label>
-                                        <input type="tel" id="driverContact" class="form-control" placeholder="9876543210">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Estimated Delivery</label>
-                                        <input type="date" id="estimatedDelivery" class="form-control">
-                                    </div>
-                                    <div class="col-12">
-                                        <label class="form-label fw-bold">Delivery Address</label>
-                                        <textarea id="deliveryAddress" class="form-control" rows="2" placeholder="Delivery address if different from billing"></textarea>
-                                    </div>
-                                    <div class="col-12">
-                                        <label class="form-label fw-bold">Special Instructions</label>
-                                        <textarea id="deliveryInstructions" class="form-control" rows="2" placeholder="Handle with care, Fragile items, etc."></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="section-card">
-                                <h4 class="section-title">Tracking</h4>
-                                <div class="text-center">
-                                    <div class="mb-4">
-                                        <i class="fas fa-qrcode fa-4x text-primary mb-3"></i>
-                                        <p class="fw-bold">Tracking ID: <span id="trackingId" class="text-danger">TRK-2024001</span></p>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Current Status</label>
-                                        <select id="dispatchStatus" class="form-select">
-                                            <option value="pending">Pending</option>
-                                            <option value="packed">Packed</option>
-                                            <option value="dispatched">Dispatched</option>
-                                            <option value="in_transit">In Transit</option>
-                                            <option value="delivered">Delivered</option>
-                                        </select>
-                                    </div>
-                                    <button class="btn-glass w-100 mb-2" onclick="generateTracking()">
-                                        <i class="fas fa-barcode me-2"></i>Generate Tracking
-                                    </button>
-                                    <button class="btn btn-outline-primary w-100" onclick="trackShipment()">
-                                        <i class="fas fa-map-marked-alt me-2"></i>Track Shipment
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div>
+                <label>PI No</label>
+                <input value="PI-4570">
             </div>
-
-            <!-- Action Buttons -->
-            <div class="row mt-4">
-                <div class="col-md-12 text-center">
-                    <div class="d-flex flex-wrap justify-content-center gap-3">
-                        <button class="btn-glass" onclick="saveInvoice()">
-                            <i class="fas fa-save me-2"></i>Save Invoice
-                        </button>
-                        <button class="btn-glass btn-print" onclick="printInvoice()">
-                            <i class="fas fa-print me-2"></i>Print Invoice
-                        </button>
-                        <button class="btn-glass" onclick="generatePDF()">
-                            <i class="fas fa-file-pdf me-2"></i>Download PDF
-                        </button>
-                        <button class="btn-glass" onclick="sendEmail()">
-                            <i class="fas fa-envelope me-2"></i>Send Email
-                        </button>
-                        <button class="btn btn-outline-danger" onclick="resetForm()">
-                            <i class="fas fa-redo me-2"></i>Reset All
-                        </button>
-                    </div>
-                </div>
+            <div>
+                <label>UOM</label>
+                <select>
+                    <option>Sq.Mt</option>
+                    <option>Sq.Ft</option>
+                </select>
             </div>
+        </div>
+
+        <h4>Wastage Mode</h4>
+        <div class="wastage">
+            <label>
+                <input type="checkbox" id="mmCheck"> +MM
+                L1 <input class="small" id="l1" value="0">
+                L2 <input class="small" id="l2" value="0">
+            </label>
+            <label>
+                <input type="checkbox" id="evenIn"> Even IN
+            </label>
+            <label>
+                <input type="checkbox" id="evenCm"> Even CM
+            </label>
         </div>
     </div>
 
-    <!-- Include Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <script src="script.js"></script>
+    <!-- RIGHT -->
+    <div class="right-box box">
+        <h4>Bill To</h4>
+        <input placeholder="Name">
+        <input placeholder="Address">
+        <div class="flex">
+            <input placeholder="City">
+            <input placeholder="State">
+        </div>
+
+        <h4>Ship To</h4>
+        <input placeholder="Name">
+        <input placeholder="Address">
+        <div class="flex">
+            <input placeholder="City">
+            <input placeholder="State">
+        </div>
+    </div>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+    <th>Type</th>
+    <th>Item Desc</th>
+    <th colspan="2">Actual (IN)</th>
+    <th colspan="2">Chargeable (IN)</th>
+    <th>Qty</th>
+    <th>Sq.Mt</th>
+    <th>Rate</th>
+    <th>Amount</th>
+</tr>
+<tr>
+    <th></th>
+    <th></th>
+    <th class="bg-actual">W</th>
+    <th class="bg-actual">H</th>
+    <th class="bg-charge">W</th>
+    <th class="bg-charge">H</th>
+    <th></th>
+    <th></th>
+    <th class="bg-rate"></th>
+    <th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>T-DRW</td>
+    <td>10MM CLEAR TOUGHENED</td>
+    <td><input value="100" oninput="calcRow(this)"></td>
+    <td><input value="32" oninput="calcRow(this)"></td>
+    <td><input readonly></td>
+    <td><input readonly></td>
+    <td><input value="1" oninput="calcRow(this)"></td>
+    <td></td>
+    <td><input value="1270"></td>
+    <td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<script>
+function roundEven(val){
+    return Math.ceil(val / 2) * 2;
+}
+
+function calcRow(el){
+    let row = el.closest("tr");
+    let aw = parseFloat(row.cells[2].children[0].value)||0;
+    let ah = parseFloat(row.cells[3].children[0].value)||0;
+
+    let cw = aw;
+    let ch = ah;
+
+    if(document.getElementById("mmCheck").checked){
+        cw += parseFloat(l1.value)||0;
+        ch += parseFloat(l2.value)||0;
+    }
+
+    if(document.getElementById("evenIn").checked){
+        cw = roundEven(cw);
+        ch = roundEven(ch);
+    }
+
+    if(document.getElementById("evenCm").checked){
+        cw = roundEven(cw * 2.54) / 2.54;
+        ch = roundEven(ch * 2.54) / 2.54;
+    }
+
+    row.cells[4].children[0].value = cw.toFixed(2);
+    row.cells[5].children[0].value = ch.toFixed(2);
+
+    let qty = parseFloat(row.cells[6].children[0].value)||0;
+    let sqm = ((cw * ch) / 1550) * qty;
+    row.cells[7].innerText = sqm.toFixed(3);
+
+    let rate = parseFloat(row.cells[8].children[0].value)||0;
+    row.cells[9].innerText = (sqm * rate).toFixed(2);
+}
+
+document.getElementById("pidate").valueAsDate = new Date();
+</script>
+
 </body>
 </html>
