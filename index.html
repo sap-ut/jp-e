@@ -1,0 +1,2237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.P.U.T. Glass Works Enterprise - Complete ERP System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #17a2b8;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            font-size: 13px;
+        }
+        
+        /* HEADER */
+        .header-bar {
+            background: white;
+            padding: 8px 15px;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+        
+        /* DASHBOARD */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .module-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            border-color: var(--secondary);
+        }
+        
+        .module-card i {
+            font-size: 28px;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        /* PROFORMA TABLE - COMPLETE */
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background: white;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            min-width: 1800px;
+        }
+        
+        .data-table thead {
+            background: linear-gradient(135deg, var(--primary), #2c5282);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .data-table th {
+            padding: 10px 8px;
+            font-weight: 600;
+            text-align: center;
+            border-right: 1px solid rgba(255,255,255,0.1);
+            white-space: nowrap;
+            font-size: 11px;
+        }
+        
+        .data-table td {
+            padding: 6px 8px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+            vertical-align: middle;
+            height: 40px;
+        }
+        
+        .data-table input, 
+        .data-table select {
+            width: 100%;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 4px 6px;
+            font-size: 12px;
+            height: 28px;
+            background: white;
+        }
+        
+        /* SIZE INPUT GROUPS */
+        .size-input-group {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        
+        .size-input-group input {
+            text-align: center;
+            width: 70px;
+        }
+        
+        /* CHARGES PANEL */
+        .charges-panel {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .charges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .charge-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* TOTAL SECTION */
+        .total-section {
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        
+        .total-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--danger);
+        }
+        
+        /* ORDER MANAGEMENT */
+        .order-table-container {
+            overflow-x: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background: white;
+        }
+        
+        /* CUSTOMER MANAGEMENT */
+        .customer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .customer-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+        }
+        
+        /* ACCOUNTING */
+        .accounting-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        /* ITEM MASTER */
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .item-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+        }
+        
+        /* USER MANAGEMENT */
+        .user-table {
+            font-size: 12px;
+        }
+        
+        /* ADMIN PANEL */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        /* REPORTS */
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .report-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            cursor: pointer;
+        }
+        
+        /* SETTINGS */
+        .settings-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+        }
+        
+        /* GST INVOICE */
+        .gst-invoice-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+        }
+        
+        /* DISPATCH PLANNER */
+        .dispatch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .dispatch-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+        }
+        
+        /* PRINT STYLES */
+        @media print {
+            .no-print, .header-bar {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+            }
+            
+            .table-container {
+                border: none;
+            }
+            
+            .data-table th {
+                background: #ddd !important;
+                color: #000 !important;
+            }
+        }
+        
+        /* GLASS LINE INDICATORS */
+        .line-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            margin: 1px;
+        }
+        
+        .indicator-c { background: #e8eaf6; color: #3f51b5; }
+        .indicator-p { background: #f3e5f5; color: #8e24aa; }
+        .indicator-f { background: #e0f2f1; color: #00796b; }
+        .indicator-w { background: #fff3e0; color: #f57c00; }
+        .indicator-b { background: #e8f5e9; color: #388e3c; }
+        .indicator-t { background: #fff8e1; color: #ff8f00; }
+        .indicator-l { background: #fce4ec; color: #c2185b; }
+        .indicator-dg { background: #e1f5fe; color: #0277bd; }
+        .indicator-rd { background: #f1f8e9; color: #689f38; }
+        .indicator-d { background: #fffde7; color: #f9a825; }
+        
+        /* FLOATING ACTIONS */
+        .float-actions {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        .action-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* UTILITIES */
+        .w-100 { width: 100%; }
+        .mb-2 { margin-bottom: 10px; }
+        .mb-3 { margin-bottom: 15px; }
+        .cursor-pointer { cursor: pointer; }
+        .text-sm { font-size: 12px; }
+        .text-xs { font-size: 11px; }
+        .fw-600 { font-weight: 600; }
+    </style>
+</head>
+<body>
+    <!-- FLOATING ACTIONS -->
+    <div class="float-actions">
+        <button class="action-btn" style="background: linear-gradient(135deg, #4CAF50, #2E7D32);" 
+                onclick="showDashboard()" title="Dashboard (Ctrl+Home)">
+            <i class="fas fa-home"></i>
+        </button>
+        <button class="action-btn" style="background: linear-gradient(135deg, #2196F3, #0D47A1);" 
+                onclick="showProforma()" title="Proforma (Ctrl+P)">
+            <i class="fas fa-file-invoice-dollar"></i>
+        </button>
+        <button class="action-btn" style="background: linear-gradient(135deg, #FF9800, #E65100);" 
+                onclick="printCurrent()" title="Print (Ctrl+Shift+P)">
+            <i class="fas fa-print"></i>
+        </button>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header-bar">
+        <div class="header-title">
+            <i class="fas fa-industry me-2"></i>
+            S.A.P.U.T. Glass Works Enterprise - Complete ERP
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-primary" id="currentModule">Dashboard</span>
+            <button class="btn btn-sm btn-outline-danger" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboardSection" class="container">
+        <div class="dashboard-grid">
+            <!-- PROFORMA & QUOTATION -->
+            <div class="module-card" onclick="showProforma()">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <h6>Proforma Invoice</h6>
+                <p class="text-xs text-muted mt-1">Create PI with all features</p>
+            </div>
+            
+            <div class="module-card" onclick="showQuotation()">
+                <i class="fas fa-file-alt"></i>
+                <h6>Quotation</h6>
+                <p class="text-xs text-muted mt-1">Generate quotations</p>
+            </div>
+            
+            <!-- ORDER MANAGEMENT -->
+            <div class="module-card" onclick="showOrderManagement()">
+                <i class="fas fa-clipboard-list"></i>
+                <h6>Order Management</h6>
+                <p class="text-xs text-muted mt-1">Create & track orders</p>
+            </div>
+            
+            <!-- CUSTOMER MANAGEMENT -->
+            <div class="module-card" onclick="showCustomerManagement()">
+                <i class="fas fa-users"></i>
+                <h6>Customers</h6>
+                <p class="text-xs text-muted mt-1">Manage customers</p>
+            </div>
+            
+            <!-- ACCOUNTING -->
+            <div class="module-card" onclick="showAccounting()">
+                <i class="fas fa-calculator"></i>
+                <h6>Accounting</h6>
+                <p class="text-xs text-muted mt-1">Accounts & ledger</p>
+            </div>
+            
+            <!-- ITEM MASTER -->
+            <div class="module-card" onclick="showItemMaster()">
+                <i class="fas fa-box"></i>
+                <h6>Item Master</h6>
+                <p class="text-xs text-muted mt-1">Manage products</p>
+            </div>
+            
+            <!-- USER MANAGEMENT -->
+            <div class="module-card" onclick="showUserManagement()">
+                <i class="fas fa-user-cog"></i>
+                <h6>User Management</h6>
+                <p class="text-xs text-muted mt-1">Manage system users</p>
+            </div>
+            
+            <!-- ADMIN PANEL -->
+            <div class="module-card" onclick="showAdminPanel()">
+                <i class="fas fa-shield-alt"></i>
+                <h6>Admin Panel</h6>
+                <p class="text-xs text-muted mt-1">System administration</p>
+            </div>
+            
+            <!-- REPORTS -->
+            <div class="module-card" onclick="showReports()">
+                <i class="fas fa-chart-bar"></i>
+                <h6>Reports</h6>
+                <p class="text-xs text-muted mt-1">View all reports</p>
+            </div>
+            
+            <!-- SETTINGS -->
+            <div class="module-card" onclick="showSettings()">
+                <i class="fas fa-cog"></i>
+                <h6>Settings</h6>
+                <p class="text-xs text-muted mt-1">System settings</p>
+            </div>
+            
+            <!-- GST INVOICE -->
+            <div class="module-card" onclick="showGSTInvoice()">
+                <i class="fas fa-file-invoice"></i>
+                <h6>GST Invoice</h6>
+                <p class="text-xs text-muted mt-1">Create GST invoices</p>
+            </div>
+            
+            <!-- DISPATCH PLANNER -->
+            <div class="module-card" onclick="showDispatchPlanner()">
+                <i class="fas fa-truck-loading"></i>
+                <h6>Dispatch Planner</h6>
+                <p class="text-xs text-muted mt-1">Plan deliveries</p>
+            </div>
+            
+            <!-- ATTENDANCE -->
+            <div class="module-card" onclick="showAttendance()">
+                <i class="fas fa-calendar-check"></i>
+                <h6>Attendance</h6>
+                <p class="text-xs text-muted mt-1">Employee attendance</p>
+            </div>
+            
+            <!-- GLASS LINES -->
+            <div class="module-card" onclick="showGlassLines()">
+                <i class="fas fa-th-large"></i>
+                <h6>Glass Lines</h6>
+                <p class="text-xs text-muted mt-1">All glass types</p>
+            </div>
+            
+            <!-- OPTIMIZATION -->
+            <div class="module-card" onclick="showOptimization()">
+                <i class="fas fa-cube"></i>
+                <h6>Optimization</h6>
+                <p class="text-xs text-muted mt-1">Glass cutting optimization</p>
+            </div>
+            
+            <!-- CUSTOM CHARGES -->
+            <div class="module-card" onclick="showCustomCharges()">
+                <i class="fas fa-coins"></i>
+                <h6>Custom Charges</h6>
+                <p class="text-xs text-muted mt-1">Manage all charges</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFORMA SECTION -->
+    <div id="proformaSection" style="display: none;" class="container">
+        <div class="p-4 mb-4" style="background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4><i class="fas fa-file-invoice-dollar me-2"></i>Proforma Invoice</h4>
+                <div class="text-muted text-sm">
+                    <i class="fas fa-keyboard me-1"></i>
+                    Shortcuts: Ins=Add Row | F9=Calculate | Del=Delete Row
+                </div>
+            </div>
+            
+            <!-- CUSTOMER DETAILS -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Customer Name</label>
+                        <input type="text" class="form-control form-control-sm" id="customerName" placeholder="Enter customer name">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label class="form-label">PI Number</label>
+                        <input type="text" class="form-control form-control-sm" id="piNumber" value="PI-001">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-control form-control-sm" id="piDate" value="<?php echo date('Y-m-d'); ?>">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- GLASS TYPE SELECTOR -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-sm btn-outline-primary" onclick="setGlassType('C')">
+                            <span class="line-indicator indicator-c">C</span> Clear
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="setGlassType('P')">
+                            <span class="line-indicator indicator-p">P</span> Patterned
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="setGlassType('F')">
+                            <span class="line-indicator indicator-f">F</span> Frosted
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="setGlassType('T')">
+                            <span class="line-indicator indicator-t">T</span> Toughened
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="setGlassType('L')">
+                            <span class="line-indicator indicator-l">L</span> Laminated
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="setGlassType('DG')">
+                            <span class="line-indicator indicator-dg">DG</span> Double Glazed
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="setGlassType('W')">
+                            <span class="line-indicator indicator-w">W</span> Wired
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="setGlassType('B')">
+                            <span class="line-indicator indicator-b">B</span> Body Tinted
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="setGlassType('RD')">
+                            <span class="line-indicator indicator-rd">RD</span> Reflective
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="setGlassType('D')">
+                            <span class="line-indicator indicator-d">D</span> Designer
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PRODUCT TABLE -->
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th width="30">Sr</th>
+                            <th width="80">Type</th>
+                            <th width="150">Item Description</th>
+                            <th colspan="2">Actual Size (Inches)</th>
+                            <th colspan="2">Actual Size (MM)</th>
+                            <th colspan="2">Chargable Size (MM)</th>
+                            <th width="80">Qty</th>
+                            <th width="100">Hole Qty</th>
+                            <th width="100">Cut Qty</th>
+                            <th width="100">Area (Sq.Ft)</th>
+                            <th width="100">Rate (₹/Sq.Ft)</th>
+                            <th width="120">Amount (₹)</th>
+                            <th width="150">Remark</th>
+                            <th width="40" class="no-print">Del</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th width="100">Width</th>
+                            <th width="100">Height</th>
+                            <th width="100">Width</th>
+                            <th width="100">Height</th>
+                            <th width="100">Width</th>
+                            <th width="100">Height</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTable">
+                        <!-- 500 rows will be generated here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- TOTALS -->
+            <div class="total-section">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="total-row">
+                            <span>Basic Subtotal:</span>
+                            <span id="basicSubtotal">₹0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Hole Charges:</span>
+                            <span id="holeChargesAmount">₹0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Cutout Charges:</span>
+                            <span id="cutChargesAmount">₹0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Document Charges:</span>
+                            <span id="docChargesAmount">₹0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Freight Charges:</span>
+                            <span id="freightChargesAmount">₹0.00</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="total-row">
+                            <span>Total Before Tax:</span>
+                            <span id="totalBeforeTax">₹0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>CGST (9%):</span>
+                            <span id="cgstAmount">₹0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>SGST (9%):</span>
+                            <span id="sgstAmount">₹0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span style="font-weight: 600;">GRAND TOTAL:</span>
+                            <span id="grandTotal" style="font-size: 18px; color: #d32f2f;">₹0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ACTION BUTTONS -->
+            <div class="d-flex justify-content-between mt-4">
+                <div>
+                    <button class="btn btn-primary me-2" onclick="addNewRow()">
+                        <i class="fas fa-plus me-1"></i> Add Row (Ins)
+                    </button>
+                    <button class="btn btn-success me-2" onclick="calculateAll()">
+                        <i class="fas fa-calculator me-1"></i> Calculate (F9)
+                    </button>
+                    <button class="btn btn-warning me-2" onclick="printProforma()">
+                        <i class="fas fa-print me-1"></i> Print
+                    </button>
+                    <button class="btn btn-info me-2" onclick="saveProforma()">
+                        <i class="fas fa-save me-1"></i> Save
+                    </button>
+                    <button class="btn btn-danger" onclick="clearAll()">
+                        <i class="fas fa-trash me-1"></i> Clear
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-outline-secondary" onclick="showDashboard()">
+                        <i class="fas fa-times me-1"></i> Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER MANAGEMENT SECTION -->
+    <div id="orderManagementSection" style="display: none;" class="container">
+        <div class="p-4 mb-4" style="background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4><i class="fas fa-clipboard-list me-2"></i>Order Management</h4>
+                <div>
+                    <button class="btn btn-primary me-2" onclick="addNewOrder()">
+                        <i class="fas fa-plus me-1"></i> New Order
+                    </button>
+                    <button class="btn btn-success" onclick="printOrders()">
+                        <i class="fas fa-print me-1"></i> Print Orders
+                    </button>
+                </div>
+            </div>
+            
+            <!-- ORDER FILTERS -->
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <input type="date" class="form-control form-control-sm" id="orderDateFilter">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select form-select-sm" id="orderStatusFilter">
+                        <option value="">All Status</option>
+                        <option value="draft">Draft</option>
+                        <option value="approved">Approved</option>
+                        <option value="production">Production</option>
+                        <option value="dispatched">Dispatched</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control form-control-sm" placeholder="Search Order No.">
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-sm btn-primary w-100" onclick="filterOrders()">
+                        <i class="fas fa-search me-1"></i> Search
+                    </button>
+                </div>
+            </div>
+            
+            <!-- ORDERS TABLE -->
+            <div class="order-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th width="50">Sr</th>
+                            <th width="120">Order No.</th>
+                            <th width="100">Date</th>
+                            <th>Customer</th>
+                            <th width="150">Glass Types</th>
+                            <th width="80">Qty</th>
+                            <th width="120">Amount</th>
+                            <th width="100">Status</th>
+                            <th width="120">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTable">
+                        <!-- Orders will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- NEW ORDER FORM -->
+            <div id="newOrderForm" style="display: none;" class="mt-4 p-4 border rounded">
+                <h5><i class="fas fa-plus-circle me-2"></i>Create New Order</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Customer</label>
+                            <select class="form-select">
+                                <option value="">Select Customer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Expected Delivery</label>
+                            <input type="date" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <button class="btn btn-success" onclick="saveOrder()">
+                        <i class="fas fa-save me-1"></i> Save Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOMER MANAGEMENT SECTION -->
+    <div id="customerManagementSection" style="display: none;" class="container">
+        <div class="p-4 mb-4" style="background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4><i class="fas fa-users me-2"></i>Customer Management</h4>
+                <button class="btn btn-primary" onclick="addNewCustomer()">
+                    <i class="fas fa-plus me-1"></i> Add Customer
+                </button>
+            </div>
+            
+            <!-- CUSTOMERS GRID -->
+            <div class="customer-grid" id="customersGrid">
+                <!-- Customers will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCOUNTING SECTION -->
+    <div id="accountingSection" style="display: none;" class="container">
+        <div class="p-4 mb-4" style="background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+            <h4 class="mb-4"><i class="fas fa-calculator me-2"></i>Accounting</h4>
+            
+            <div class="accounting-grid">
+                <!-- DAY BOOK -->
+                <div>
+                    <h6>Day Book</h6>
+                    <div class="table-container" style="max-height: 400px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Particulars</th>
+                                    <th>Debit</th>
+                                    <th>Credit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dayBookTable">
+                                <!-- Day book entries -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- LEDGER -->
+                <div>
+                    <h6>Ledger</h6>
+                    <div class="mb-3">
+                        <select class="form-select form-select-sm" id="ledgerSelect">
+                            <option value="">Select Account</option>
+                        </select>
+                    </div>
+                    <div class="table-container" style="max-height: 350px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Particulars</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ledgerTable">
+                                <!-- Ledger entries -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ITEM MASTER SECTION -->
+    <div id="itemMasterSection" style="display: none;" class="container">
+        <div class="p-4 mb-4" style="background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4><i class="fas fa-box me-2"></i>Item Master</h4>
+                <button class="btn btn-primary" onclick="addNewItem()">
+                    <i class="fas fa-plus me-1"></i> Add Item
+                </button>
+            </div>
+            
+            <!-- ITEMS GRID -->
+            <div class="item-grid" id="itemsGrid">
+                <!-- Items will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- USER MANAGEMENT SECTION -->
+    <div id="userManagementSection" style="display: none;" class="container">
+        <div class="p-4 mb-4" style="background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4><i class="fas fa-user-cog me-2"></i>User Management</h4>
+                <button class="btn btn-primary" onclick="addNewUser()">
+                    <i class="fas fa-plus me-1"></i> Add User
+                </button>
+            </div>
+            
+            <!-- USERS TABLE -->
+            <div class="table-container">
+                <table class="user-table data-table">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <!-- Users will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL SECTION -->
+    <div id="adminPanelSection" style="display: none;" class="container">
+        <div class="p-4 mb-4" style="background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+            <h4 class="mb-4"><i class="fas fa-shield-alt me-2"></i>Admin Panel</h4>
+            
+            <div class="admin-grid">
+                <!-- DATABASE BACKUP -->
+                <div class="admin-card" style="background: white; border-radius: 8px; padding: 20px; border: 1px solid #dee2e6;">
+                    <h6><i class="fas fa-database me-2"></i>Database Backup</h6>
+                    <button class="btn btn-success w-100 mb-2" onclick="backupData()">
+                        <i class="fas fa-download me-2"></i> Backup Data
+                    </button>
+                    <button class="btn btn-warning w-100" onclick="restoreData()">
+                        <i class="fas fa-upload me-2"></i> Restore Data
+                    </button>
+                </div>
+                
+                <!-- SYSTEM LOGS -->
+                <div class="admin-card" style="background: white; border-radius: 8px; padding: 20px; border: 1px solid #dee2e6;">
+                    <h6><i class="fas fa-clipboard-list me-2"></i>System Logs</h6>
+                    <div style="max-height: 200px; overflow-y: auto;">
+                        <table class="table table-sm">
+                            <tbody id="systemLogs">
+                                <!-- Logs will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- SYSTEM SETTINGS -->
+                <div class="admin-card" style="background: white; border-radius: 8px; padding: 20px; border: 1px solid #dee2e6;">
+                    <h6><i class="fas fa-cogs me-2"></i>System Settings</h6>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="autoBackup">
+                        <label class="form-check-label">Auto Backup</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="emailNotifications">
+                        <label class="form-check-label">Email Notifications</label>
+                    </div>
+                    <button class="btn btn-primary w-100 mt-2" onclick="saveSettings()">
+                        <i class="fas fa-save me-2"></i> Save Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REPORTS SECTION -->
+    <div id="reportsSection" style="display: none;" class="container">
+        <div class="p-4 mb-4" style="background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+            <h4 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Reports</h4>
+            
+            <div class="reports-grid">
+                <!-- SALES REPORT -->
+                <div class="report-card" onclick="generateSalesReport()">
+                    <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                    <h6>Sales Report</h6>
+                    <p class="text-xs text-muted">Daily/Monthly sales</p>
+                </div>
+                
+                <!-- CUSTOMER REPORT -->
+                <div class="report-card" onclick="generateCustomerReport()">
+                    <i class="fas fa-users fa-3x text-success mb-3"></i>
+                    <h6>Customer Report</h6>
+                    <p class="text-xs text-muted">Customer-wise sales</p>
+                </div>
+                
+                <!-- INVENTORY REPORT -->
+                <div class="report-card" onclick="generateInventoryReport()">
+                    <i class="fas fa-boxes fa-3x text-warning mb-3"></i>
+                    <h6>Inventory Report</h6>
+                    <p class="text-xs text-muted">Stock status</p>
+                </div>
+                
+                <!-- PROFIT REPORT -->
+                <div class="report-card" onclick="generateProfitReport()">
+                    <i class="fas fa-money-bill-wave fa-3x text-danger mb-3"></i>
+                    <h6>Profit & Loss</h6>
+                    <p class="text-xs text-muted">Profit analysis</p>
+                </div>
+                
+                <!-- ORDER REPORT -->
+                <div class="report-card" onclick="generateOrderReport()">
+                    <i class="fas fa-clipboard-list fa-3x text-info mb-3"></i>
+                    <h6>Order Report</h6>
+                    <p class="text-xs text-muted">Order status report</p>
+                </div>
+                
+                <!-- GST REPORT -->
+                <div class="report-card" onclick="generateGSTReport()">
+                    <i class="fas fa-file-invoice fa-3x text-dark mb-3"></i>
+                    <h6>GST Report</h6>
+                    <p class="text-xs text-muted">GST filing reports</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SETTINGS SECTION -->
+    <div id="settingsSection" style="display: none;" class="container">
+        <div class="p-4 mb-4" style="background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+            <h4 class="mb-4"><i class="fas fa-cog me-2"></i>System Settings</h4>
+            
+            <div class="settings-panel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Company Name</label>
+                            <input type="text" class="form-control" value="S.A.P.U.T. Glass Works Enterprise">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">GST Number</label>
+                            <input type="text" class="form-control" value="27AABCU9603R1ZX">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Default Tax Rate (%)</label>
+                            <input type="number" class="form-control" value="18">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Currency</label>
+                            <select class="form-select">
+                                <option>Indian Rupee (₹)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-end">
+                    <button class="btn btn-primary" onclick="saveSystemSettings()">
+                        <i class="fas fa-save me-1"></i> Save Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GST INVOICE SECTION -->
+    <div id="gstInvoiceSection" style="display: none;" class="container">
+        <div class="p-4 mb-4" style="background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+            <h4 class="mb-4"><i class="fas fa-file-invoice me-2"></i>GST Invoice</h4>
+            
+            <div class="gst-invoice-container">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    GST Invoice Module - Generate 4 copies for GST filing
+                </div>
+                
+                <div class="text-center">
+                    <button class="btn btn-primary btn-lg" onclick="generateGSTInvoice()">
+                        <i class="fas fa-file-invoice-dollar me-2"></i>
+                        Generate GST Invoice
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DISPATCH PLANNER SECTION -->
+    <div id="dispatchPlannerSection" style="display: none;" class="container">
+        <div class="p-4 mb-4" style="background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+            <h4 class="mb-4"><i class="fas fa-truck-loading me-2"></i>Dispatch Planner</h4>
+            
+            <div class="dispatch-grid">
+                <!-- PENDING DISPATCH -->
+                <div class="dispatch-card">
+                    <h6><i class="fas fa-clock me-2"></i>Pending Dispatch</h6>
+                    <div style="max-height: 200px; overflow-y: auto;">
+                        <table class="table table-sm">
+                            <tbody id="pendingDispatch">
+                                <!-- Pending dispatches -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- TODAY'S DISPATCH -->
+                <div class="dispatch-card">
+                    <h6><i class="fas fa-calendar-day me-2"></i>Today's Dispatch</h6>
+                    <div style="max-height: 200px; overflow-y: auto;">
+                        <table class="table table-sm">
+                            <tbody id="todaysDispatch">
+                                <!-- Today's dispatch -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- VEHICLE SCHEDULE -->
+                <div class="dispatch-card">
+                    <h6><i class="fas fa-truck me-2"></i>Vehicle Schedule</h6>
+                    <div style="max-height: 200px; overflow-y: auto;">
+                        <table class="table table-sm">
+                            <tbody id="vehicleSchedule">
+                                <!-- Vehicle schedule -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add other sections similarly for Attendance, Glass Lines, Optimization, Custom Charges -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // GLASS TYPE DATA
+        const glassTypes = {
+            'C': { // Clear Glass
+                name: 'Clear Float Glass',
+                items: [
+                    { code: 'C-3MM', name: 'Clear Float 3mm', rate: 45 },
+                    { code: 'C-4MM', name: 'Clear Float 4mm', rate: 55 },
+                    { code: 'C-5MM', name: 'Clear Float 5mm', rate: 65 },
+                    { code: 'C-6MM', name: 'Clear Float 6mm', rate: 75 },
+                    { code: 'C-8MM', name: 'Clear Float 8mm', rate: 95 },
+                    { code: 'C-10MM', name: 'Clear Float 10mm', rate: 125 },
+                    { code: 'C-12MM', name: 'Clear Float 12mm', rate: 155 }
+                ]
+            },
+            'P': { // Patterned
+                name: 'Patterned Glass',
+                items: [
+                    { code: 'P-4MM', name: 'Patterned 4mm', rate: 85 },
+                    { code: 'P-5MM', name: 'Patterned 5mm', rate: 95 },
+                    { code: 'P-6MM', name: 'Patterned 6mm', rate: 105 }
+                ]
+            },
+            'F': { // Frosted
+                name: 'Frosted Glass',
+                items: [
+                    { code: 'F-4MM', name: 'Frosted 4mm', rate: 110 },
+                    { code: 'F-5MM', name: 'Frosted 5mm', rate: 120 },
+                    { code: 'F-6MM', name: 'Frosted 6mm', rate: 130 }
+                ]
+            },
+            'T': { // Toughened
+                name: 'Toughened Glass',
+                items: [
+                    { code: 'T-5MM', name: 'Toughened 5mm', rate: 155 },
+                    { code: 'T-6MM', name: 'Toughened 6mm', rate: 175 },
+                    { code: 'T-8MM', name: 'Toughened 8mm', rate: 205 },
+                    { code: 'T-10MM', name: 'Toughened 10mm', rate: 245 },
+                    { code: 'T-12MM', name: 'Toughened 12mm', rate: 295 }
+                ]
+            },
+            'L': { // Laminated
+                name: 'Laminated Glass',
+                items: [
+                    { code: 'L-6.38', name: 'Laminated 6.38mm', rate: 225 },
+                    { code: 'L-8.38', name: 'Laminated 8.38mm', rate: 265 },
+                    { code: 'L-10.38', name: 'Laminated 10.38mm', rate: 315 }
+                ]
+            },
+            'DG': { // Double Glazed
+                name: 'Double Glazed Unit',
+                items: [
+                    { code: 'DG-24MM', name: 'DGU 24mm', rate: 385 },
+                    { code: 'DG-28MM', name: 'DGU 28mm', rate: 425 }
+                ]
+            },
+            'W': { // Wired
+                name: 'Wired Glass',
+                items: [
+                    { code: 'W-6MM', name: 'Wired 6mm', rate: 140 },
+                    { code: 'W-8MM', name: 'Wired 8mm', rate: 160 }
+                ]
+            },
+            'B': { // Body Tinted
+                name: 'Body Tinted Glass',
+                items: [
+                    { code: 'B-5MM', name: 'Tinted 5mm Bronze', rate: 135 },
+                    { code: 'B-6MM', name: 'Tinted 6mm Green', rate: 145 },
+                    { code: 'B-8MM', name: 'Tinted 8mm Blue', rate: 165 },
+                    { code: 'B-10MM', name: 'Tinted 10mm Grey', rate: 185 }
+                ]
+            },
+            'RD': { // Reflective/Dyed
+                name: 'Reflective Glass',
+                items: [
+                    { code: 'RD-6MM', name: 'Reflective 6mm Blue', rate: 195 },
+                    { code: 'RD-8MM', name: 'Reflective 8mm Silver', rate: 225 },
+                    { code: 'RD-DYE', name: 'Dyed Glass 6mm', rate: 185 }
+                ]
+            },
+            'D': { // Designer
+                name: 'Designer Glass',
+                items: [
+                    { code: 'D-ETCH', name: 'Etched Designer', rate: 325 },
+                    { code: 'D-BACK', name: 'Backpainted Glass', rate: 285 },
+                    { code: 'D-PRINT', name: 'Digital Print Glass', rate: 450 }
+                ]
+            }
+        };
+
+        // GLOBAL VARIABLES
+        let currentRow = 1;
+        let currentGlassType = 'C';
+        let customers = [];
+        let orders = [];
+        let items = [];
+        let users = [];
+        
+        // INITIALIZE
+        document.addEventListener('DOMContentLoaded', function() {
+            showDashboard();
+            setupKeyboardShortcuts();
+            generate500Rows();
+            loadSampleData();
+        });
+        
+        // KEYBOARD SHORTCUTS SETUP (NO VISUAL PANEL)
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', function(e) {
+                // Prevent in input fields except specific shortcuts
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                    if (e.key === 'F1' || e.key === 'F9' || e.key === 'Insert' || 
+                        (e.ctrlKey && ['p','P','o','O','l','L','q','Q','c','C','a','A','g','G','i','I','d','D','r','R','s','S','home','Home'].includes(e.key.toLowerCase()))) {
+                        e.preventDefault();
+                    } else if (!(e.ctrlKey && ['1','2','3','4','5','6','7','8','9','0'].includes(e.key))) {
+                        return;
+                    }
+                }
+                
+                // Function Keys
+                if (e.key === 'F1') {
+                    e.preventDefault();
+                    showKeyboardShortcutsList();
+                }
+                if (e.key === 'F9') {
+                    e.preventDefault();
+                    calculateAll();
+                }
+                if (e.key === 'Insert' || e.key === 'Ins') {
+                    e.preventDefault();
+                    addNewRow();
+                }
+                
+                // Ctrl + Number (1-0) for Glass Types
+                if (e.ctrlKey && !e.altKey && !e.shiftKey) {
+                    const key = e.key;
+                    switch(key) {
+                        case '1': e.preventDefault(); setGlassType('C'); break;
+                        case '2': e.preventDefault(); setGlassType('P'); break;
+                        case '3': e.preventDefault(); setGlassType('F'); break;
+                        case '4': e.preventDefault(); setGlassType('T'); break;
+                        case '5': e.preventDefault(); setGlassType('L'); break;
+                        case '6': e.preventDefault(); setGlassType('DG'); break;
+                        case '7': e.preventDefault(); setGlassType('W'); break;
+                        case '8': e.preventDefault(); setGlassType('B'); break;
+                        case '9': e.preventDefault(); setGlassType('RD'); break;
+                        case '0': e.preventDefault(); setGlassType('D'); break;
+                    }
+                }
+                
+                // Ctrl + Letter for Navigation
+                if (e.ctrlKey) {
+                    const key = e.key.toLowerCase();
+                    switch(key) {
+                        case 'p': e.preventDefault(); showProforma(); break;
+                        case 'o': e.preventDefault(); showOrderManagement(); break;
+                        case 'c': e.preventDefault(); showCustomerManagement(); break;
+                        case 'a': e.preventDefault(); showAccounting(); break;
+                        case 'i': e.preventDefault(); showItemMaster(); break;
+                        case 'u': e.preventDefault(); showUserManagement(); break;
+                        case 'r': e.preventDefault(); showReports(); break;
+                        case 's': e.preventDefault(); showSettings(); break;
+                        case 'g': e.preventDefault(); showGSTInvoice(); break;
+                        case 'd': e.preventDefault(); showDispatchPlanner(); break;
+                        case 'l': e.preventDefault(); showGlassLines(); break;
+                        case 'q': e.preventDefault(); showQuotation(); break;
+                        case 'home': e.preventDefault(); showDashboard(); break;
+                    }
+                }
+                
+                // Delete Row
+                if (e.key === 'Delete' && document.activeElement.tagName !== 'INPUT') {
+                    e.preventDefault();
+                    deleteCurrentRow();
+                }
+                
+                // Print Current
+                if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'p') {
+                    e.preventDefault();
+                    printCurrent();
+                }
+            });
+        }
+        
+        // NAVIGATION FUNCTIONS
+        function showDashboard() {
+            hideAllSections();
+            document.getElementById('dashboardSection').style.display = 'block';
+            document.getElementById('currentModule').textContent = 'Dashboard';
+        }
+        
+        function showProforma() {
+            hideAllSections();
+            document.getElementById('proformaSection').style.display = 'block';
+            document.getElementById('currentModule').textContent = 'Proforma';
+        }
+        
+        function showOrderManagement() {
+            hideAllSections();
+            document.getElementById('orderManagementSection').style.display = 'block';
+            document.getElementById('currentModule').textContent = 'Order Management';
+            loadOrders();
+        }
+        
+        function showCustomerManagement() {
+            hideAllSections();
+            document.getElementById('customerManagementSection').style.display = 'block';
+            document.getElementById('currentModule').textContent = 'Customer Management';
+            loadCustomers();
+        }
+        
+        function showAccounting() {
+            hideAllSections();
+            document.getElementById('accountingSection').style.display = 'block';
+            document.getElementById('currentModule').textContent = 'Accounting';
+            loadAccountingData();
+        }
+        
+        function showItemMaster() {
+            hideAllSections();
+            document.getElementById('itemMasterSection').style.display = 'block';
+            document.getElementById('currentModule').textContent = 'Item Master';
+            loadItems();
+        }
+        
+        function showUserManagement() {
+            hideAllSections();
+            document.getElementById('userManagementSection').style.display = 'block';
+            document.getElementById('currentModule').textContent = 'User Management';
+            loadUsers();
+        }
+        
+        function showAdminPanel() {
+            hideAllSections();
+            document.getElementById('adminPanelSection').style.display = 'block';
+            document.getElementById('currentModule').textContent = 'Admin Panel';
+            loadSystemLogs();
+        }
+        
+        function showReports() {
+            hideAllSections();
+            document.getElementById('reportsSection').style.display = 'block';
+            document.getElementById('currentModule').textContent = 'Reports';
+        }
+        
+        function showSettings() {
+            hideAllSections();
+            document.getElementById('settingsSection').style.display = 'block';
+            document.getElementById('currentModule').textContent = 'Settings';
+        }
+        
+        function showGSTInvoice() {
+            hideAllSections();
+            document.getElementById('gstInvoiceSection').style.display = 'block';
+            document.getElementById('currentModule').textContent = 'GST Invoice';
+        }
+        
+        function showDispatchPlanner() {
+            hideAllSections();
+            document.getElementById('dispatchPlannerSection').style.display = 'block';
+            document.getElementById('currentModule').textContent = 'Dispatch Planner';
+            loadDispatchData();
+        }
+        
+        function showQuotation() {
+            alert('Quotation Module - Coming Soon!');
+        }
+        
+        function showAttendance() {
+            alert('Attendance Module - Coming Soon!');
+        }
+        
+        function showGlassLines() {
+            alert('Glass Lines Module - Coming Soon!');
+        }
+        
+        function showOptimization() {
+            alert('Optimization Module - Coming Soon!');
+        }
+        
+        function showCustomCharges() {
+            alert('Custom Charges Module - Coming Soon!');
+        }
+        
+        function hideAllSections() {
+            const sections = [
+                'dashboardSection',
+                'proformaSection',
+                'orderManagementSection',
+                'customerManagementSection',
+                'accountingSection',
+                'itemMasterSection',
+                'userManagementSection',
+                'adminPanelSection',
+                'reportsSection',
+                'settingsSection',
+                'gstInvoiceSection',
+                'dispatchPlannerSection'
+            ];
+            
+            sections.forEach(section => {
+                if (document.getElementById(section)) {
+                    document.getElementById(section).style.display = 'none';
+                }
+            });
+        }
+        
+        // LOAD SAMPLE DATA
+        function loadSampleData() {
+            // Sample customers
+            customers = [
+                { id: 1, name: 'Raj Glass House', city: 'Delhi', phone: '9876543210', gst: '07AABCU9603R1ZX' },
+                { id: 2, name: 'Shyam Glass Works', city: 'Noida', phone: '9876543211', gst: '06ABCDE1234F1Z5' },
+                { id: 3, name: 'Mohan Glass Traders', city: 'Ghaziabad', phone: '9876543212', gst: '09ABCDE1234F1Z6' }
+            ];
+            
+            // Sample orders
+            orders = [
+                { id: 1, orderNo: 'ORD-2024-001', date: '2024-01-15', customer: 'Raj Glass House', amount: 45000, status: 'approved' },
+                { id: 2, orderNo: 'ORD-2024-002', date: '2024-01-16', customer: 'Shyam Glass Works', amount: 28000, status: 'production' },
+                { id: 3, orderNo: 'ORD-2024-003', date: '2024-01-17', customer: 'Mohan Glass Traders', amount: 62000, status: 'dispatched' }
+            ];
+            
+            // Sample items
+            items = [
+                { id: 1, code: 'GLASS-001', name: 'Clear Float 6mm', type: 'Clear', rate: 75, stock: 1000 },
+                { id: 2, code: 'GLASS-002', name: 'Toughened 8mm', type: 'Toughened', rate: 205, stock: 500 },
+                { id: 3, code: 'GLASS-003', name: 'Laminated 6.38mm', type: 'Laminated', rate: 225, stock: 300 }
+            ];
+            
+            // Sample users
+            users = [
+                { id: 1, name: 'Admin User', username: 'admin', role: 'Admin', status: 'Active' },
+                { id: 2, name: 'Sales Manager', username: 'sales', role: 'Sales', status: 'Active' },
+                { id: 3, name: 'Accountant', username: 'account', role: 'Account', status: 'Active' }
+            ];
+        }
+        
+        // PROFORMA FUNCTIONS
+        function generate500Rows() {
+            const tableBody = document.getElementById('productTable');
+            tableBody.innerHTML = '';
+            
+            for (let i = 1; i <= 500; i++) {
+                const row = document.createElement('tr');
+                row.id = `row-${i}`;
+                
+                const indicatorClass = `indicator-${currentGlassType.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${i}</td>
+                    <td class="glass-type-cell">
+                        <span class="line-indicator ${indicatorClass}">${currentGlassType}</span>
+                    </td>
+                    <td>
+                        <select class="form-select form-select-sm item-select" 
+                                onchange="updateRate(this, ${i})"
+                                data-row="${i}">
+                            <option value="">Select Item</option>
+                            ${glassTypes[currentGlassType].items.map(item => 
+                                `<option value="${item.code}" data-rate="${item.rate}">${item.name}</option>`
+                            ).join('')}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm actual-width-inches" 
+                               placeholder="0" value="0" onchange="calculateRow(${i})">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm actual-height-inches" 
+                               placeholder="0" value="0" onchange="calculateRow(${i})">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm actual-width-mm" 
+                               placeholder="0" value="0" onchange="calculateMM(${i})">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm actual-height-mm" 
+                               placeholder="0" value="0" onchange="calculateMM(${i})">
+                    </td>
+                    <td class="chargable-width">0</td>
+                    <td class="chargable-height">0</td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm qty" 
+                               value="1" min="1" onchange="calculateRow(${i})">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm hole" 
+                               value="0" min="0" onchange="calculateRow(${i})">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm cut" 
+                               value="0" min="0" onchange="calculateRow(${i})">
+                    </td>
+                    <td class="area">0.00</td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm rate" 
+                               value="${glassTypes[currentGlassType].items[0].rate}" onchange="calculateRow(${i})">
+                    </td>
+                    <td class="amount">0.00</td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm" placeholder="Remark">
+                    </td>
+                    <td class="no-print">
+                        <button class="btn btn-xs btn-danger" onclick="deleteRow(${i})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            }
+        }
+        
+        function setGlassType(type) {
+            currentGlassType = type;
+            
+            // Update current row if focused
+            const activeRow = document.querySelector('tr input:focus')?.closest('tr');
+            if (activeRow) {
+                const typeCell = activeRow.querySelector('.glass-type-cell');
+                const itemCell = activeRow.querySelector('.item-select');
+                
+                if (typeCell && itemCell) {
+                    const indicatorClass = `indicator-${type.toLowerCase()}`;
+                    typeCell.innerHTML = `<span class="line-indicator ${indicatorClass}">${type}</span>`;
+                    
+                    // Update item dropdown
+                    itemCell.innerHTML = '<option value="">Select Item</option>' +
+                        glassTypes[type].items.map(item => 
+                            `<option value="${item.code}" data-rate="${item.rate}">${item.name}</option>`
+                        ).join('');
+                    
+                    // Update rate
+                    const rateInput = activeRow.querySelector('.rate');
+                    if (rateInput && glassTypes[type].items[0]) {
+                        rateInput.value = glassTypes[type].items[0].rate;
+                    }
+                    
+                    itemCell.focus();
+                }
+            }
+            
+            showNotification(`Glass type set to: ${glassTypes[type].name}`);
+        }
+        
+        function addNewRow() {
+            // Find first empty row and focus
+            for (let i = 1; i <= 500; i++) {
+                const row = document.getElementById(`row-${i}`);
+                const widthInput = row.querySelector('.actual-width-inches');
+                if (parseFloat(widthInput.value) === 0) {
+                    widthInput.focus();
+                    break;
+                }
+            }
+        }
+        
+        function calculateRow(rowId) {
+            const row = document.getElementById(`row-${rowId}`);
+            if (!row) return 0;
+            
+            const widthInches = parseFloat(row.querySelector('.actual-width-inches').value) || 0;
+            const heightInches = parseFloat(row.querySelector('.actual-height-inches').value) || 0;
+            
+            // Convert to mm
+            const widthMM = Math.round(widthInches * 25.4);
+            const heightMM = Math.round(heightInches * 25.4);
+            
+            row.querySelector('.actual-width-mm').value = widthMM;
+            row.querySelector('.actual-height-mm').value = heightMM;
+            
+            // Calculate chargable size
+            const chargableWidth = widthMM + 6;
+            const chargableHeight = heightMM + 6;
+            
+            // Calculate area and amount
+            const qty = parseFloat(row.querySelector('.qty').value) || 1;
+            const rate = parseFloat(row.querySelector('.rate').value) || 0;
+            const holeQty = parseFloat(row.querySelector('.hole').value) || 0;
+            const cutQty = parseFloat(row.querySelector('.cut').value) || 0;
+            
+            const area = (widthInches * heightInches) / 144;
+            const amount = area * rate * qty;
+            
+            // Update row
+            row.querySelector('.chargable-width').textContent = chargableWidth;
+            row.querySelector('.chargable-height').textContent = chargableHeight;
+            row.querySelector('.area').textContent = area.toFixed(2);
+            row.querySelector('.amount').textContent = amount.toFixed(2);
+            
+            // Store data
+            row.dataset.amount = amount;
+            row.dataset.holeQty = holeQty;
+            row.dataset.cutQty = cutQty;
+            
+            // Update summary
+            calculateSummary();
+            
+            return amount;
+        }
+        
+        function calculateMM(rowId) {
+            const row = document.getElementById(`row-${rowId}`);
+            if (!row) return 0;
+            
+            const widthMM = parseFloat(row.querySelector('.actual-width-mm').value) || 0;
+            const heightMM = parseFloat(row.querySelector('.actual-height-mm').value) || 0;
+            
+            const widthInches = (widthMM / 25.4).toFixed(2);
+            const heightInches = (heightMM / 25.4).toFixed(2);
+            
+            row.querySelector('.actual-width-inches').value = widthInches;
+            row.querySelector('.actual-height-inches').value = heightInches;
+            
+            calculateRow(rowId);
+        }
+        
+        function updateRate(select, rowId) {
+            const selectedOption = select.options[select.selectedIndex];
+            const rate = selectedOption.dataset.rate || 0;
+            
+            const row = document.getElementById(`row-${rowId}`);
+            if (row) {
+                row.querySelector('.rate').value = rate;
+                calculateRow(rowId);
+            }
+        }
+        
+        function calculateAll() {
+            let total = 0;
+            
+            for (let i = 1; i <= 500; i++) {
+                total += calculateRow(i) || 0;
+            }
+            
+            calculateSummary();
+            showNotification('All calculations completed!');
+        }
+        
+        function calculateSummary() {
+            let basicTotal = 0;
+            let holeCharges = 0;
+            let cutCharges = 0;
+            
+            for (let i = 1; i <= 500; i++) {
+                const row = document.getElementById(`row-${i}`);
+                if (row && row.dataset.amount) {
+                    basicTotal += parseFloat(row.dataset.amount) || 0;
+                    holeCharges += (parseFloat(row.dataset.holeQty) || 0) * 50;
+                    cutCharges += (parseFloat(row.dataset.cutQty) || 0) * 100;
+                }
+            }
+            
+            const docCharges = 500;
+            const freightCharges = 1000;
+            const totalBeforeTax = basicTotal + holeCharges + cutCharges + docCharges + freightCharges;
+            const cgst = totalBeforeTax * 0.09;
+            const sgst = totalBeforeTax * 0.09;
+            const grandTotal = totalBeforeTax + cgst + sgst;
+            
+            document.getElementById('basicSubtotal').textContent = '₹' + basicTotal.toFixed(2);
+            document.getElementById('holeChargesAmount').textContent = '₹' + holeCharges.toFixed(2);
+            document.getElementById('cutChargesAmount').textContent = '₹' + cutCharges.toFixed(2);
+            document.getElementById('docChargesAmount').textContent = '₹' + docCharges.toFixed(2);
+            document.getElementById('freightChargesAmount').textContent = '₹' + freightCharges.toFixed(2);
+            document.getElementById('totalBeforeTax').textContent = '₹' + totalBeforeTax.toFixed(2);
+            document.getElementById('cgstAmount').textContent = '₹' + cgst.toFixed(2);
+            document.getElementById('sgstAmount').textContent = '₹' + sgst.toFixed(2);
+            document.getElementById('grandTotal').textContent = '₹' + grandTotal.toFixed(2);
+        }
+        
+        function deleteRow(rowId) {
+            const row = document.getElementById(`row-${rowId}`);
+            if (row && confirm('Delete this row?')) {
+                row.querySelectorAll('input').forEach(input => {
+                    if (!input.classList.contains('rate')) {
+                        input.value = '';
+                    }
+                });
+                row.querySelector('.item-select').value = '';
+                row.querySelector('.chargable-width').textContent = '0';
+                row.querySelector('.chargable-height').textContent = '0';
+                row.querySelector('.area').textContent = '0.00';
+                row.querySelector('.amount').textContent = '0.00';
+                
+                delete row.dataset.amount;
+                delete row.dataset.holeQty;
+                delete row.dataset.cutQty;
+                
+                calculateSummary();
+            }
+        }
+        
+        function deleteCurrentRow() {
+            const activeRow = document.activeElement.closest('tr');
+            if (activeRow && activeRow.id.startsWith('row-')) {
+                const rowId = parseInt(activeRow.id.replace('row-', ''));
+                deleteRow(rowId);
+            }
+        }
+        
+        function clearAll() {
+            if (confirm('Clear all data?')) {
+                for (let i = 1; i <= 500; i++) {
+                    const row = document.getElementById(`row-${i}`);
+                    if (row) {
+                        row.querySelectorAll('input').forEach(input => {
+                            if (!input.classList.contains('rate')) {
+                                input.value = '';
+                            }
+                        });
+                        row.querySelector('.item-select').value = '';
+                        row.querySelector('.chargable-width').textContent = '0';
+                        row.querySelector('.chargable-height').textContent = '0';
+                        row.querySelector('.area').textContent = '0.00';
+                        row.querySelector('.amount').textContent = '0.00';
+                        
+                        delete row.dataset.amount;
+                        delete row.dataset.holeQty;
+                        delete row.dataset.cutQty;
+                    }
+                }
+                
+                calculateSummary();
+                showNotification('All data cleared!');
+            }
+        }
+        
+        function printProforma() {
+            calculateAll();
+            window.print();
+        }
+        
+        function saveProforma() {
+            alert('Proforma saved successfully!');
+        }
+        
+        // ORDER MANAGEMENT FUNCTIONS
+        function loadOrders() {
+            const table = document.getElementById('ordersTable');
+            table.innerHTML = '';
+            
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                const statusClass = {
+                    'draft': 'secondary',
+                    'approved': 'success',
+                    'production': 'warning',
+                    'dispatched': 'info',
+                    'completed': 'primary'
+                }[order.status] || 'secondary';
+                
+                row.innerHTML = `
+                    <td>${order.id}</td>
+                    <td><strong>${order.orderNo}</strong></td>
+                    <td>${order.date}</td>
+                    <td>${order.customer}</td>
+                    <td><span class="line-indicator indicator-c">C</span> <span class="line-indicator indicator-t">T</span></td>
+                    <td>${Math.round(order.amount / 150)}</td>
+                    <td>₹${order.amount.toLocaleString()}</td>
+                    <td><span class="badge bg-${statusClass}">${order.status}</span></td>
+                    <td>
+                        <button class="btn btn-xs btn-primary me-1" onclick="viewOrder(${order.id})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-xs btn-success me-1" onclick="editOrder(${order.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-xs btn-danger" onclick="deleteOrder(${order.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+        
+        function addNewOrder() {
+            const form = document.getElementById('newOrderForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function saveOrder() {
+            alert('Order saved successfully!');
+            document.getElementById('newOrderForm').style.display = 'none';
+        }
+        
+        function printOrders() {
+            window.open('', '_blank').document.write('<h3>Order Report</h3><p>Print functionality</p>').close();
+        }
+        
+        // CUSTOMER MANAGEMENT FUNCTIONS
+        function loadCustomers() {
+            const grid = document.getElementById('customersGrid');
+            grid.innerHTML = '';
+            
+            customers.forEach(customer => {
+                const card = document.createElement('div');
+                card.className = 'customer-card';
+                card.innerHTML = `
+                    <h6>${customer.name}</h6>
+                    <div class="text-sm text-muted mb-2">${customer.city}</div>
+                    <div class="text-sm mb-2">Phone: ${customer.phone}</div>
+                    <div class="text-sm mb-3">GST: ${customer.gst}</div>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-xs btn-primary" onclick="editCustomer(${customer.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-xs btn-danger" onclick="deleteCustomer(${customer.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        function addNewCustomer() {
+            const name = prompt('Enter customer name:');
+            if (name) {
+                const newCustomer = {
+                    id: customers.length + 1,
+                    name: name,
+                    city: prompt('Enter city:') || '',
+                    phone: prompt('Enter phone:') || '',
+                    gst: prompt('Enter GST:') || ''
+                };
+                customers.push(newCustomer);
+                loadCustomers();
+                showNotification('Customer added successfully!');
+            }
+        }
+        
+        // ACCOUNTING FUNCTIONS
+        function loadAccountingData() {
+            // Day Book
+            const dayBookTable = document.getElementById('dayBookTable');
+            dayBookTable.innerHTML = `
+                <tr>
+                    <td>2024-01-15</td>
+                    <td>Raj Glass House - PI Payment</td>
+                    <td>₹45,000</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>2024-01-16</td>
+                    <td>Shyam Glass Works - Advance</td>
+                    <td>₹28,000</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>2024-01-17</td>
+                    <td>Material Purchase</td>
+                    <td></td>
+                    <td>₹35,000</td>
+                </tr>
+            `;
+            
+            // Ledger
+            const ledgerSelect = document.getElementById('ledgerSelect');
+            ledgerSelect.innerHTML = `
+                <option value="">Select Account</option>
+                <option value="cash">Cash Account</option>
+                <option value="bank">Bank Account</option>
+                <option value="customer">Customer Accounts</option>
+            `;
+        }
+        
+        // ITEM MASTER FUNCTIONS
+        function loadItems() {
+            const grid = document.getElementById('itemsGrid');
+            grid.innerHTML = '';
+            
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <h6>${item.name}</h6>
+                    <div class="text-sm text-muted mb-2">Code: ${item.code}</div>
+                    <div class="text-sm mb-2">Type: ${item.type}</div>
+                    <div class="text-sm mb-2">Rate: ₹${item.rate}/sq.ft</div>
+                    <div class="text-sm mb-3">Stock: ${item.stock} sq.ft</div>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-xs btn-primary" onclick="editItem(${item.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-xs btn-danger" onclick="deleteItem(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        function addNewItem() {
+            const name = prompt('Enter item name:');
+            if (name) {
+                const newItem = {
+                    id: items.length + 1,
+                    code: `ITEM-${items.length + 1}`,
+                    name: name,
+                    type: prompt('Enter type:') || 'Glass',
+                    rate: parseFloat(prompt('Enter rate:') || 0),
+                    stock: parseFloat(prompt('Enter stock:') || 0)
+                };
+                items.push(newItem);
+                loadItems();
+                showNotification('Item added successfully!');
+            }
+        }
+        
+        // USER MANAGEMENT FUNCTIONS
+        function loadUsers() {
+            const table = document.getElementById('usersTable');
+            table.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>U${user.id.toString().padStart(3, '0')}</td>
+                    <td>${user.name}</td>
+                    <td>${user.username}</td>
+                    <td><span class="badge ${user.role === 'Admin' ? 'bg-danger' : 'bg-primary'}">${user.role}</span></td>
+                    <td><span class="badge bg-success">${user.status}</span></td>
+                    <td>
+                        <button class="btn btn-xs btn-warning me-1" onclick="editUser(${user.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-xs btn-danger" onclick="deleteUser(${user.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+        
+        function addNewUser() {
+            const name = prompt('Enter user name:');
+            if (name) {
+                const newUser = {
+                    id: users.length + 1,
+                    name: name,
+                    username: prompt('Enter username:') || '',
+                    role: prompt('Enter role (Admin/Sales/Account):') || 'User',
+                    status: 'Active'
+                };
+                users.push(newUser);
+                loadUsers();
+                showNotification('User added successfully!');
+            }
+        }
+        
+        // ADMIN PANEL FUNCTIONS
+        function loadSystemLogs() {
+            const logs = document.getElementById('systemLogs');
+            logs.innerHTML = `
+                <tr><td>10:30 AM</td><td>Admin</td><td>Logged in</td></tr>
+                <tr><td>11:15 AM</td><td>Admin</td><td>Created Proforma PI-001</td></tr>
+                <tr><td>02:45 PM</td><td>Sales</td><td>Added new customer</td></tr>
+                <tr><td>04:20 PM</td><td>Admin</td><td>Backup completed</td></tr>
+            `;
+        }
+        
+        function backupData() {
+            showNotification('Database backup completed!');
+        }
+        
+        function restoreData() {
+            showNotification('Database restore initiated!');
+        }
+        
+        function saveSettings() {
+            showNotification('Settings saved successfully!');
+        }
+        
+        // DISPATCH PLANNER FUNCTIONS
+        function loadDispatchData() {
+            // Pending dispatch
+            const pending = document.getElementById('pendingDispatch');
+            pending.innerHTML = `
+                <tr><td>ORD-2024-001</td><td>Raj Glass House</td><td><span class="badge bg-warning">Pending</span></td></tr>
+                <tr><td>ORD-2024-002</td><td>Shyam Glass Works</td><td><span class="badge bg-warning">Pending</span></td></tr>
+            `;
+            
+            // Today's dispatch
+            const today = document.getElementById('todaysDispatch');
+            today.innerHTML = `
+                <tr><td>ORD-2024-003</td><td>Mohan Glass Traders</td><td><span class="badge bg-success">Scheduled</span></td></tr>
+            `;
+            
+            // Vehicle schedule
+            const vehicles = document.getElementById('vehicleSchedule');
+            vehicles.innerHTML = `
+                <tr><td>DL01AB1234</td><td>Driver: Ramesh</td><td>Route: Delhi-Noida</td></tr>
+                <tr><td>DL01CD5678</td><td>Driver: Suresh</td><td>Route: Delhi-Ghaziabad</td></tr>
+            `;
+        }
+        
+        // GST INVOICE FUNCTIONS
+        function generateGSTInvoice() {
+            showNotification('GST Invoice generated! 4 copies printed.');
+        }
+        
+        // REPORTS FUNCTIONS
+        function generateSalesReport() {
+            showNotification('Sales report generated!');
+        }
+        
+        function generateCustomerReport() {
+            showNotification('Customer report generated!');
+        }
+        
+        function generateInventoryReport() {
+            showNotification('Inventory report generated!');
+        }
+        
+        function generateProfitReport() {
+            showNotification('Profit & Loss report generated!');
+        }
+        
+        function generateOrderReport() {
+            showNotification('Order report generated!');
+        }
+        
+        function generateGSTReport() {
+            showNotification('GST report generated!');
+        }
+        
+        // SYSTEM SETTINGS
+        function saveSystemSettings() {
+            showNotification('System settings saved!');
+        }
+        
+        // UTILITY FUNCTIONS
+        function showNotification(message) {
+            alert(message);
+        }
+        
+        function printCurrent() {
+            window.print();
+        }
+        
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.reload();
+            }
+        }
+        
+        // EDIT FUNCTIONS (Placeholders)
+        function viewOrder(id) {
+            alert(`View order ${id}`);
+        }
+        
+        function editOrder(id) {
+            alert(`Edit order ${id}`);
+        }
+        
+        function deleteOrder(id) {
+            if (confirm('Delete this order?')) {
+                orders = orders.filter(order => order.id !== id);
+                loadOrders();
+                showNotification('Order deleted!');
+            }
+        }
+        
+        function editCustomer(id) {
+            alert(`Edit customer ${id}`);
+        }
+        
+        function deleteCustomer(id) {
+            if (confirm('Delete this customer?')) {
+                customers = customers.filter(customer => customer.id !== id);
+                loadCustomers();
+                showNotification('Customer deleted!');
+            }
+        }
+        
+        function editItem(id) {
+            alert(`Edit item ${id}`);
+        }
+        
+        function deleteItem(id) {
+            if (confirm('Delete this item?')) {
+                items = items.filter(item => item.id !== id);
+                loadItems();
+                showNotification('Item deleted!');
+            }
+        }
+        
+        function editUser(id) {
+            alert(`Edit user ${id}`);
+        }
+        
+        function deleteUser(id) {
+            if (confirm('Delete this user?')) {
+                users = users.filter(user => user.id !== id);
+                loadUsers();
+                showNotification('User deleted!');
+            }
+        }
+        
+        // KEYBOARD SHORTCUTS LIST (Will be sent separately)
+        function showKeyboardShortcutsList() {
+            const shortcuts = `
+╔══════════════════════════════════════════════════════════════╗
+║              S.A.P.U.T. GLASS WORKS - SHORTCUTS             ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  🏠 NAVIGATION:                                             ║
+║  Ctrl + Home        → Dashboard                             ║
+║  Ctrl + P           → Proforma Invoice                      ║
+║  Ctrl + O           → Order Management                      ║
+║  Ctrl + C           → Customer Management                   ║
+║  Ctrl + A           → Accounting                            ║
+║  Ctrl + I           → Item Master                           ║
+║  Ctrl + U           → User Management                       ║
+║  Ctrl + R           → Reports                               ║
+║  Ctrl + S           → Settings                              ║
+║  Ctrl + G           → GST Invoice                           ║
+║  Ctrl + D           → Dispatch Planner                      ║
+║  Ctrl + Q           → Quotation                             ║
+║                                                              ║
+║  🪟 PROFORMA OPERATIONS:                                   ║
+║  Insert / Ins       → Add New Row                           ║
+║  F9                 → Calculate All                         ║
+║  Delete             → Delete Current Row                    ║
+║  Ctrl + Shift + P   → Print Current                         ║
+║                                                              ║
+║  🔵 GLASS TYPE SHORTCUTS:                                  ║
+║  Ctrl + 1           → Clear Glass                           ║
+║  Ctrl + 2           → Patterned Glass                       ║
+║  Ctrl + 3           → Frosted Glass                         ║
+║  Ctrl + 4           → Toughened Glass                       ║
+║  Ctrl + 5           → Laminated Glass                       ║
+║  Ctrl + 6           → Double Glazed                         ║
+║  Ctrl + 7           → Wired Glass                           ║
+║  Ctrl + 8           → Body Tinted                           ║
+║  Ctrl + 9           → Reflective Glass                      ║
+║  Ctrl + 0           → Designer Glass                        ║
+║                                                              ║
+║  📋 GENERAL:                                               ║
+║  F1                 → Show this shortcuts list              ║
+║  Esc                → Close current dialog                  ║
+║  Tab                → Next field                            ║
+║  Shift + Tab        → Previous field                        ║
+║                                                              ║
+║  ⚡ FAST WORKFLOW FOR LAMINATED GLASS:                     ║
+║  1. Ctrl + 5 (Laminated Glass)                             ║
+║  2. Insert (Add Row)                                       ║
+║  3. Enter size in Inches or MM                             ║
+║  4. Select item from dropdown                              ║
+║  5. F9 (Calculate)                                         ║
+║  6. Ctrl + P (Print)                                       ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝`;
+            
+            // Open in new window for easy reference
+            const win = window.open('', '_blank');
+            win.document.write(`
+                <html>
+                <head>
+                    <title>Keyboard Shortcuts - S.A.P.U.T. Glass Works</title>
+                    <style>
+                        body { 
+                            font-family: 'Courier New', monospace; 
+                            background: #f5f5f5; 
+                            padding: 20px;
+                            font-size: 14px;
+                            line-height: 1.4;
+                        }
+                        pre { 
+                            background: white; 
+                            padding: 20px; 
+                            border-radius: 5px; 
+                            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                            white-space: pre-wrap;
+                            word-wrap: break-word;
+                        }
+                        .print-btn { 
+                            background: #4CAF50; 
+                            color: white; 
+                            border: none; 
+                            padding: 10px 20px; 
+                            border-radius: 4px; 
+                            cursor: pointer;
+                            margin-top: 20px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h2>📋 Keyboard Shortcuts Reference</h2>
+                    <pre>${shortcuts}</pre>
+                    <button class="print-btn" onclick="window.print()">🖨️ Print this List</button>
+                    <script>
+                        // Save to localStorage for future reference
+                        localStorage.setItem('saput_shortcuts', \`${shortcuts}\`);
+                    <\/script>
+                </body>
+                </html>
+            `);
+            win.document.close();
+        }
+    </script>
+</body>
+</html>
