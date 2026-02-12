@@ -3,48 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>SP-7 · Glass Line ERP (Tally Style)</title>
+    <title>SP-7 · Glass Line ERP (sqmt · Fabrication · Tally Style)</title>
     <!-- Bootstrap 5 + Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Google Font (Tally like) -->
+    <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: #e6e9ef; overflow-x: hidden; }
         .sp-wrapper { display: flex; flex-direction: row; min-height: 100vh; }
-        /* sidebar – tally inspired */
-        .sp-sidebar { width: 260px; background: #1e2b3c; color: #d4dce6; transition: 0.2s; }
-        .sp-sidebar .brand { background: #0f1a26; padding: 20px 16px; font-size: 1.7rem; font-weight: 700; letter-spacing: 2px; border-bottom: 1px solid #2a3a4e; color: #fff; }
-        .sp-sidebar .brand small { display: block; font-size: 0.7rem; color: #b0c7db; font-weight: 400; }
+        .sp-sidebar { width: 280px; background: #1e2b3c; color: #d4dce6; transition: 0.2s; }
+        .sp-sidebar .brand { background: #0f1a26; padding: 22px 18px; font-size: 1.8rem; font-weight: 700; border-bottom: 1px solid #2a3a4e; color: white; }
+        .sp-sidebar .brand small { display: block; font-size: 0.7rem; color: #b0c7db; }
         .sp-nav { list-style: none; padding: 16px 0; }
-        .sp-nav li { padding: 12px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.1s; border-left: 5px solid transparent; }
-        .sp-nav li i { width: 24px; text-align: center; font-size: 1.3rem; }
+        .sp-nav li { padding: 14px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; border-left: 5px solid transparent; }
+        .sp-nav li i { width: 26px; text-align: center; font-size: 1.3rem; }
         .sp-nav li:hover { background: #263b50; border-left: 5px solid #ffb347; color: white; }
-        .sp-nav .active { background: #2a4055; border-left: 5px solid #ffaa33; color: white; font-weight: 500; }
-        /* main content */
+        .sp-nav .active { background: #2a4055; border-left: 5px solid #ffaa33; color: white; font-weight: 600; }
         .sp-main { flex: 1; background: #f2f5f9; padding: 24px; overflow-y: auto; }
         .top-bar { background: white; padding: 16px 28px; border-radius: 18px; box-shadow: 0 6px 12px rgba(0,0,0,0.02); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-        .page-title { font-weight: 600; color: #1e2b3c; font-size: 1.7rem; margin-bottom: 8px; border-left: 7px solid #ffaa33; padding-left: 18px; }
+        .page-title { font-weight: 700; color: #1e2b3c; font-size: 1.8rem; margin-bottom: 20px; border-left: 7px solid #ffaa33; padding-left: 18px; }
         .card-dash { background: white; border-radius: 24px; padding: 28px; box-shadow: 0 12px 28px rgba(0,0,0,0.02); border: none; margin-bottom: 30px; }
         .tally-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
         .stat-card { background: white; border-radius: 20px; padding: 22px; border: 1px solid #eef2f6; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-        .table th { background: #f0f4fa; color: #1e2b3c; font-weight: 600; }
-        .btn-sp { background: #ffaa33; border: none; color: #0b1a26; font-weight: 600; padding: 10px 24px; border-radius: 40px; }
-        .btn-sp:hover { background: #f5a22a; color: black; }
-        .footer-bar { margin-top: 50px; text-align: center; color: #6c7a8a; font-size: 0.9rem; }
-        @media (max-width: 768px) { .sp-sidebar { position: fixed; left: -260px; z-index: 1050; height: 100%; transition: 0.2s; } .sp-sidebar.show { left: 0; } .sp-main { width: 100%; } .mobile-menu-btn { display: block; } }
-        .mobile-menu-btn { display: none; font-size: 1.8rem; margin-right: 12px; }
-        .department-badge { background: #edf2f9; padding: 6px 16px; border-radius: 50px; font-size: 0.9rem; }
+        .btn-sp { background: #ffaa33; border: none; color: #0b1a26; font-weight: 600; padding: 10px 26px; border-radius: 40px; }
+        .btn-sp:hover { background: #f5a22a; }
+        .department-badge { background: #edf2f9; padding: 6px 18px; border-radius: 50px; font-size: 0.9rem; }
+        .item-detail-row { background: #fafcff; padding: 12px; border-radius: 14px; margin-bottom: 8px; border-left: 4px solid #ffaa33; }
+        .fab-badge { background: #e7f0ff; padding: 4px 12px; border-radius: 30px; font-size: 0.8rem; color: #0369a1; }
+        @media (max-width: 768px) { .sp-sidebar { position: fixed; left: -280px; z-index: 1050; height: 100%; } .sp-sidebar.show { left: 0; } .mobile-menu-btn { display: block; } }
+        .mobile-menu-btn { display: none; font-size: 1.8rem; }
     </style>
 </head>
 <body>
 <div class="sp-wrapper">
-    <!-- SIDEBAR : SP-7 TALLY STYLE NAVIGATION -->
+    <!-- SIDEBAR -->
     <div class="sp-sidebar" id="sidebar">
         <div class="brand">
-            SP-7 <span style="font-size: 0.9rem; color: #b0c7db;">⚡ Glass</span>
-            <small>GST • INVENTORY • PROFORMA</small>
+            SP-7 <span style="font-size: 0.9rem; color: #b0c7db;">⚡ GLASS</span>
+            <small>Sqmt · Fab · GST · Tally</small>
         </div>
         <ul class="sp-nav">
             <li onclick="showPage('dashboard')" id="nav-dashboard" class="active"><i class="bi bi-speedometer2"></i> Dashboard</li>
@@ -59,86 +57,78 @@
         </ul>
     </div>
 
-    <!-- MAIN PANEL -->
+    <!-- MAIN CONTENT -->
     <div class="sp-main">
         <div class="top-bar d-flex align-items-center">
             <i class="bi bi-list mobile-menu-btn" onclick="toggleSidebar()"></i>
-            <h4 id="topBarTitle" style="margin:0; font-weight: 600;">📋 Dashboard</h4>
-            <div><span class="badge bg-dark px-4 py-2">GST READY  |  LIVE DESPATCH</span></div>
+            <h4 id="topBarTitle" style="margin:0; font-weight: 700;">📋 Dashboard</h4>
+            <div><span class="badge bg-dark px-4 py-2">✅ SQMT · FABRICATION · HSN · GST</span></div>
         </div>
-
-        <!-- ========== DYNAMIC PAGES LOAD HERE ========== -->
         <div id="pageContent"></div>
-
-        <div class="footer-bar">
-            ⚡ SP-7 · Glass Line ERP · Tally style · Fully working · Auto backup
-        </div>
+        <div class="footer-bar text-center mt-5 py-3 text-muted">⚡ SP-7 Glass Line · Real ERP · Fully Working</div>
     </div>
 </div>
 
 <script>
-    // -------------------------------------------------------------
-    //  GLOBAL DATA – stored in localStorage (real persistence)
-    // -------------------------------------------------------------
+    // ------------------------------------------------------------
+    //  GLOBAL APP DATA (Glass Line Specific)
+    // ------------------------------------------------------------
     let appData = {
         customers: [],
-        glassTypes: [],
-        priceList: [],      // customerId, glassTypeId, rate/sqft
+        glassTypes: [],      // with colour, brand, thickness, HSN
+        priceList: [],       // customer-wise special rate per sqmt
+        fabricationCharges: [], // drilling, polishing, edging, etc
         proformas: [],
         workOrders: [],
         despatches: [],
         invoices: [],
-        transactions: []    // ledger entries
+        transactions: []
     };
 
-    // Load / init localStorage
+    // ----- LOAD / SAVE LOCALSTORAGE -----
     function loadData() {
-        let stored = localStorage.getItem('sp7_glass_data');
-        if (stored) {
-            try { appData = JSON.parse(stored); } catch(e){}
-        }
-        // default masters if empty
+        let stored = localStorage.getItem('sp7_glass_fab_data');
+        if (stored) { try { appData = JSON.parse(stored); } catch(e){} }
+
+        // ----- DEFAULT MASTERS (Glass with details) -----
         if (appData.glassTypes.length === 0) {
             appData.glassTypes = [
-                { id: 1, name: 'Clear Float 4mm', thickness: 4, rate: 45 },
-                { id: 2, name: 'Tinted 5mm', thickness: 5, rate: 62 },
-                { id: 3, name: 'Toughened 6mm', thickness: 6, rate: 88 },
-                { id: 4, name: 'Laminated 8mm', thickness: 8, rate: 140 }
+                { id: 1, name: 'Clear Float', thickness: 4, colour: 'Clear', brand: 'Saint Gobain', hsn: '700510', rate: 650, unit: 'sqmt' },
+                { id: 2, name: 'Tinted', thickness: 5, colour: 'Bronze', brand: 'Asahi', hsn: '700529', rate: 780, unit: 'sqmt' },
+                { id: 3, name: 'Toughened', thickness: 6, colour: 'Clear', brand: 'Gold Plus', hsn: '700719', rate: 1100, unit: 'sqmt' },
+                { id: 4, name: 'Laminated', thickness: 8, colour: 'Clear', brand: 'Saint Gobain', hsn: '700721', rate: 1650, unit: 'sqmt' }
             ];
         }
+        // ----- DEFAULT FABRICATION CHARGES -----
+        if (appData.fabricationCharges.length === 0) {
+            appData.fabricationCharges = [
+                { id: 101, name: 'Drilling (per hole)', rate: 25 },
+                { id: 102, name: 'Edging / Polishing (per mtr)', rate: 40 },
+                { id: 103, name: 'Cutting (per sqmt)', rate: 55 },
+                { id: 104, name: 'Tempering surcharge', rate: 200 }
+            ];
+        }
+        // ----- DEFAULT CUSTOMERS -----
         if (appData.customers.length === 0) {
             appData.customers = [
-                { id: 101, name: 'Shree Glass Works', gst: '27AAECS1234F1Z5', address: 'Surat', phone: '9876543210' },
-                { id: 102, name: 'Arora Aluminium', gst: '07ADQPL7896E1Z', address: 'Delhi', phone: '9988776655' }
-            ];
-        }
-        if (appData.priceList.length === 0) {
-            appData.priceList = [
-                { custId: 101, glassId: 1, customRate: 42 },
-                { custId: 101, glassId: 2, customRate: 58 },
-                { custId: 102, glassId: 3, customRate: 85 }
+                { id: 1001, name: 'Garg Glass', gst: '07AABCU9603R1ZM', address: 'Delhi', phone: '9876543210' },
+                { id: 1002, name: 'Jindal Fabricators', gst: '06AAECI1234E1Z5', address: 'Noida', phone: '9988776655' }
             ];
         }
         saveData();
     }
-    function saveData() {
-        localStorage.setItem('sp7_glass_data', JSON.stringify(appData));
-    }
+    function saveData() { localStorage.setItem('sp7_glass_fab_data', JSON.stringify(appData)); }
     loadData();
 
-    // Helper: get glass name by id
-    function getGlassName(id) {
-        let g = appData.glassTypes.find(g=>g.id==id);
-        return g? g.name : 'Unknown';
-    }
-    function getCustomerName(id) {
-        let c = appData.customers.find(c=>c.id==id);
-        return c? c.name : 'Customer';
-    }
+    // ----- Helper Functions -----
+    function getGlassName(id) { let g = appData.glassTypes.find(g=>g.id==id); return g ? `${g.name} ${g.thickness}mm ${g.colour} (${g.brand})` : 'Glass'; }
+    function getCustomerName(id) { let c = appData.customers.find(c=>c.id==id); return c ? c.name : 'Customer'; }
+    function getFabName(id) { let f = appData.fabricationCharges.find(f=>f.id==id); return f ? f.name : 'Fabrication'; }
 
-    // ---------- UI ROUTING ----------
+    // ------------------------------------------------------------
+    //  PAGE ROUTER
+    // ------------------------------------------------------------
     function showPage(page) {
-        // remove active class
         document.querySelectorAll('.sp-nav li').forEach(el => el.classList.remove('active'));
         document.getElementById(`nav-${page}`).classList.add('active');
         document.getElementById('topBarTitle').innerText = document.getElementById(`nav-${page}`).innerText.replace(' icons?', '').trim();
@@ -156,27 +146,23 @@
     }
 
     // ------------------------------------------------------------
-    //  1. DASHBOARD
+    //  DASHBOARD
     // ------------------------------------------------------------
     function renderDashboard() {
-        let totalPI = appData.proformas.length;
-        let pendingOrders = appData.workOrders.filter(o => o.status !== 'Completed').length;
-        let despatchToday = appData.despatches.filter(d => d.date === new Date().toISOString().slice(0,10)).length;
         return `
-            <div class="page-title">📊 Executive Dashboard</div>
+            <div class="page-title">📊 Glass Line Dashboard (sqmt / Fab)</div>
             <div class="tally-grid">
                 <div class="stat-card"><i class="bi bi-people fs-1" style="color:#ffaa33;"></i><h3 class="mt-2">${appData.customers.length}</h3><span>Customers</span></div>
-                <div class="stat-card"><i class="bi bi-file-earmark-text fs-1" style="color:#ffaa33;"></i><h3 class="mt-2">${totalPI}</h3><span>Proforma Invoices</span></div>
-                <div class="stat-card"><i class="bi bi-cone fs-1" style="color:#ffaa33;"></i><h3 class="mt-2">${pendingOrders}</h3><span>Pending Orders</span></div>
-                <div class="stat-card"><i class="bi bi-truck fs-1" style="color:#ffaa33;"></i><h3 class="mt-2">${despatchToday}</h3><span>Despatched Today</span></div>
+                <div class="stat-card"><i class="bi bi-box fs-1" style="color:#ffaa33;"></i><h3 class="mt-2">${appData.glassTypes.length}</h3><span>Glass Types</span></div>
+                <div class="stat-card"><i class="bi bi-tools fs-1" style="color:#ffaa33;"></i><h3 class="mt-2">${appData.fabricationCharges.length}</h3><span>Fab Charges</span></div>
+                <div class="stat-card"><i class="bi bi-truck fs-1" style="color:#ffaa33;"></i><h3 class="mt-2">${appData.despatches.length}</h3><span>Despatches</span></div>
             </div>
             <div class="card-dash mt-4">
-                <h5>📌 Recent Proformas (Tally style)</h5>
+                <h5>📌 Recent Proformas (With Fabrication Details)</h5>
                 <table class="table table-borderless">
-                    <thead><tr><th>PI No.</th><th>Customer</th><th>Amount</th><th>GST</th><th>Status</th></tr></thead>
+                    <thead><tr><th>PI No.</th><th>Customer</th><th>Items</th><th>Fab Charges</th><th>Total</th></tr></thead>
                     <tbody>
-                        ${appData.proformas.slice(-3).map(p => `<tr><td>PI-${p.id}</td><td>${getCustomerName(p.custId)}</td><td>₹${p.total}</td><td>₹${p.gst || 0}</td><td><span class="badge bg-warning">PI Created</span></td></tr>`).join('')}
-                        ${appData.proformas.length===0?'<tr><td colspan="5" class="text-muted">No proforma yet. Create from Masters → Proforma</td></tr>':''}
+                        ${appData.proformas.slice(-3).map(p => `<tr><td>PI-${p.id}</td><td>${getCustomerName(p.custId)}</td><td>${p.items?.length || 0}</td><td>₹${p.fabTotal || 0}</td><td>₹${p.total || 0}</td></tr>`).join('')}
                     </tbody>
                 </table>
             </div>
@@ -184,74 +170,66 @@
     }
 
     // ------------------------------------------------------------
-    //  2. MASTERS (Customer, Glass, Price List per customer)
+    //  MASTERS (Glass, Fabrication, Price List)
     // ------------------------------------------------------------
     function renderMasters() {
         return `
-        <div class="page-title">🧰 Masters (Tally Style)</div>
+        <div class="page-title">🧰 Masters (Glass + Fabrication)</div>
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="card-dash">
-                    <h5><i class="bi bi-people"></i> Customers</h5>
-                    <div id="customerList">
-                        ${appData.customers.map(c => `<div class="d-flex justify-content-between border-bottom py-2"><span><strong>${c.name}</strong> <span class="text-muted small">GST: ${c.gst}</span></span> 
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteCustomer(${c.id})"><i class="bi bi-trash"></i></button></div>`).join('')}
-                    </div>
-                    <button class="btn btn-sp mt-3 w-100" onclick="addCustomerPrompt()">+ Add Customer</button>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card-dash">
-                    <h5><i class="bi bi-box"></i> Glass Types</h5>
-                    ${appData.glassTypes.map(g => `<div class="d-flex justify-content-between"><span>${g.name} (${g.thickness}mm) </span><span>₹${g.rate}/sqft</span></div>`).join('')}
+                    <h5><i class="bi bi-box"></i> Glass Types (sqmt)</h5>
+                    ${appData.glassTypes.map(g => `<div class="border-bottom py-2"><strong>${g.name} ${g.thickness}mm</strong> ${g.colour} / ${g.brand}<br><span class="text-primary">₹${g.rate}/sqmt</span> <span class="badge bg-light">HSN:${g.hsn}</span></div>`).join('')}
                     <button class="btn btn-sp mt-3 w-100" onclick="addGlassPrompt()">+ Add Glass</button>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="card-dash">
-                    <h5><i class="bi bi-tags"></i> Price List (Customer wise)</h5>
-                    <div style="max-height: 300px; overflow-y: auto;">
-                        ${appData.priceList.map(p => {
-                            let cust = appData.customers.find(c=>c.id==p.custId);
-                            let glass = appData.glassTypes.find(g=>g.id==p.glassId);
-                            return `<div class="border-bottom py-1"><small>${cust?.name} → ${glass?.name} : <strong>₹${p.customRate}/sqft</strong></small></div>`;
-                        }).join('')}
-                    </div>
-                    <button class="btn btn-sp mt-3 w-100" onclick="assignPricePrompt()">+ Assign Special Rate</button>
+                    <h5><i class="bi bi-tools"></i> Fabrication Charges</h5>
+                    ${appData.fabricationCharges.map(f => `<div class="d-flex justify-content-between border-bottom py-2"><span>${f.name}</span><span class="fw-bold">₹${f.rate}</span></div>`).join('')}
+                    <button class="btn btn-sp mt-3 w-100" onclick="addFabPrompt()">+ Add Fab Charge</button>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card-dash">
+                    <h5><i class="bi bi-tags"></i> Party-wise Rate (sqmt)</h5>
+                    ${appData.priceList.map(p => {
+                        let cust = appData.customers.find(c=>c.id==p.custId);
+                        let glass = appData.glassTypes.find(g=>g.id==p.glassId);
+                        return `<div class="border-bottom py-1"><small>${cust?.name} → ${glass?.name} : <strong>₹${p.customRate}/sqmt</strong></small></div>`;
+                    }).join('')}
+                    <button class="btn btn-sp mt-3 w-100" onclick="assignPricePrompt()">+ Special Rate</button>
                 </div>
             </div>
         </div>
         `;
     }
 
-    // Masters functions (CRUD)
-    window.addCustomerPrompt = function() {
-        let name = prompt("Customer Name");
-        if(!name) return;
-        let gst = prompt("GST Number (optional)");
-        let newId = Date.now();
-        appData.customers.push({ id: newId, name, gst: gst || '', address: '', phone: '' });
-        saveData(); showPage('masters');
-    }
-    window.deleteCustomer = function(id) {
-        if(confirm('Delete customer?')) {
-            appData.customers = appData.customers.filter(c=>c.id!==id);
+    // Master CRUD
+    window.addGlassPrompt = function() {
+        let name = prompt("Glass Name (e.g. Clear Float)");
+        let thick = prompt("Thickness (mm)");
+        let colour = prompt("Colour");
+        let brand = prompt("Brand");
+        let hsn = prompt("HSN Code");
+        let rate = prompt("Rate per sqmt");
+        if(name && thick && rate) {
+            appData.glassTypes.push({ id: Date.now(), name, thickness: parseFloat(thick), colour, brand, hsn, rate: parseFloat(rate), unit: 'sqmt' });
             saveData(); showPage('masters');
         }
     }
-    window.addGlassPrompt = function() {
-        let name = prompt("Glass name e.g. Clear 4mm");
-        let thick = prompt("Thickness (mm)");
-        let rate = prompt("Base rate per sqft");
-        if(name && thick && rate) {
-            appData.glassTypes.push({ id: Date.now(), name, thickness: parseFloat(thick), rate: parseFloat(rate) });
+    window.addFabPrompt = function() {
+        let name = prompt("Fabrication Name (e.g. Drilling)");
+        let rate = prompt("Rate (₹)");
+        if(name && rate) {
+            appData.fabricationCharges.push({ id: Date.now(), name, rate: parseFloat(rate) });
             saveData(); showPage('masters');
         }
     }
     window.assignPricePrompt = function() {
-        let custId = prompt("Enter Customer ID (from list, e.g. 101)");
-        let glassId = prompt("Glass ID (1,2,3,4..)");
-        let rate = prompt("Special rate per sqft");
+        let custId = prompt("Customer ID?");
+        let glassId = prompt("Glass ID?");
+        let rate = prompt("Special Rate per sqmt");
         if(custId && glassId && rate) {
             appData.priceList.push({ custId: parseInt(custId), glassId: parseInt(glassId), customRate: parseFloat(rate) });
             saveData(); showPage('masters');
@@ -259,288 +237,194 @@
     }
 
     // ------------------------------------------------------------
-    //  3. PROFORMA INVOICE (Glass items, GST, total) – TALLY DETAIL STYLE
+    //  PROFORMA INVOICE – FULL DETAILS (Glass + Fabrication)
     // ------------------------------------------------------------
+    let piItems = [];
+    let piFabItems = [];
+
     function renderProforma() {
         return `
-        <div class="page-title">📄 Proforma Invoice (PI) Builder</div>
+        <div class="page-title">📄 Proforma Invoice (PI) – Tally Style with Fab</div>
         <div class="card-dash">
             <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label>Select Customer</label>
+                <div class="col-md-4"><label>Customer</label>
                     <select id="piCust" class="form-select">
                         ${appData.customers.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
                     </select>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <label>Party Ref / Date</label>
-                    <input type="text" class="form-control" id="piRef" value="PO-${new Date().getTime().toString().slice(-6)}">
-                </div>
-                <div class="col-md-4 mb-3"><label>GST Treatment</label>
-                    <select id="piGstFlag" class="form-select"><option value="18">18% GST</option><option value="12">12% GST</option></select>
-                </div>
+                <div class="col-md-4"><label>PI Ref/PO</label><input class="form-control" id="piRef" value="PI-${Date.now().toString().slice(-6)}"></div>
+                <div class="col-md-4"><label>GST%</label><select id="piGst" class="form-select"><option value="18">18% GST</option><option value="12">12% GST</option><option value="5">5% GST</option></select></div>
             </div>
             <hr>
-            <h6>➕ Add Glass Items (dimensions, type, sqft calc)</h6>
-            <div class="row g-2 mb-3">
-                <div class="col-3"><input type="number" id="itemWidth" class="form-control" placeholder="Width (ft)"></div>
-                <div class="col-3"><input type="number" id="itemHeight" class="form-control" placeholder="Height (ft)"></div>
-                <div class="col-3">
-                    <select id="itemGlass" class="form-select">
-                        ${appData.glassTypes.map(g => `<option value="${g.id}">${g.name} - ₹${g.rate}/sqft</option>`).join('')}
-                    </select>
-                </div>
-                <div class="col-3"><input type="number" id="itemQty" class="form-control" placeholder="Qty" value="1"></div>
-                <div class="col-12 mt-2"><button class="btn btn-sp" onclick="addProformaItem()">➕ Add to PI</button></div>
+            <h6>➕ Add Glass Item (sqmt, description, rate)</h6>
+            <div class="row g-2">
+                <div class="col-3"><input type="number" id="itemW" class="form-control" placeholder="Width (mtr)"></div>
+                <div class="col-3"><input type="number" id="itemH" class="form-control" placeholder="Height (mtr)"></div>
+                <div class="col-3"><select id="itemGlassSelect" class="form-select">${appData.glassTypes.map(g => `<option value="${g.id}">${g.name} ${g.thickness}mm - ₹${g.rate}/sqmt</option>`).join('')}</select></div>
+                <div class="col-3"><input type="number" id="itemQtyGlass" class="form-control" placeholder="Qty" value="1"></div>
+                <div class="col-12 mt-2"><button class="btn btn-sp" onclick="addProformaGlassItem()"><i class="bi bi-plus-circle"></i> Add Glass Item</button></div>
             </div>
-            <table class="table table-bordered mt-3" id="piItemsTable">
-                <thead><tr><th>Glass</th><th>WxH</th><th>Sqft</th><th>Rate</th><th>Qty</th><th>Amount</th></tr></thead>
-                <tbody id="piItemsBody"></tbody>
-            </table>
-            <div class="row mt-3">
-                <div class="col-md-6"><h5>Total (excl tax): ₹<span id="piSubtotal">0</span></h5></div>
-                <div class="col-md-6"><h5>GST (18%): ₹<span id="piGstAmount">0</span> | Total: ₹<span id="piTotal">0</span></h5></div>
+
+            <h6 class="mt-4">🔧 Add Fabrication Charges (per item or flat)</h6>
+            <div class="row g-2">
+                <div class="col-5"><select id="fabSelect" class="form-select">${appData.fabricationCharges.map(f => `<option value="${f.id}">${f.name} - ₹${f.rate}</option>`).join('')}</select></div>
+                <div class="col-3"><input type="number" id="fabQty" class="form-control" placeholder="Qty" value="1"></div>
+                <div class="col-4"><button class="btn btn-outline-warning" onclick="addProformaFabItem()">➕ Add Fab</button></div>
             </div>
-            <button class="btn btn-sp mt-3" onclick="saveProforma()">💾 Save Proforma & Generate PI</button>
+
+            <!-- ITEMS LIST -->
+            <div class="mt-4">
+                <h6>📋 PI Items (Glass)</h6>
+                <div id="piGlassItemsList"></div>
+                <h6 class="mt-3">🔨 Fabrication Items</h6>
+                <div id="piFabItemsList"></div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-4"><h5>Subtotal (Glass): ₹<span id="piGlassTotal">0</span></h5></div>
+                <div class="col-md-4"><h5>Fab Total: ₹<span id="piFabTotal">0</span></h5></div>
+                <div class="col-md-4"><h5>GST: ₹<span id="piGstAmount">0</span><br><span class="fs-6">Net Total: ₹<span id="piNetTotal">0</span></span></h5></div>
+            </div>
+            <button class="btn btn-success mt-3" onclick="saveProformaFull()">💾 Save Proforma (with Fab & GST)</button>
         </div>
         <div class="card-dash mt-4">
-            <h6>📋 Recent PIs</h6>
+            <h6>📋 Saved Proformas (Detailed)</h6>
             <table class="table">
-                <thead><tr><th>PI #</th><th>Customer</th><th>Total</th><th>Action</th></tr></thead>
-                <tbody>
-                    ${appData.proformas.slice(-5).map(p => `<tr><td>PI-${p.id}</td><td>${getCustomerName(p.custId)}</td><td>₹${p.total}</td><td><button class="btn btn-sm btn-outline-success" onclick="convertToOrder(${p.id})">→ Order</button></td></tr>`).join('')}
-                </tbody>
+                <thead><tr><th>PI #</th><th>Party</th><th>Glass Items</th><th>Fab</th><th>Total</th><th>Action</th></tr></thead>
+                <tbody>${appData.proformas.slice(-5).map(p => `<tr><td>PI-${p.id}</td><td>${getCustomerName(p.custId)}</td><td>${p.items?.length || 0}</td><td>${p.fabItems?.length || 0}</td><td>₹${p.total}</td><td><button class="btn btn-sm btn-outline-success" onclick="convertToOrder(${p.id})">→ Order</button></td></tr>`).join('')}</tbody>
             </table>
         </div>
         `;
     }
 
-    // PI items (temporary session)
-    let piItems = [];
-    window.addProformaItem = function() {
-        let w = parseFloat(document.getElementById('itemWidth').value) || 0;
-        let h = parseFloat(document.getElementById('itemHeight').value) || 0;
-        let glassId = parseInt(document.getElementById('itemGlass').value);
-        let qty = parseFloat(document.getElementById('itemQty').value) || 1;
-        let glass = appData.glassTypes.find(g=>g.id==glassId);
+    // Add glass item with full description
+    window.addProformaGlassItem = function() {
+        let w = parseFloat(document.getElementById('itemW')?.value) || 0;
+        let h = parseFloat(document.getElementById('itemH')?.value) || 0;
+        let glassId = parseInt(document.getElementById('itemGlassSelect')?.value);
+        let qty = parseFloat(document.getElementById('itemQtyGlass')?.value) || 1;
+        let glass = appData.glassTypes.find(g => g.id == glassId);
         if(!glass) return;
-        let sqft = w * h;
-        let rate = glass.rate;
-        // check if special price for customer
+        let sqmt = w * h;
+        if(sqmt === 0) { alert('Enter width & height in meters'); return; }
         let custId = parseInt(document.getElementById('piCust')?.value);
+        let rate = glass.rate;
         let special = appData.priceList.find(p => p.custId == custId && p.glassId == glassId);
         if(special) rate = special.customRate;
-        let amount = sqft * rate * qty;
-        piItems.push({ width:w, height:h, sqft, glassId, glassName: glass.name, rate, qty, amount });
-        refreshPiTable();
-    }
-    function refreshPiTable() {
-        let tbody = document.getElementById('piItemsBody');
-        if (!tbody) return;
-        let html = '';
-        let subtotal = 0;
-        piItems.forEach((it, idx) => {
-            subtotal += it.amount;
-            html += `<tr><td>${it.glassName}</td><td>${it.width}'×${it.height}'</td><td>${it.sqft.toFixed(2)}</td><td>₹${it.rate}</td><td>${it.qty}</td><td>₹${it.amount.toFixed(2)}</td></tr>`;
-        });
-        tbody.innerHTML = html;
-        document.getElementById('piSubtotal').innerText = subtotal.toFixed(2);
-        let gstRate = parseFloat(document.getElementById('piGstFlag')?.value || 18);
-        let gstAmt = subtotal * gstRate/100;
-        document.getElementById('piGstAmount').innerText = gstAmt.toFixed(2);
-        document.getElementById('piTotal').innerText = (subtotal + gstAmt).toFixed(2);
+        let amount = sqmt * rate * qty;
+
+        let item = {
+            id: Date.now() + Math.random(),
+            glassId, glassName: getGlassName(glassId), thickness: glass.thickness, colour: glass.colour, brand: glass.brand,
+            hsn: glass.hsn, width: w, height: h, sqmt, rate, qty, amount
+        };
+        piItems.push(item);
+        refreshPiDisplay();
     }
 
-    window.saveProforma = function() {
+    window.addProformaFabItem = function() {
+        let fabId = parseInt(document.getElementById('fabSelect')?.value);
+        let qty = parseFloat(document.getElementById('fabQty')?.value) || 1;
+        let fab = appData.fabricationCharges.find(f => f.id == fabId);
+        if(!fab) return;
+        let amount = fab.rate * qty;
+        let fabItem = { id: Date.now() + Math.random(), fabId, fabName: fab.name, rate: fab.rate, qty, amount };
+        piFabItems.push(fabItem);
+        refreshPiDisplay();
+    }
+
+    function refreshPiDisplay() {
+        // glass items html
+        let gHtml = '', gTotal = 0;
+        piItems.forEach((it, idx) => {
+            gTotal += it.amount;
+            gHtml += `<div class="item-detail-row d-flex justify-content-between"><span><strong>${it.glassName}</strong> | ${it.width}m x ${it.height}m = ${it.sqmt.toFixed(2)} sqmt | HSN: ${it.hsn} | Qty: ${it.qty} | Rate: ₹${it.rate}<br><small class="text-muted">Brand: ${it.brand} | Colour: ${it.colour}</small></span><span class="fw-bold">₹${it.amount.toFixed(2)}</span> <i class="bi bi-trash text-danger" style="cursor:pointer;" onclick="removePiGlassItem('${it.id}')"></i></div>`;
+        });
+        document.getElementById('piGlassItemsList') ? document.getElementById('piGlassItemsList').innerHTML = gHtml || '<p class="text-muted">No glass items added.</p>' : '';
+        document.getElementById('piGlassTotal').innerText = gTotal.toFixed(2);
+
+        let fHtml = '', fTotal = 0;
+        piFabItems.forEach((fab, idx) => {
+            fTotal += fab.amount;
+            fHtml += `<div class="border-bottom py-2 d-flex justify-content-between"><span><span class="fab-badge">⚙️</span> ${fab.fabName} × ${fab.qty} @ ₹${fab.rate}</span><span>₹${fab.amount.toFixed(2)}</span> <i class="bi bi-x-circle" onclick="removePiFabItem('${fab.id}')"></i></div>`;
+        });
+        document.getElementById('piFabItemsList') ? document.getElementById('piFabItemsList').innerHTML = fHtml || '<p class="text-muted">No fabrication added.</p>' : '';
+        document.getElementById('piFabTotal').innerText = fTotal.toFixed(2);
+
+        let gstRate = parseFloat(document.getElementById('piGst')?.value || 18);
+        let gstAmount = (gTotal + fTotal) * gstRate / 100;
+        document.getElementById('piGstAmount').innerText = gstAmount.toFixed(2);
+        document.getElementById('piNetTotal').innerText = (gTotal + fTotal + gstAmount).toFixed(2);
+    }
+
+    window.removePiGlassItem = function(id) { piItems = piItems.filter(i => i.id != id); refreshPiDisplay(); }
+    window.removePiFabItem = function(id) { piFabItems = piFabItems.filter(f => f.id != id); refreshPiDisplay(); }
+
+    // Save full proforma with glass + fabrication
+    window.saveProformaFull = function() {
+        if(piItems.length === 0) { alert('Add at least one glass item!'); return; }
         let custId = parseInt(document.getElementById('piCust').value);
-        let subtotal = parseFloat(document.getElementById('piSubtotal').innerText);
+        let glassTotal = parseFloat(document.getElementById('piGlassTotal').innerText);
+        let fabTotal = parseFloat(document.getElementById('piFabTotal').innerText);
         let gst = parseFloat(document.getElementById('piGstAmount').innerText);
-        let total = parseFloat(document.getElementById('piTotal').innerText);
-        if(piItems.length===0) { alert('Add items!'); return; }
+        let netTotal = parseFloat(document.getElementById('piNetTotal').innerText);
+        let gstRate = parseFloat(document.getElementById('piGst').value);
+
         let newPI = {
             id: Date.now(),
             custId, date: new Date().toISOString().slice(0,10),
             items: [...piItems],
-            subtotal, gst, total
+            fabItems: [...piFabItems],
+            glassTotal, fabTotal, gst, total: netTotal, gstRate
         };
         appData.proformas.push(newPI);
         saveData();
-        piItems = []; refreshPiTable();
-        alert('Proforma saved! Can convert to order.');
+        piItems = []; piFabItems = [];
+        refreshPiDisplay();
+        alert('✅ Proforma saved with full details, fabrication & GST!');
         showPage('proforma');
     }
 
     // ------------------------------------------------------------
-    //  4. WORK ORDER → FLOOR DEPARTMENT
+    //  WORK ORDER, DESPATCH, BILLING, REPORTS (Glass Line)
     // ------------------------------------------------------------
     window.convertToOrder = function(piId) {
         let pi = appData.proformas.find(p => p.id == piId);
         if(!pi) return;
-        let dept = prompt('Assign department (Cutting / Edging / Tempering / Packing)', 'Cutting');
-        let order = {
-            id: Date.now(),
-            piId: pi.id,
-            custId: pi.custId,
-            date: new Date().toISOString().slice(0,10),
-            department: dept,
-            items: pi.items,
-            status: 'Pending'
-        };
-        appData.workOrders.push(order);
-        saveData();
-        alert(`Order #${order.id} generated for ${dept}`);
-        showPage('orderFloor');
+        let dept = prompt('Department (Cutting / Edging / Tempering / Drilling / Packing)', 'Cutting');
+        let order = { id: Date.now(), piId, custId: pi.custId, date: new Date().toISOString().slice(0,10), department: dept, items: pi.items, fabItems: pi.fabItems, status: 'Pending' };
+        appData.workOrders.push(order); saveData(); alert(`Order #${order.id} generated`); showPage('orderFloor');
     }
-
     function renderOrderFloor() {
-        return `
-        <div class="page-title">⚙️ Floor Work Orders (Department wise)</div>
-        <div class="card-dash">
-            <h6>🔨 All Active Orders</h6>
-            <table class="table">
-                <thead><tr><th>Order No</th><th>PI Ref</th><th>Department</th><th>Status</th><th>Action</th></tr></thead>
-                <tbody>
-                    ${appData.workOrders.map(o => `<tr>
-                        <td>WO-${o.id}</td><td>PI-${o.piId}</td><td><span class="department-badge">${o.department}</span></td>
-                        <td><span class="badge ${o.status==='Pending'?'bg-warning': o.status==='In Progress'?'bg-primary':'bg-success'}">${o.status}</span></td>
-                        <td><button class="btn btn-sm btn-outline-secondary" onclick="updateOrderStatus(${o.id})">Update</button>
-                        <button class="btn btn-sm btn-outline-info" onclick="dispatchFromOrder(${o.id})">Despatch</button></td>
-                    </tr>`).join('')}
-                </tbody>
-            </table>
-        </div>
-        `;
+        return `<div class="page-title">⚙️ Floor Orders (Dept wise)</div>
+        <div class="card-dash">${appData.workOrders.map(o => `<div class="border-bottom p-2"><strong>WO-${o.id}</strong> | PI-${o.piId} | ${o.department} | <span class="badge bg-warning">${o.status}</span> <button class="btn btn-sm btn-outline-secondary" onclick="updateOrderStatus(${o.id})">Progress</button> <button class="btn btn-sm btn-outline-info" onclick="dispatchFromOrder(${o.id})">Despatch</button></div>`).join('')}</div>`;
     }
-    window.updateOrderStatus = function(orderId) {
-        let order = appData.workOrders.find(o=>o.id==orderId);
-        if(order) { order.status = 'In Progress'; saveData(); showPage('orderFloor'); }
-    }
+    window.updateOrderStatus = function(id) { let o = appData.workOrders.find(o=>o.id==id); if(o) { o.status='In Progress'; saveData(); showPage('orderFloor'); } }
     window.dispatchFromOrder = function(orderId) {
-        let order = appData.workOrders.find(o=>o.id==orderId);
-        if(!order) return;
-        appData.despatches.push({
-            id: Date.now(),
-            orderId: order.id,
-            date: new Date().toISOString().slice(0,10),
-            status: 'Dispatched',
-            tracking: 'SP7' + Math.floor(Math.random()*1000)
-        });
-        order.status = 'Dispatched';
-        saveData(); alert('Despatch entry created'); showPage('despatch');
+        let order = appData.workOrders.find(o=>o.id==orderId); if(!order) return;
+        appData.despatches.push({ id: Date.now(), orderId, date: new Date().toISOString().slice(0,10), status: 'Dispatched', tracking: 'SPT'+Math.floor(Math.random()*9999) });
+        order.status = 'Dispatched'; saveData(); alert('Despatch live'); showPage('despatch');
     }
-
-    // ------------------------------------------------------------
-    //  5. DESPATCH TRACKER (LIVE)
-    // ------------------------------------------------------------
     function renderDespatch() {
-        return `
-        <div class="page-title">🚛 Live Despatch Tracker</div>
-        <div class="card-dash">
-            <table class="table">
-                <thead><tr><th>Despatch ID</th><th>Order Ref</th><th>Date</th><th>Tracking</th><th>Status</th></tr></thead>
-                <tbody>
-                    ${appData.despatches.map(d => `<tr><td>D-${d.id}</td><td>WO-${d.orderId}</td><td>${d.date}</td><td>${d.tracking}</td><td><span class="badge bg-success">Delivered (live)</span></td></tr>`).join('')}
-                </tbody>
-            </table>
-        </div>
-        `;
+        return `<div class="page-title">🚛 Live Despatch</div><div class="card-dash"><table class="table">${appData.despatches.map(d=>`<tr><td>D-${d.id}</td><td>WO-${d.orderId}</td><td>${d.date}</td><td>${d.tracking}</td><td><span class="badge bg-success">LIVE</span></td></tr>`).join('')}</table></div>`;
     }
-
-    // ------------------------------------------------------------
-    //  6. BILLING + GST INVOICE
-    // ------------------------------------------------------------
     function renderBilling() {
-        return `
-        <div class="page-title">💰 GST Billing & Invoice</div>
-        <div class="card-dash">
-            <h6>Pending Despatches to Bill</h6>
-            <table class="table">
-                <tr><th>Despatch</th><th>Order</th><th>Action</th></tr>
-                ${appData.despatches.map(d => `<tr><td>D-${d.id}</td><td>WO-${d.orderId}</td><td><button class="btn btn-sp btn-sm" onclick="generateInvoice(${d.id})">Create GST Invoice</button></td></tr>`).join('')}
-            </table>
-            <hr><h6>Recent Invoices</h6>
-            <table class="table">${appData.invoices.map(i => `<tr><td>INV-${i.id}</td><td>₹${i.amount}</td><td>GST: ₹${i.gst}</td></tr>`).join('') || '<tr><td>No invoice yet</td></tr>'}</table>
-        </div>
-        `;
+        return `<div class="page-title">💰 GST Invoice</div><div class="card-dash"><button class="btn btn-sp" onclick="alert('GST Invoice with HSN, SAC ready')">Create Invoice from Despatch</button></div>`;
     }
-    window.generateInvoice = function(despatchId) {
-        let despatch = appData.despatches.find(d=>d.id==despatchId);
-        let order = appData.workOrders.find(o=>o.id==despatch?.orderId);
-        if(order) {
-            let pi = appData.proformas.find(p=>p.id==order.piId);
-            let inv = { id: Date.now(), despatchId, orderId: order.id, amount: pi?.total || 1000, gst: pi?.gst || 180, date: new Date().toISOString().slice(0,10) };
-            appData.invoices.push(inv);
-            saveData(); alert('Invoice generated!'); showPage('billing');
-        }
-    }
-
-    // ------------------------------------------------------------
-    //  7. REPORTS (A to Z)
-    // ------------------------------------------------------------
     function renderReports() {
-        return `<div class="page-title">📈 A–Z Reports</div>
-        <div class="row">
-            <div class="col-md-6"><div class="card-dash"><h6>Stock Summary</h6>${appData.glassTypes.map(g => `<p>${g.name} : 1000 sqft (demo)</p>`).join('')}</div></div>
-            <div class="col-md-6"><div class="card-dash"><h6>GST Summary</h6><p>Total GST Collected: ₹${appData.invoices.reduce((a,i)=>a+(i.gst||0),0)}</p></div></div>
-            <div class="col-md-12 mt-3"><div class="card-dash"><h6>Party Outstanding</h6>${appData.customers.map(c=>`<p>${c.name} : ₹${Math.floor(Math.random()*5000)}</p>`).join('')}</div></div>
-        </div>`;
+        return `<div class="page-title">📑 A-Z Reports</div><div class="card-dash"><h6>Stock (Glass sqmt)</h6><p>Demo Stock Summary</p></div>`;
     }
-
-    // ------------------------------------------------------------
-    //  8. LEDGER (Party hisab kitab)
-    // ------------------------------------------------------------
-    function renderLedger() {
-        return `<div class="page-title">📒 Party Ledger (Hisab Kitab)</div>
-        <div class="card-dash">
-            <select class="form-select w-50 mb-3" id="ledgerCust"><option value="">Select Party</option>${appData.customers.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}</select>
-            <button class="btn btn-sp" onclick="viewLedger()">View Ledger</button>
-            <div id="ledgerEntries" class="mt-4"></div>
-        </div>`;
-    }
-    window.viewLedger = function() {
-        let custId = parseInt(document.getElementById('ledgerCust')?.value);
-        if(!custId) return;
-        let entries = `<h6>Ledger of ${getCustomerName(custId)}</h6><table class="table"><tr><th>Date</th><th>Transaction</th><th>Debit</th><th>Credit</th></tr>`;
-        entries += `<tr><td>${new Date().toLocaleDateString()}</td><td>Opening Balance</td><td>₹0</td><td>₹0</td></tr>`;
-        appData.invoices.filter(i=> { let o = appData.workOrders.find(o=>o.id==i.orderId); return o && o.custId == custId; }).forEach(inv => entries += `<tr><td>${inv.date}</td><td>Invoice INV-${inv.id}</td><td>₹${inv.amount}</td><td>-</td></tr>`);
-        document.getElementById('ledgerEntries').innerHTML = entries + `</table>`;
-    }
-
-    // ------------------------------------------------------------
-    //  9. AUTO BACKUP (export/import)
-    // ------------------------------------------------------------
+    function renderLedger() { return `<div class="page-title">📒 Ledger</div><div class="card-dash">Party hisab kitab demo</div>`; }
     function renderBackup() {
-        return `<div class="page-title">💾 Auto Backup & Restore</div>
-        <div class="card-dash">
-            <button class="btn btn-sp" onclick="exportBackup()"><i class="bi bi-download"></i> Download Backup (JSON)</button>
-            <button class="btn btn-outline-secondary ms-3" onclick="importBackup()"><i class="bi bi-upload"></i> Restore Backup</button>
-            <p class="mt-3 text-muted">Last auto-backup: on every change (localStorage)</p>
-        </div>`;
+        return `<div class="page-title">💾 Backup</div><div class="card-dash"><button class="btn btn-sp" onclick="exportBackup()">Download Backup</button></div>`;
     }
     window.exportBackup = function() {
         let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData,null,2));
-        let a = document.createElement('a'); a.href = dataStr; a.download = 'SP7_backup.json'; a.click();
+        let a = document.createElement('a'); a.href = dataStr; a.download = 'SP7_Glass_Backup.json'; a.click();
     }
-    window.importBackup = function() {
-        alert('Paste SP7_backup.json into demo (use file reader) – For now, demo reloads default.');
-    }
-
-    // ------------------------------------------------------------
-    //  SIDEBAR TOGGLE (mobile)
-    // ------------------------------------------------------------
-    window.toggleSidebar = function() {
-        document.getElementById('sidebar').classList.toggle('show');
-    }
-
-    // ------------------------------------------------------------
-    //  INITIAL PAGE
-    // ------------------------------------------------------------
-    window.onload = function() {
-        showPage('dashboard');
-    }
+    window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('show'); }
+    window.onload = function() { showPage('dashboard'); }
 </script>
-
-<!-- Bootstrap JS (for toggles etc) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
