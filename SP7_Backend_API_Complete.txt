@@ -1,0 +1,1467 @@
+// ==========================================================
+// SP-7 GLASS ERP - COMPLETE BACKEND API (NODE.JS + EXPRESS)
+// Author: SP-7 Technologies
+// File: SP7_Backend_API_Complete.txt
+// Description: Complete REST API for Glass ERP
+// ==========================================================
+
+// ==========================================================
+// 1. package.json
+// ==========================================================
+
+/*
+{
+  "name": "sp7-glass-erp-backend",
+  "version": "1.0.0",
+  "description": "SP-7 Glass ERP Backend API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "mysql2": "^3.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.0",
+    "express-validator": "^6.14.0",
+    "morgan": "^1.10.0",
+    "helmet": "^7.0.0",
+    "compression": "^1.7.4",
+    "multer": "^1.4.5-lts.1",
+    "pdfkit": "^0.13.0",
+    "exceljs": "^4.3.0",
+    "node-cron": "^3.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
+*/
+
+// ==========================================================
+// 2. .env - Environment Variables
+// ==========================================================
+
+/*
+# Server Configuration
+PORT=5000
+NODE_ENV=production
+
+# Database Configuration
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=sp7_erp
+DB_PORT=3306
+
+# JWT Configuration
+JWT_SECRET=sp7_glass_erp_secret_key_2025
+JWT_EXPIRE=7d
+
+# API Configuration
+API_PREFIX=/api/v1
+CORS_ORIGIN=*
+
+# File Upload
+UPLOAD_PATH=./uploads
+MAX_FILE_SIZE=5242880
+*/
+
+// ==========================================================
+// 3. server.js - Main Server File
+// ==========================================================
+
+const express = require('express');
+const mysql = require('mysql2');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const morgan = require('morgan');
+const helmet = require('helmet');
+const compression = require('compression');
+const path = require('path');
+
+// Load environment variables
+dotenv.config();
+
+// Import routes
+const authRoutes = require('./routes/auth.routes');
+const masterRoutes = require('./routes/master.routes');
+const piRoutes = require('./routes/pi.routes');
+const woRoutes = require('./routes/wo.routes');
+const inventoryRoutes = require('./routes/inventory.routes');
+const reportRoutes = require('./routes/report.routes');
+const tallyRoutes = require('./routes/tally.routes');
+
+// Import middleware
+const { errorHandler } = require('./middleware/errorHandler');
+const { authenticate } = require('./middleware/auth');
+
+// Initialize express
+const app = express();
+
+// Database connection pool
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0
+});
+
+// Make db available to routes
+app.locals.db = pool.promise();
+
+// Middleware
+app.use(helmet());
+app.use(compression());
+app.use(cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true
+}));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(morgan('combined'));
+
+// Static files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/masters', authenticate, masterRoutes);
+app.use('/api/pi', authenticate, piRoutes);
+app.use('/api/wo', authenticate, woRoutes);
+app.use('/api/inventory', authenticate, inventoryRoutes);
+app.use('/api/reports', authenticate, reportRoutes);
+app.use('/api/tally', authenticate, tallyRoutes);
+
+// Health check
+app.get('/api/health', (req, res) => {
+    res.json({ 
+        status: 'OK', 
+        timestamp: new Date(),
+        database: pool.promise() ? 'connected' : 'disconnected'
+    });
+});
+
+// Error handler
+app.use(errorHandler);
+
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`🚀 SP-7 ERP Server running on port ${PORT}`);
+    console.log(`📅 Started at: ${new Date().toLocaleString()}`);
+    console.log(`🔗 API: http://localhost:${PORT}/api`);
+});
+
+// ==========================================================
+// 4. config/database.js - Database Configuration
+// ==========================================================
+
+const mysql = require('mysql2');
+
+class Database {
+    constructor() {
+        this.pool = mysql.createPool({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
+            port: process.env.DB_PORT,
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0,
+            enableKeepAlive: true,
+            keepAliveInitialDelay: 0
+        }).promise();
+    }
+
+    async query(sql, params) {
+        try {
+            const [rows] = await this.pool.execute(sql, params);
+            return rows;
+        } catch (error) {
+            console.error('Database query error:', error);
+            throw error;
+        }
+    }
+
+    async transaction(callback) {
+        const connection = await this.pool.getConnection();
+        await connection.beginTransaction();
+
+        try {
+            const result = await callback(connection);
+            await connection.commit();
+            return result;
+        } catch (error) {
+            await connection.rollback();
+            throw error;
+        } finally {
+            connection.release();
+        }
+    }
+
+    async getConnection() {
+        return await this.pool.getConnection();
+    }
+}
+
+module.exports = new Database();
+
+// ==========================================================
+// 5. middleware/auth.js - Authentication Middleware
+// ==========================================================
+
+const jwt = require('jsonwebtoken');
+const db = require('../config/database');
+
+const authenticate = async (req, res, next) => {
+    try {
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+
+        if (!token) {
+            throw new Error();
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        // Check if user exists in database
+        const users = await db.query(
+            'SELECT user_id, username, full_name, user_role FROM tbl_users WHERE user_id = ? AND is_active = 1',
+            [decoded.user_id]
+        );
+
+        if (users.length === 0) {
+            throw new Error();
+        }
+
+        req.user = users[0];
+        req.token = token;
+        next();
+    } catch (error) {
+        res.status(401).json({ error: 'Please authenticate' });
+    }
+};
+
+const authorize = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.user_role)) {
+            return res.status(403).json({ error: 'Access denied' });
+        }
+        next();
+    };
+};
+
+module.exports = { authenticate, authorize };
+
+// ==========================================================
+// 6. routes/auth.routes.js - Authentication Routes
+// ==========================================================
+
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { body, validationResult } = require('express-validator');
+const db = require('../config/database');
+
+const router = express.Router();
+
+// Login
+router.post('/login', [
+    body('username').notEmpty(),
+    body('password').notEmpty()
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { username, password } = req.body;
+
+        // Get user from database
+        const users = await db.query(
+            'SELECT user_id, username, password, full_name, user_role FROM tbl_users WHERE username = ? AND is_active = 1',
+            [username]
+        );
+
+        if (users.length === 0) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        const user = users[0];
+
+        // Check password
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        // Generate token
+        const token = jwt.sign(
+            { user_id: user.user_id, username: user.username, role: user.user_role },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRE }
+        );
+
+        // Update last login
+        await db.query(
+            'UPDATE tbl_users SET last_login = ? WHERE user_id = ?',
+            [Math.floor(Date.now() / 1000), user.user_id]
+        );
+
+        res.json({
+            token,
+            user: {
+                id: user.user_id,
+                username: user.username,
+                name: user.full_name,
+                role: user.user_role
+            }
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Change password
+router.post('/change-password', authenticate, [
+    body('old_password').notEmpty(),
+    body('new_password').isLength({ min: 6 })
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { old_password, new_password } = req.body;
+
+        // Get user with password
+        const users = await db.query(
+            'SELECT password FROM tbl_users WHERE user_id = ?',
+            [req.user.user_id]
+        );
+
+        const isValid = await bcrypt.compare(old_password, users[0].password);
+        if (!isValid) {
+            return res.status(401).json({ error: 'Invalid old password' });
+        }
+
+        // Hash new password
+        const hashedPassword = await bcrypt.hash(new_password, 10);
+
+        // Update password
+        await db.query(
+            'UPDATE tbl_users SET password = ? WHERE user_id = ?',
+            [hashedPassword, req.user.user_id]
+        );
+
+        res.json({ message: 'Password changed successfully' });
+    } catch (error) {
+        console.error('Change password error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Get current user
+router.get('/me', authenticate, async (req, res) => {
+    res.json(req.user);
+});
+
+module.exports = router;
+
+// ==========================================================
+// 7. routes/master.routes.js - Master Routes
+// ==========================================================
+
+const express = require('express');
+const db = require('../config/database');
+const { body, validationResult } = require('express-validator');
+
+const router = express.Router();
+
+// ========== CUSTOMER MASTER ==========
+
+// Get all customers
+router.get('/customers', async (req, res) => {
+    try {
+        const customers = await db.query(`
+            SELECT c.*, pt.term_name 
+            FROM tbl_customer_master c
+            LEFT JOIN tbl_payment_terms pt ON c.payment_term_id = pt.term_id
+            WHERE c.is_active = 1
+            ORDER BY c.customer_name
+        `);
+        res.json(customers);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get customer by ID
+router.get('/customers/:id', async (req, res) => {
+    try {
+        const customers = await db.query(
+            'SELECT * FROM tbl_customer_master WHERE customer_id = ?',
+            [req.params.id]
+        );
+        
+        if (customers.length === 0) {
+            return res.status(404).json({ error: 'Customer not found' });
+        }
+
+        // Get ship to addresses
+        const addresses = await db.query(
+            'SELECT * FROM tbl_customer_ship_addresses WHERE customer_id = ? AND is_active = 1',
+            [req.params.id]
+        );
+
+        res.json({
+            ...customers[0],
+            ship_addresses: addresses
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Create customer
+router.post('/customers', [
+    body('customer_code').notEmpty(),
+    body('customer_name').notEmpty(),
+    body('bill_address').notEmpty(),
+    body('bill_city').notEmpty(),
+    body('bill_state').notEmpty(),
+    body('bill_pincode').notEmpty(),
+    body('bill_gst').optional(),
+    body('bill_phone').optional()
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const result = await db.query(
+            `INSERT INTO tbl_customer_master 
+            (customer_code, customer_name, customer_type, bill_address, bill_address2,
+             bill_city, bill_state, bill_pincode, bill_gst, bill_phone, bill_email,
+             ship_address, ship_city, ship_state, ship_pincode, ship_contact, ship_phone,
+             credit_limit, payment_term_id, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                req.body.customer_code,
+                req.body.customer_name,
+                req.body.customer_type || 1,
+                req.body.bill_address,
+                req.body.bill_address2 || null,
+                req.body.bill_city,
+                req.body.bill_state,
+                req.body.bill_pincode,
+                req.body.bill_gst || null,
+                req.body.bill_phone || null,
+                req.body.bill_email || null,
+                req.body.ship_address || req.body.bill_address,
+                req.body.ship_city || req.body.bill_city,
+                req.body.ship_state || req.body.bill_state,
+                req.body.ship_pincode || req.body.bill_pincode,
+                req.body.ship_contact || null,
+                req.body.ship_phone || req.body.bill_phone,
+                req.body.credit_limit || 0,
+                req.body.payment_term_id || 4,
+                Math.floor(Date.now() / 1000)
+            ]
+        );
+
+        res.status(201).json({ 
+            message: 'Customer created successfully',
+            customer_id: result.insertId 
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Update customer
+router.put('/customers/:id', async (req, res) => {
+    try {
+        await db.query(
+            `UPDATE tbl_customer_master SET
+            customer_name = ?, customer_type = ?, bill_address = ?, bill_address2 = ?,
+            bill_city = ?, bill_state = ?, bill_pincode = ?, bill_gst = ?,
+            bill_phone = ?, bill_email = ?, ship_address = ?, ship_city = ?,
+            ship_state = ?, ship_pincode = ?, ship_contact = ?, ship_phone = ?,
+            credit_limit = ?, payment_term_id = ?, updated_at = ?
+            WHERE customer_id = ?`,
+            [
+                req.body.customer_name,
+                req.body.customer_type,
+                req.body.bill_address,
+                req.body.bill_address2,
+                req.body.bill_city,
+                req.body.bill_state,
+                req.body.bill_pincode,
+                req.body.bill_gst,
+                req.body.bill_phone,
+                req.body.bill_email,
+                req.body.ship_address,
+                req.body.ship_city,
+                req.body.ship_state,
+                req.body.ship_pincode,
+                req.body.ship_contact,
+                req.body.ship_phone,
+                req.body.credit_limit,
+                req.body.payment_term_id,
+                Math.floor(Date.now() / 1000),
+                req.params.id
+            ]
+        );
+
+        res.json({ message: 'Customer updated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Delete customer
+router.delete('/customers/:id', async (req, res) => {
+    try {
+        await db.query(
+            'UPDATE tbl_customer_master SET is_active = 0 WHERE customer_id = ?',
+            [req.params.id]
+        );
+        res.json({ message: 'Customer deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ========== SHIP TO ADDRESSES ==========
+
+// Get ship addresses for customer
+router.get('/customers/:customer_id/ship-addresses', async (req, res) => {
+    try {
+        const addresses = await db.query(
+            'SELECT * FROM tbl_customer_ship_addresses WHERE customer_id = ? AND is_active = 1',
+            [req.params.customer_id]
+        );
+        res.json(addresses);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Add ship address
+router.post('/ship-addresses', [
+    body('customer_id').notEmpty(),
+    body('ship_name').notEmpty(),
+    body('address').notEmpty(),
+    body('city').notEmpty(),
+    body('state').notEmpty(),
+    body('pincode').notEmpty()
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        // If this is default, remove default from others
+        if (req.body.is_default) {
+            await db.query(
+                'UPDATE tbl_customer_ship_addresses SET is_default = 0 WHERE customer_id = ?',
+                [req.body.customer_id]
+            );
+        }
+
+        const result = await db.query(
+            `INSERT INTO tbl_customer_ship_addresses 
+            (customer_id, ship_code, ship_name, attention, address, address2,
+             city, state, pincode, phone, mobile, email, is_default, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                req.body.customer_id,
+                req.body.ship_code || `SITE-${Date.now()}`,
+                req.body.ship_name,
+                req.body.attention || null,
+                req.body.address,
+                req.body.address2 || null,
+                req.body.city,
+                req.body.state,
+                req.body.pincode,
+                req.body.phone || null,
+                req.body.mobile || null,
+                req.body.email || null,
+                req.body.is_default || 0,
+                Math.floor(Date.now() / 1000)
+            ]
+        );
+
+        res.status(201).json({ 
+            message: 'Ship address added successfully',
+            ship_id: result.insertId 
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ========== ITEM MASTER ==========
+
+// Get all items
+router.get('/items', async (req, res) => {
+    try {
+        const items = await db.query(`
+            SELECT i.*, gt.glass_name, u.uom_name 
+            FROM tbl_item_master i
+            LEFT JOIN tbl_glass_type_master gt ON i.glass_type_id = gt.glass_type_id
+            LEFT JOIN tbl_uom_master u ON i.uom_id = u.uom_id
+            WHERE i.is_active = 1
+            ORDER BY i.item_code
+        `);
+        res.json(items);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Create item
+router.post('/items', [
+    body('item_code').notEmpty(),
+    body('item_name').notEmpty(),
+    body('glass_type_id').notEmpty(),
+    body('thickness').isNumeric()
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const result = await db.query(
+            `INSERT INTO tbl_item_master 
+            (item_code, item_name, glass_type_id, thickness, hsn_code, uom_id, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [
+                req.body.item_code,
+                req.body.item_name,
+                req.body.glass_type_id,
+                req.body.thickness,
+                req.body.hsn_code || '700510',
+                req.body.uom_id || 1,
+                Math.floor(Date.now() / 1000)
+            ]
+        );
+
+        res.status(201).json({ 
+            message: 'Item created successfully',
+            item_id: result.insertId 
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ========== PROCESS MASTER ==========
+
+// Get all processes
+router.get('/processes', async (req, res) => {
+    try {
+        const processes = await db.query(`
+            SELECT p.*, u.uom_name 
+            FROM tbl_fast_process_master p
+            LEFT JOIN tbl_uom_master u ON p.uom_id = u.uom_id
+            WHERE p.is_active = 1
+            ORDER BY p.sort_order
+        `);
+        res.json(processes);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get process rates
+router.get('/processes/:process_id/rates', async (req, res) => {
+    try {
+        const rates = await db.query(
+            'SELECT * FROM tbl_fast_process_rates WHERE process_id = ? AND is_active = 1 ORDER BY thickness',
+            [req.params.process_id]
+        );
+        res.json(rates);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ========== CHARGES MASTER ==========
+
+// Get all charges
+router.get('/charges', async (req, res) => {
+    try {
+        const charges = await db.query(
+            'SELECT * FROM tbl_charges_master WHERE is_active = 1 ORDER BY display_order'
+        );
+        res.json(charges);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get charges by category
+router.get('/charges/category/:category', async (req, res) => {
+    try {
+        const charges = await db.query(
+            'SELECT * FROM tbl_charges_master WHERE charge_category = ? AND is_active = 1 ORDER BY display_order',
+            [req.params.category]
+        );
+        res.json(charges);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ========== PAYMENT TERMS ==========
+
+router.get('/payment-terms', async (req, res) => {
+    try {
+        const terms = await db.query(
+            'SELECT * FROM tbl_payment_terms WHERE is_active = 1 ORDER BY days'
+        );
+        res.json(terms);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ========== UOM MASTER ==========
+
+router.get('/uom', async (req, res) => {
+    try {
+        const uom = await db.query(
+            'SELECT * FROM tbl_uom_master WHERE is_active = 1'
+        );
+        res.json(uom);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+module.exports = router;
+
+// ==========================================================
+// 8. routes/pi.routes.js - Proforma Invoice Routes
+// ==========================================================
+
+const express = require('express');
+const db = require('../config/database');
+
+const router = express.Router();
+
+// Get all PIs
+router.get('/', async (req, res) => {
+    try {
+        const pis = await db.query(`
+            SELECT p.*, c.customer_name 
+            FROM tbl_pi_master p
+            JOIN tbl_customer_master c ON p.customer_id = c.customer_id
+            ORDER BY p.pi_id DESC
+            LIMIT 100
+        `);
+        res.json(pis);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get PI by ID
+router.get('/:id', async (req, res) => {
+    try {
+        const pis = await db.query(`
+            SELECT p.*, c.customer_name, c.bill_gst, c.bill_address, c.bill_city,
+                   s.ship_name, s.address as ship_address, s.city as ship_city,
+                   sp.salesperson_name, pt.term_name
+            FROM tbl_pi_master p
+            JOIN tbl_customer_master c ON p.customer_id = c.customer_id
+            LEFT JOIN tbl_customer_ship_addresses s ON p.ship_address_id = s.ship_id
+            LEFT JOIN tbl_salesperson_master sp ON p.salesperson_id = sp.salesperson_id
+            LEFT JOIN tbl_payment_terms pt ON p.payment_term_id = pt.term_id
+            WHERE p.pi_id = ?
+        `, [req.params.id]);
+
+        if (pis.length === 0) {
+            return res.status(404).json({ error: 'PI not found' });
+        }
+
+        // Get items
+        const items = await db.query(`
+            SELECT d.*, i.item_name 
+            FROM tbl_pi_details d
+            JOIN tbl_item_master i ON d.item_id = i.item_id
+            WHERE d.pi_id = ?
+        `, [req.params.id]);
+
+        // Get charges
+        const charges = await db.query(
+            'SELECT * FROM tbl_transaction_charges WHERE trans_type = 1 AND trans_id = ?',
+            [req.params.id]
+        );
+
+        res.json({
+            ...pis[0],
+            items,
+            charges
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Generate PI number
+async function generatePINumber() {
+    const year = new Date().getFullYear();
+    const result = await db.query(
+        `SELECT COUNT(*) as count FROM tbl_pi_master 
+         WHERE pi_number LIKE ?`,
+        [`PI/${year}/%`]
+    );
+    
+    const seq = (result[0].count + 1).toString().padStart(5, '0');
+    return `PI/${year}/${seq}`;
+}
+
+// Create PI
+router.post('/', async (req, res) => {
+    const connection = await db.getConnection();
+    
+    try {
+        await connection.beginTransaction();
+
+        // Generate PI number
+        const pi_number = await generatePINumber();
+
+        // Insert PI master
+        const [piResult] = await connection.execute(
+            `INSERT INTO tbl_pi_master 
+            (pi_number, pi_date, customer_id, ship_address_id, customer_po_no, po_date,
+             payment_term_id, salesperson_id, remarks, subtotal, discount_total,
+             taxable_amount, cgst_total, sgst_total, igst_total, round_off,
+             grand_total, status, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                pi_number,
+                req.body.pi_date,
+                req.body.customer_id,
+                req.body.ship_address_id || null,
+                req.body.customer_po_no || null,
+                req.body.po_date || null,
+                req.body.payment_term_id || 4,
+                req.body.salesperson_id || 1,
+                req.body.remarks || null,
+                req.body.subtotal || 0,
+                req.body.discount_total || 0,
+                req.body.taxable_amount || 0,
+                req.body.cgst_total || 0,
+                req.body.sgst_total || 0,
+                req.body.igst_total || 0,
+                req.body.round_off || 0,
+                req.body.grand_total || 0,
+                1, // Draft
+                Math.floor(Date.now() / 1000)
+            ]
+        );
+
+        const pi_id = piResult.insertId;
+
+        // Insert items
+        if (req.body.items && req.body.items.length > 0) {
+            for (const item of req.body.items) {
+                await connection.execute(
+                    `INSERT INTO tbl_pi_details 
+                    (pi_id, item_id, glass_type_id, thickness, height_actual, width_actual,
+                     height_chargeable, width_chargeable, quantity, unit_id, rate,
+                     discount_percent, discount_amount, tax_rate, tax_amount, total_amount,
+                     fabrication_details)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [
+                        pi_id,
+                        item.item_id,
+                        item.glass_type_id || 1,
+                        item.thickness || 0,
+                        item.height_actual || item.height,
+                        item.width_actual || item.width,
+                        item.height_chargeable || item.height,
+                        item.width_chargeable || item.width,
+                        item.quantity,
+                        item.unit_id || 1,
+                        item.rate || 0,
+                        item.discount_percent || 0,
+                        item.discount_amount || 0,
+                        item.tax_rate || 18,
+                        item.tax_amount || 0,
+                        item.total_amount || 0,
+                        JSON.stringify(item.fabrication_details || [])
+                    ]
+                );
+            }
+        }
+
+        // Insert charges
+        if (req.body.charges && req.body.charges.length > 0) {
+            for (const charge of req.body.charges) {
+                await connection.execute(
+                    `INSERT INTO tbl_transaction_charges 
+                    (trans_type, trans_id, charge_id, charge_code, charge_name,
+                     calc_type, calc_value, base_amount, charge_amount,
+                     gst_rate, gst_amount, total_amount, created_at)
+                    VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [
+                        pi_id,
+                        charge.charge_id,
+                        charge.charge_code,
+                        charge.charge_name,
+                        charge.calc_type,
+                        charge.calc_value,
+                        charge.base_amount || 0,
+                        charge.charge_amount,
+                        charge.gst_rate || 18,
+                        charge.gst_amount || 0,
+                        charge.total_amount,
+                        Math.floor(Date.now() / 1000)
+                    ]
+                );
+            }
+        }
+
+        await connection.commit();
+
+        res.status(201).json({
+            message: 'PI created successfully',
+            pi_id,
+            pi_number
+        });
+
+    } catch (error) {
+        await connection.rollback();
+        console.error('Error creating PI:', error);
+        res.status(500).json({ error: error.message });
+    } finally {
+        connection.release();
+    }
+});
+
+// Update PI
+router.put('/:id', async (req, res) => {
+    const connection = await db.getConnection();
+    
+    try {
+        await connection.beginTransaction();
+
+        // Update PI master
+        await connection.execute(
+            `UPDATE tbl_pi_master SET
+            pi_date = ?, customer_id = ?, ship_address_id = ?, customer_po_no = ?,
+            po_date = ?, payment_term_id = ?, salesperson_id = ?, remarks = ?,
+            subtotal = ?, discount_total = ?, taxable_amount = ?,
+            cgst_total = ?, sgst_total = ?, igst_total = ?, round_off = ?,
+            grand_total = ?, updated_at = ?
+            WHERE pi_id = ?`,
+            [
+                req.body.pi_date,
+                req.body.customer_id,
+                req.body.ship_address_id,
+                req.body.customer_po_no,
+                req.body.po_date,
+                req.body.payment_term_id,
+                req.body.salesperson_id,
+                req.body.remarks,
+                req.body.subtotal,
+                req.body.discount_total,
+                req.body.taxable_amount,
+                req.body.cgst_total,
+                req.body.sgst_total,
+                req.body.igst_total,
+                req.body.round_off,
+                req.body.grand_total,
+                Math.floor(Date.now() / 1000),
+                req.params.id
+            ]
+        );
+
+        // Delete old items
+        await connection.execute('DELETE FROM tbl_pi_details WHERE pi_id = ?', [req.params.id]);
+
+        // Insert new items
+        if (req.body.items && req.body.items.length > 0) {
+            for (const item of req.body.items) {
+                await connection.execute(
+                    `INSERT INTO tbl_pi_details 
+                    (pi_id, item_id, glass_type_id, thickness, height_actual, width_actual,
+                     height_chargeable, width_chargeable, quantity, unit_id, rate,
+                     discount_percent, discount_amount, tax_rate, tax_amount, total_amount,
+                     fabrication_details)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [
+                        req.params.id,
+                        item.item_id,
+                        item.glass_type_id,
+                        item.thickness,
+                        item.height_actual || item.height,
+                        item.width_actual || item.width,
+                        item.height_chargeable || item.height,
+                        item.width_chargeable || item.width,
+                        item.quantity,
+                        item.unit_id,
+                        item.rate,
+                        item.discount_percent,
+                        item.discount_amount,
+                        item.tax_rate,
+                        item.tax_amount,
+                        item.total_amount,
+                        JSON.stringify(item.fabrication_details || [])
+                    ]
+                );
+            }
+        }
+
+        // Delete old charges
+        await connection.execute(
+            'DELETE FROM tbl_transaction_charges WHERE trans_type = 1 AND trans_id = ?',
+            [req.params.id]
+        );
+
+        // Insert new charges
+        if (req.body.charges && req.body.charges.length > 0) {
+            for (const charge of req.body.charges) {
+                await connection.execute(
+                    `INSERT INTO tbl_transaction_charges 
+                    (trans_type, trans_id, charge_id, charge_code, charge_name,
+                     calc_type, calc_value, base_amount, charge_amount,
+                     gst_rate, gst_amount, total_amount, created_at)
+                    VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [
+                        req.params.id,
+                        charge.charge_id,
+                        charge.charge_code,
+                        charge.charge_name,
+                        charge.calc_type,
+                        charge.calc_value,
+                        charge.base_amount || 0,
+                        charge.charge_amount,
+                        charge.gst_rate || 18,
+                        charge.gst_amount || 0,
+                        charge.total_amount,
+                        Math.floor(Date.now() / 1000)
+                    ]
+                );
+            }
+        }
+
+        await connection.commit();
+
+        res.json({ message: 'PI updated successfully' });
+
+    } catch (error) {
+        await connection.rollback();
+        console.error('Error updating PI:', error);
+        res.status(500).json({ error: error.message });
+    } finally {
+        connection.release();
+    }
+});
+
+// Delete PI
+router.delete('/:id', async (req, res) => {
+    try {
+        await db.query('DELETE FROM tbl_pi_details WHERE pi_id = ?', [req.params.id]);
+        await db.query('DELETE FROM tbl_transaction_charges WHERE trans_type = 1 AND trans_id = ?', [req.params.id]);
+        await db.query('DELETE FROM tbl_pi_master WHERE pi_id = ?', [req.params.id]);
+        
+        res.json({ message: 'PI deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Convert PI to WO
+router.post('/:id/convert-to-wo', async (req, res) => {
+    try {
+        const result = await db.query('CALL sp_convert_pi_to_wo(?)', [req.params.id]);
+        res.json({ 
+            message: 'PI converted to Work Order successfully',
+            wo_id: result[0][0].wo_id,
+            wo_number: result[0][0].wo_number
+        });
+    } catch (error) {
+        console.error('Error converting PI to WO:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+module.exports = router;
+
+// ==========================================================
+// 9. routes/wo.routes.js - Work Order Routes
+// ==========================================================
+
+const express = require('express');
+const db = require('../config/database');
+
+const router = express.Router();
+
+// Get all WOs
+router.get('/', async (req, res) => {
+    try {
+        const wos = await db.query(`
+            SELECT w.*, c.customer_name,
+                   CASE 
+                       WHEN w.production_status = 1 THEN 'Pending'
+                       WHEN w.production_status = 2 THEN 'Cutting'
+                       WHEN w.production_status = 3 THEN 'Processing'
+                       WHEN w.production_status = 4 THEN 'Completed'
+                       WHEN w.production_status = 5 THEN 'Delivered'
+                   END as status_name
+            FROM tbl_work_order_master w
+            JOIN tbl_customer_master c ON w.customer_id = c.customer_id
+            ORDER BY w.wo_id DESC
+        `);
+        res.json(wos);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get WO by ID
+router.get('/:id', async (req, res) => {
+    try {
+        const wos = await db.query(`
+            SELECT w.*, c.customer_name, c.bill_gst,
+                   s.ship_name, s.address as ship_address,
+                   p.pi_number
+            FROM tbl_work_order_master w
+            JOIN tbl_customer_master c ON w.customer_id = c.customer_id
+            LEFT JOIN tbl_customer_ship_addresses s ON w.ship_address_id = s.ship_id
+            LEFT JOIN tbl_pi_master p ON w.pi_id = p.pi_id
+            WHERE w.wo_id = ?
+        `, [req.params.id]);
+
+        if (wos.length === 0) {
+            return res.status(404).json({ error: 'Work Order not found' });
+        }
+
+        // Get items
+        const items = await db.query(`
+            SELECT d.*, i.item_name 
+            FROM tbl_work_order_details d
+            JOIN tbl_item_master i ON d.item_id = i.item_id
+            WHERE d.wo_id = ?
+        `, [req.params.id]);
+
+        // Get cutting plan
+        const cuttingPlan = await db.query(`
+            SELECT cp.*, m.machine_name, o.operator_name
+            FROM tbl_wo_cutting_plan cp
+            LEFT JOIN tbl_machine_master m ON cp.machine_id = m.machine_id
+            LEFT JOIN tbl_operator_master o ON cp.operator_id = o.operator_id
+            WHERE cp.wo_detail_id IN (SELECT wo_detail_id FROM tbl_work_order_details WHERE wo_id = ?)
+        `, [req.params.id]);
+
+        res.json({
+            ...wos[0],
+            items,
+            cuttingPlan
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Update WO status
+router.put('/:id/status', async (req, res) => {
+    try {
+        await db.query(
+            'UPDATE tbl_work_order_master SET production_status = ?, updated_at = ? WHERE wo_id = ?',
+            [req.body.status, Math.floor(Date.now() / 1000), req.params.id]
+        );
+        res.json({ message: 'WO status updated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Update cutting qty
+router.put('/details/:detail_id/cut', async (req, res) => {
+    try {
+        await db.query(
+            'UPDATE tbl_work_order_details SET cut_qty = ? WHERE wo_detail_id = ?',
+            [req.body.cut_qty, req.params.detail_id]
+        );
+        
+        // Update production status
+        await db.query('CALL sp_update_production_status(?)', [req.params.detail_id]);
+        
+        res.json({ message: 'Cutting quantity updated' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Add cutting plan
+router.post('/cutting-plan', async (req, res) => {
+    try {
+        const result = await db.query(
+            `INSERT INTO tbl_wo_cutting_plan 
+            (wo_detail_id, sheet_no, jumbo_height, jumbo_width,
+             cut_pos_x, cut_pos_y, cut_height, cut_width, quantity)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                req.body.wo_detail_id,
+                req.body.sheet_no,
+                req.body.jumbo_height,
+                req.body.jumbo_width,
+                req.body.cut_pos_x,
+                req.body.cut_pos_y,
+                req.body.cut_height,
+                req.body.cut_width,
+                req.body.quantity
+            ]
+        );
+
+        res.status(201).json({ 
+            message: 'Cutting plan added',
+            cutting_plan_id: result.insertId 
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Run cutting optimizer
+router.post('/optimize-cut', async (req, res) => {
+    try {
+        const { wo_detail_id, jumbo_height, jumbo_width, cutting_gap, rotation_allowed } = req.body;
+        
+        await db.query(
+            'CALL sp_optimize_guillotine_cut(?, ?, ?, ?, ?)',
+            [wo_detail_id, jumbo_height, jumbo_width, cutting_gap, rotation_allowed ? 1 : 0]
+        );
+
+        // Get the session results
+        const [session] = await db.query(
+            'SELECT session_id FROM tbl_cutting_optimizer_sessions WHERE wo_detail_id = ? ORDER BY session_id DESC LIMIT 1',
+            [wo_detail_id]
+        );
+
+        const results = await db.query(
+            'SELECT * FROM tbl_cutting_optimizer_results WHERE session_id = ?',
+            [session[0].session_id]
+        );
+
+        res.json({
+            message: 'Optimization complete',
+            session_id: session[0].session_id,
+            results
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Approve cutting plan
+router.post('/approve-cutting/:session_id', async (req, res) => {
+    try {
+        await db.query('CALL sp_approve_cutting_plan(?, ?)', [
+            req.params.session_id,
+            req.user.user_id
+        ]);
+
+        res.json({ message: 'Cutting plan approved and applied to WO' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+module.exports = router;
+
+// ==========================================================
+// 10. middleware/errorHandler.js - Global Error Handler
+// ==========================================================
+
+const errorHandler = (err, req, res, next) => {
+    console.error('Error:', err);
+
+    // Default error
+    let error = { ...err };
+    error.message = err.message;
+
+    // MySQL errors
+    if (err.code === 'ER_DUP_ENTRY') {
+        const message = 'Duplicate entry found';
+        error = { message, statusCode: 400 };
+    }
+
+    if (err.code === 'ER_NO_REFERENCED_ROW') {
+        const message = 'Referenced record does not exist';
+        error = { message, statusCode: 400 };
+    }
+
+    if (err.code === 'ER_ROW_IS_REFERENCED') {
+        const message = 'Cannot delete as it is referenced elsewhere';
+        error = { message, statusCode: 400 };
+    }
+
+    // JWT errors
+    if (err.name === 'JsonWebTokenError') {
+        const message = 'Invalid token';
+        error = { message, statusCode: 401 };
+    }
+
+    if (err.name === 'TokenExpiredError') {
+        const message = 'Token expired';
+        error = { message, statusCode: 401 };
+    }
+
+    // Validation errors
+    if (err.name === 'ValidationError') {
+        const message = Object.values(err.errors).map(val => val.message);
+        error = { message, statusCode: 400 };
+    }
+
+    res.status(error.statusCode || 500).json({
+        success: false,
+        error: error.message || 'Server Error'
+    });
+};
+
+module.exports = { errorHandler };
+
+// ==========================================================
+// 11. utils/calculator.js - Calculation Utilities
+// ==========================================================
+
+class Calculator {
+    // Calculate area in sqft from mm
+    static areaSqFt(height_mm, width_mm) {
+        return (height_mm * width_mm) / 14400;
+    }
+
+    // Calculate area in sqm from mm
+    static areaSqM(height_mm, width_mm) {
+        return (height_mm * width_mm) / 1000000;
+    }
+
+    // Calculate running feet
+    static runningFt(height_mm, width_mm) {
+        return ((height_mm + width_mm) * 2) / 304.8;
+    }
+
+    // Calculate item amount
+    static calculateItemAmount(quantity, height, width, rate, discountPercent, taxRate) {
+        const area = this.areaSqFt(height, width);
+        const baseAmount = quantity * area * rate;
+        const discount = baseAmount * (discountPercent / 100);
+        const taxable = baseAmount - discount;
+        const tax = taxable * (taxRate / 100);
+        
+        return {
+            baseAmount: Math.round(baseAmount),
+            discount: Math.round(discount),
+            taxable: Math.round(taxable),
+            tax: Math.round(tax),
+            total: Math.round(taxable + tax)
+        };
+    }
+
+    // Calculate fabrication amount
+    static calculateFabrication(processType, thickness, quantity, size) {
+        // This would call the database to get rates
+        return quantity * 30; // Example: ₹0.30 per hole
+    }
+
+    // Format currency (paise to rupees)
+    static formatCurrency(paise) {
+        return (paise / 100).toFixed(2);
+    }
+
+    // Convert rupees to paise
+    static toPaise(rupees) {
+        return Math.round(rupees * 100);
+    }
+
+    // Calculate GST
+    static calculateGST(amount, rate, type = 'intra') {
+        const gst = Math.round(amount * rate / 100);
+        if (type === 'intra') {
+            return {
+                cgst: Math.round(gst / 2),
+                sgst: Math.round(gst / 2),
+                igst: 0,
+                total: gst
+            };
+        } else {
+            return {
+                cgst: 0,
+                sgst: 0,
+                igst: gst,
+                total: gst
+            };
+        }
+    }
+
+    // Round off to nearest
+    static roundOff(amount, roundTo = 1) {
+        return Math.round(amount / roundTo) * roundTo;
+    }
+
+    // Convert number to words (Indian system)
+    static numberToWords(num) {
+        if (num === 0) return 'Zero';
+
+        const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+                      'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
+                      'Seventeen', 'Eighteen', 'Nineteen'];
+        const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+        
+        const numToWords = (n) => {
+            if (n < 20) return ones[n];
+            if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? ' ' + ones[n % 10] : '');
+            if (n < 1000) return ones[Math.floor(n / 100)] + ' Hundred' + (n % 100 ? ' ' + numToWords(n % 100) : '');
+            return '';
+        };
+
+        let words = '';
+        let crore = Math.floor(num / 10000000);
+        num %= 10000000;
+        
+        let lakh = Math.floor(num / 100000);
+        num %= 100000;
+        
+        let thousand = Math.floor(num / 1000);
+        num %= 1000;
+        
+        let hundred = num;
+
+        if (crore) words += numToWords(crore) + ' Crore ';
+        if (lakh) words += numToWords(lakh) + ' Lakh ';
+        if (thousand) words += numToWords(thousand) + ' Thousand ';
+        if (hundred) words += numToWords(hundred);
+
+        return words.trim() + ' Rupees Only';
+    }
+}
+
+module.exports = Calculator;
+
+// ==========================================================
+// BACKEND API COMPLETE - 11 FILES
+// ==========================================================
