@@ -1,0 +1,36 @@
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   CUSTOMER      │     │   PI_MASTER     │     │   WORK_ORDER    │
+├─────────────────┤     ├─────────────────┤     ├─────────────────┤
+│ customer_id PK  │────▶│ pi_id PK        │────▶│ wo_id PK        │
+│ customer_code   │     │ pi_number       │     │ wo_number       │
+│ customer_name   │     │ pi_date         │     │ pi_id FK        │
+│ bill_address    │     │ customer_id FK  │     │ customer_id FK  │
+│ ship_address    │     │ ship_address_id │     │ delivery_date   │
+│ gst_no          │     │ grand_total     │     │ status          │
+│ is_active       │     │ status          │     │ created_at      │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+         │                       │                       │
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│ CUSTOMER_SHIP   │     │  PI_DETAILS     │     │  WO_DETAILS     │
+├─────────────────┤     ├─────────────────┤     ├─────────────────┤
+│ ship_id PK      │     │ pi_detail_id PK │     │ wo_detail_id PK │
+│ customer_id FK  │     │ pi_id FK        │     │ wo_id FK        │
+│ ship_name       │     │ item_id FK      │     │ item_id FK      │
+│ address         │     │ height_width    │     │ quantity        │
+│ city            │     │ quantity        │     │ cut_qty         │
+│ phone           │     │ rate            │     │ processed_qty   │
+│ is_default      │     │ total_amount    │     │ balance_qty     │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│ FAST_PROCESS    │     │ CHARGES_MASTER  │     │ PRICE_MASTER    │
+├─────────────────┤     ├─────────────────┤     ├─────────────────┤
+│ process_id PK   │     │ charge_id PK    │     │ price_id PK     │
+│ process_code    │     │ charge_code     │     │ item_id FK      │
+│ process_name    │     │ charge_name     │     │ thickness       │
+│ category        │     │ calc_type       │     │ min_size        │
+│ is_active       │     │ calc_value      │     │ max_size        │
+└─────────────────┘     │ gst_rate        │     │ rate            │
+                        └─────────────────┘     └─────────────────┘
