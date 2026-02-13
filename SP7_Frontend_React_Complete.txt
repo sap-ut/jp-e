@@ -1,0 +1,1248 @@
+// ==========================================================
+// SP-7 GLASS ERP - COMPLETE FRONTEND (REACT)
+// Author: SP-7 Technologies
+// File: SP7_Frontend_React_Complete.txt
+// Description: Complete React.js Frontend for Glass ERP
+// ==========================================================
+
+// ==========================================================
+// 1. package.json
+// ==========================================================
+
+/*
+{
+  "name": "sp7-glass-erp-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.0",
+    "axios": "^1.3.0",
+    "react-table": "^7.8.0",
+    "react-toastify": "^9.1.0",
+    "react-icons": "^4.7.0",
+    "date-fns": "^2.29.0",
+    "jspdf": "^2.5.0",
+    "jspdf-autotable": "^3.5.0",
+    "xlsx": "^0.18.0",
+    "tailwindcss": "^3.2.0",
+    "@headlessui/react": "^1.7.0",
+    "@heroicons/react": "^2.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  }
+}
+*/
+
+// ==========================================================
+// 2. src/App.js - Main Application
+// ==========================================================
+
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Layout Components
+import Layout from './components/Layout';
+import PrivateRoute from './components/PrivateRoute';
+
+// Auth Pages
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+
+// Master Pages
+import CustomerMaster from './pages/masters/CustomerMaster';
+import ItemMaster from './pages/masters/ItemMaster';
+import GlassTypeMaster from './pages/masters/GlassTypeMaster';
+import ProcessMaster from './pages/masters/ProcessMaster';
+import ChargesMaster from './pages/masters/ChargesMaster';
+import PriceMaster from './pages/masters/PriceMaster';
+
+// Transaction Pages
+import ProformaInvoice from './pages/transactions/ProformaInvoice';
+import WorkOrder from './pages/transactions/WorkOrder';
+import CuttingOptimizer from './pages/transactions/CuttingOptimizer';
+import SalesInvoice from './pages/transactions/SalesInvoice';
+
+// Inventory Pages
+import GlassInventory from './pages/inventory/GlassInventory';
+import HardwareInventory from './pages/inventory/HardwareInventory';
+import StockTransaction from './pages/inventory/StockTransaction';
+
+// Report Pages
+import PIReport from './pages/reports/PIReport';
+import WOReport from './pages/reports/WOReport';
+import ProductionReport from './pages/reports/ProductionReport';
+import RejectionReport from './pages/reports/RejectionReport';
+import PendingBillingReport from './pages/reports/PendingBillingReport';
+import SalespersonReport from './pages/reports/SalespersonReport';
+
+function App() {
+  return (
+    <Router>
+      <ToastContainer position="top-right" autoClose={3000} />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
+          <Route index element={<Navigate to="/dashboard" />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          
+          {/* Masters Routes */}
+          <Route path="masters/customers" element={<CustomerMaster />} />
+          <Route path="masters/items" element={<ItemMaster />} />
+          <Route path="masters/glass-types" element={<GlassTypeMaster />} />
+          <Route path="masters/processes" element={<ProcessMaster />} />
+          <Route path="masters/charges" element={<ChargesMaster />} />
+          <Route path="masters/prices" element={<PriceMaster />} />
+          
+          {/* Transaction Routes */}
+          <Route path="transactions/pi" element={<ProformaInvoice />} />
+          <Route path="transactions/wo" element={<WorkOrder />} />
+          <Route path="transactions/cutting" element={<CuttingOptimizer />} />
+          <Route path="transactions/invoice" element={<SalesInvoice />} />
+          
+          {/* Inventory Routes */}
+          <Route path="inventory/glass" element={<GlassInventory />} />
+          <Route path="inventory/hardware" element={<HardwareInventory />} />
+          <Route path="inventory/stock" element={<StockTransaction />} />
+          
+          {/* Report Routes */}
+          <Route path="reports/pi" element={<PIReport />} />
+          <Route path="reports/wo" element={<WOReport />} />
+          <Route path="reports/production" element={<ProductionReport />} />
+          <Route path="reports/rejection" element={<RejectionReport />} />
+          <Route path="reports/pending-billing" element={<PendingBillingReport />} />
+          <Route path="reports/salesperson" element={<SalespersonReport />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
+
+// ==========================================================
+// 3. src/components/Layout.js - Main Layout with Sidebar
+// ==========================================================
+
+import React, { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  HomeIcon,
+  CubeIcon,
+  DocumentTextIcon,
+  ClipboardDocumentListIcon,
+  ChartBarIcon,
+  CogIcon,
+  ArrowRightOnRectangleIcon,
+  ChevronDownIcon,
+  UserGroupIcon,
+  TruckIcon,
+  CreditCardIcon,
+  BeakerIcon,
+  NewspaperIcon
+} from '@heroicons/react/24/outline';
+
+const Layout = ({ children }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [openMenus, setOpenMenus] = useState({});
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const toggleMenu = (menu) => {
+    setOpenMenus(prev => ({ ...prev, [menu]: !prev[menu] }));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  const menuItems = [
+    {
+      name: 'Dashboard',
+      icon: HomeIcon,
+      path: '/dashboard'
+    },
+    {
+      name: 'Masters',
+      icon: CubeIcon,
+      submenu: [
+        { name: 'Customer Master', path: '/masters/customers' },
+        { name: 'Item Master', path: '/masters/items' },
+        { name: 'Glass Type Master', path: '/masters/glass-types' },
+        { name: 'Process Master', path: '/masters/processes' },
+        { name: 'Charges Master', path: '/masters/charges' },
+        { name: 'Price Master', path: '/masters/prices' }
+      ]
+    },
+    {
+      name: 'Transactions',
+      icon: DocumentTextIcon,
+      submenu: [
+        { name: 'Proforma Invoice', path: '/transactions/pi' },
+        { name: 'Work Order', path: '/transactions/wo' },
+        { name: 'Cutting Optimizer', path: '/transactions/cutting' },
+        { name: 'Sales Invoice', path: '/transactions/invoice' }
+      ]
+    },
+    {
+      name: 'Inventory',
+      icon: ClipboardDocumentListIcon,
+      submenu: [
+        { name: 'Glass Inventory', path: '/inventory/glass' },
+        { name: 'Hardware Inventory', path: '/inventory/hardware' },
+        { name: 'Stock Transactions', path: '/inventory/stock' }
+      ]
+    },
+    {
+      name: 'Reports',
+      icon: ChartBarIcon,
+      submenu: [
+        { name: 'PI Report', path: '/reports/pi' },
+        { name: 'WO Report', path: '/reports/wo' },
+        { name: 'Production Report', path: '/reports/production' },
+        { name: 'Rejection Report', path: '/reports/rejection' },
+        { name: 'Pending Billing', path: '/reports/pending-billing' },
+        { name: 'Salesperson Report', path: '/reports/salesperson' }
+      ]
+    }
+  ];
+
+  return (
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-blue-900 text-white transition-all duration-300`}>
+        <div className="flex items-center justify-between p-4">
+          {sidebarOpen ? (
+            <h1 className="text-xl font-bold">SP-7 ERP</h1>
+          ) : (
+            <h1 className="text-xl font-bold">SP7</h1>
+          )}
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1 rounded hover:bg-blue-800">
+            <ChevronDownIcon className={`h-5 w-5 transform ${sidebarOpen ? '' : 'rotate-180'}`} />
+          </button>
+        </div>
+
+        <nav className="mt-8">
+          {menuItems.map((item) => (
+            <div key={item.name}>
+              {item.submenu ? (
+                <div>
+                  <button
+                    onClick={() => toggleMenu(item.name)}
+                    className="w-full flex items-center justify-between p-3 hover:bg-blue-800"
+                  >
+                    <div className="flex items-center">
+                      <item.icon className="h-5 w-5 mr-3" />
+                      {sidebarOpen && <span>{item.name}</span>}
+                    </div>
+                    {sidebarOpen && (
+                      <ChevronDownIcon className={`h-4 w-4 transform ${openMenus[item.name] ? 'rotate-180' : ''}`} />
+                    )}
+                  </button>
+                  {openMenus[item.name] && sidebarOpen && (
+                    <div className="bg-blue-800">
+                      {item.submenu.map((sub) => (
+                        <Link
+                          key={sub.path}
+                          to={sub.path}
+                          className={`block p-3 pl-12 hover:bg-blue-700 ${
+                            location.pathname === sub.path ? 'bg-blue-700' : ''
+                          }`}
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  to={item.path}
+                  className={`flex items-center p-3 hover:bg-blue-800 ${
+                    location.pathname === item.path ? 'bg-blue-800' : ''
+                  }`}
+                >
+                  <item.icon className="h-5 w-5 mr-3" />
+                  {sidebarOpen && <span>{item.name}</span>}
+                </Link>
+              )}
+            </div>
+          ))}
+
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center p-3 mt-8 hover:bg-blue-800"
+          >
+            <ArrowRightOnRectangleIcon className="h-5 w-5 mr-3" />
+            {sidebarOpen && <span>Logout</span>}
+          </button>
+        </nav>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto">
+        <div className="p-8">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Layout;
+
+// ==========================================================
+// 4. src/pages/Dashboard.js - Dashboard Page
+// ==========================================================
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import {
+  CurrencyRupeeIcon,
+  DocumentTextIcon,
+  CubeIcon,
+  TruckIcon,
+  ExclamationTriangleIcon
+} from '@heroicons/react/24/outline';
+
+const Dashboard = () => {
+  const [stats, setStats] = useState({
+    today_pi: 0,
+    week_pi: 0,
+    pending_wo: 0,
+    cutting_wo: 0,
+    processing_wo: 0,
+    completed_wo: 0,
+    pending_qty: 0,
+    monthly_sales: 0,
+    total_sales: 0
+  });
+
+  const [recentPIs, setRecentPIs] = useState([]);
+  const [pendingWOs, setPendingWOs] = useState([]);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      const response = await axios.get('/api/dashboard');
+      setStats(response.data.stats);
+      setRecentPIs(response.data.recentPIs);
+      setPendingWOs(response.data.pendingWOs);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    }
+  };
+
+  const statCards = [
+    {
+      title: 'Today PI',
+      value: stats.today_pi,
+      icon: DocumentTextIcon,
+      color: 'bg-blue-500'
+    },
+    {
+      title: 'Monthly Sales',
+      value: `₹${(stats.monthly_sales / 100).toLocaleString()}`,
+      icon: CurrencyRupeeIcon,
+      color: 'bg-green-500'
+    },
+    {
+      title: 'Pending WO',
+      value: stats.pending_wo,
+      icon: CubeIcon,
+      color: 'bg-yellow-500'
+    },
+    {
+      title: 'In Progress',
+      value: stats.cutting_wo + stats.processing_wo,
+      icon: TruckIcon,
+      color: 'bg-purple-500'
+    }
+  ];
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-8">Dashboard</h1>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {statCards.map((card, index) => (
+          <div key={index} className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">{card.title}</p>
+                <p className="text-2xl font-bold mt-2">{card.value}</p>
+              </div>
+              <div className={`${card.color} p-3 rounded-lg`}>
+                <card.icon className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Charts and Tables */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent PIs */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-4">Recent Proforma Invoices</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left py-2">PI No</th>
+                  <th className="text-left py-2">Date</th>
+                  <th className="text-left py-2">Customer</th>
+                  <th className="text-right py-2">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentPIs.map((pi) => (
+                  <tr key={pi.pi_id} className="border-b hover:bg-gray-50">
+                    <td className="py-2">{pi.pi_number}</td>
+                    <td className="py-2">{new Date(pi.pi_date * 1000).toLocaleDateString()}</td>
+                    <td className="py-2">{pi.customer_name}</td>
+                    <td className="py-2 text-right">₹{(pi.grand_total / 100).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Pending Work Orders */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-4">Pending Work Orders</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left py-2">WO No</th>
+                  <th className="text-left py-2">Delivery Date</th>
+                  <th className="text-left py-2">Customer</th>
+                  <th className="text-center py-2">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pendingWOs.map((wo) => (
+                  <tr key={wo.wo_id} className="border-b hover:bg-gray-50">
+                    <td className="py-2">{wo.wo_number}</td>
+                    <td className="py-2">{new Date(wo.delivery_date * 1000).toLocaleDateString()}</td>
+                    <td className="py-2">{wo.customer_name}</td>
+                    <td className="py-2 text-center">
+                      <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">
+                        {wo.status_name}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Production Summary */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-4">Production Summary</h2>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between mb-1">
+                <span>Cutting</span>
+                <span>{stats.cutting_wo} Orders</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-blue-500 h-2 rounded-full" style={{ width: '60%' }}></div>
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between mb-1">
+                <span>Processing</span>
+                <span>{stats.processing_wo} Orders</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-green-500 h-2 rounded-full" style={{ width: '40%' }}></div>
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between mb-1">
+                <span>Completed</span>
+                <span>{stats.completed_wo} Orders</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-purple-500 h-2 rounded-full" style={{ width: '80%' }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Alerts */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-4">Alerts</h2>
+          <div className="space-y-3">
+            {stats.pending_qty > 0 && (
+              <div className="flex items-center p-3 bg-yellow-50 text-yellow-800 rounded-lg">
+                <ExclamationTriangleIcon className="h-5 w-5 mr-3" />
+                <span>{stats.pending_qty} items pending for delivery</span>
+              </div>
+            )}
+            <div className="flex items-center p-3 bg-blue-50 text-blue-800 rounded-lg">
+              <DocumentTextIcon className="h-5 w-5 mr-3" />
+              <span>{stats.today_pi} PIs created today</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
+
+// ==========================================================
+// 5. src/pages/transactions/ProformaInvoice.js - PI Page
+// ==========================================================
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import DataTable from '../../components/DataTable';
+
+const ProformaInvoice = () => {
+  const [piList, setPiList] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [customers, setCustomers] = useState([]);
+  const [items, setItems] = useState([]);
+  const [formData, setFormData] = useState({
+    pi_number: '',
+    pi_date: new Date().toISOString().split('T')[0],
+    customer_id: '',
+    ship_address_id: '',
+    items: [],
+    charges: [],
+    subtotal: 0,
+    discount_total: 0,
+    taxable_amount: 0,
+    cgst_total: 0,
+    sgst_total: 0,
+    grand_total: 0
+  });
+
+  useEffect(() => {
+    fetchPIs();
+    fetchCustomers();
+    fetchItems();
+  }, []);
+
+  const fetchPIs = async () => {
+    try {
+      const response = await axios.get('/api/pi');
+      setPiList(response.data);
+    } catch (error) {
+      toast.error('Error fetching PIs');
+    }
+  };
+
+  const fetchCustomers = async () => {
+    try {
+      const response = await axios.get('/api/masters/customers');
+      setCustomers(response.data);
+    } catch (error) {
+      toast.error('Error fetching customers');
+    }
+  };
+
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get('/api/masters/items');
+      setItems(response.data);
+    } catch (error) {
+      toast.error('Error fetching items');
+    }
+  };
+
+  const columns = [
+    { Header: 'PI No', accessor: 'pi_number' },
+    { 
+      Header: 'Date', 
+      accessor: 'pi_date',
+      Cell: ({ value }) => new Date(value * 1000).toLocaleDateString()
+    },
+    { Header: 'Customer', accessor: 'customer_name' },
+    { 
+      Header: 'Amount', 
+      accessor: 'grand_total',
+      Cell: ({ value }) => `₹${(value / 100).toLocaleString()}`
+    },
+    { 
+      Header: 'Status', 
+      accessor: 'status',
+      Cell: ({ value }) => {
+        const statusMap = { 1: 'Draft', 2: 'Confirmed', 3: 'Converted', 4: 'Cancelled' };
+        const colors = { 1: 'gray', 2: 'green', 3: 'blue', 4: 'red' };
+        return (
+          <span className={`px-2 py-1 bg-${colors[value]}-100 text-${colors[value]}-800 rounded-full text-xs`}>
+            {statusMap[value]}
+          </span>
+        );
+      }
+    },
+    {
+      Header: 'Actions',
+      Cell: ({ row }) => (
+        <div className="space-x-2">
+          <button className="text-blue-600 hover:text-blue-800">Edit</button>
+          <button className="text-green-600 hover:text-green-800">Print</button>
+          <button className="text-purple-600 hover:text-purple-800">Convert to WO</button>
+        </div>
+      )
+    }
+  ];
+
+  const addItem = () => {
+    setFormData({
+      ...formData,
+      items: [
+        ...formData.items,
+        {
+          id: Date.now(),
+          item_id: '',
+          thickness: 0,
+          height: 0,
+          width: 0,
+          quantity: 1,
+          rate: 0,
+          discount: 0,
+          tax: 18,
+          total: 0
+        }
+      ]
+    });
+  };
+
+  const calculateItemTotal = (item) => {
+    const area = (item.height * item.width) / 14400;
+    const amount = item.quantity * area * item.rate;
+    const discount = amount * item.discount / 100;
+    const taxable = amount - discount;
+    const tax = taxable * item.tax / 100;
+    return taxable + tax;
+  };
+
+  const calculateTotals = () => {
+    let subtotal = 0;
+    let discount_total = 0;
+    let tax_total = 0;
+
+    formData.items.forEach(item => {
+      const area = (item.height * item.width) / 14400;
+      const amount = item.quantity * area * item.rate;
+      const discount = amount * item.discount / 100;
+      const taxable = amount - discount;
+      const tax = taxable * item.tax / 100;
+      
+      subtotal += amount;
+      discount_total += discount;
+      tax_total += tax;
+    });
+
+    const taxable_amount = subtotal - discount_total;
+    
+    setFormData({
+      ...formData,
+      subtotal,
+      discount_total,
+      taxable_amount,
+      cgst_total: tax_total / 2,
+      sgst_total: tax_total / 2,
+      grand_total: taxable_amount + tax_total
+    });
+  };
+
+  const handleSave = async () => {
+    try {
+      await axios.post('/api/pi', formData);
+      toast.success('PI saved successfully');
+      setShowForm(false);
+      fetchPIs();
+    } catch (error) {
+      toast.error('Error saving PI');
+    }
+  };
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold">Proforma Invoice</h1>
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+        >
+          {showForm ? 'View List' : '+ New PI'}
+        </button>
+      </div>
+
+      {showForm ? (
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-4">Create New PI</h2>
+          
+          {/* Header Section */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium mb-1">PI Date</label>
+              <input
+                type="date"
+                value={formData.pi_date}
+                onChange={(e) => setFormData({ ...formData, pi_date: e.target.value })}
+                className="w-full border rounded-lg px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Customer</label>
+              <select
+                value={formData.customer_id}
+                onChange={(e) => setFormData({ ...formData, customer_id: e.target.value })}
+                className="w-full border rounded-lg px-3 py-2"
+              >
+                <option value="">Select Customer</option>
+                {customers.map(c => (
+                  <option key={c.customer_id} value={c.customer_id}>{c.customer_name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">PO Reference</label>
+              <input
+                type="text"
+                className="w-full border rounded-lg px-3 py-2"
+              />
+            </div>
+          </div>
+
+          {/* Items Table */}
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="font-medium">Items</h3>
+              <button
+                onClick={addItem}
+                className="bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700 text-sm"
+              >
+                + Add Item
+              </button>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="min-w-full border">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-2 text-left">Item</th>
+                    <th className="px-4 py-2 text-left">Thk</th>
+                    <th className="px-4 py-2 text-left">H</th>
+                    <th className="px-4 py-2 text-left">W</th>
+                    <th className="px-4 py-2 text-right">Qty</th>
+                    <th className="px-4 py-2 text-right">Rate</th>
+                    <th className="px-4 py-2 text-right">Disc%</th>
+                    <th className="px-4 py-2 text-right">Tax%</th>
+                    <th className="px-4 py-2 text-right">Total</th>
+                    <th className="px-4 py-2"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {formData.items.map((item, index) => (
+                    <tr key={item.id} className="border-t">
+                      <td className="px-4 py-2">
+                        <select
+                          value={item.item_id}
+                          onChange={(e) => {
+                            const newItems = [...formData.items];
+                            newItems[index].item_id = e.target.value;
+                            setFormData({ ...formData, items: newItems });
+                            calculateTotals();
+                          }}
+                          className="w-32 border rounded px-2 py-1"
+                        >
+                          <option value="">Select</option>
+                          {items.map(i => (
+                            <option key={i.item_id} value={i.item_id}>{i.item_code}</option>
+                          ))}
+                        </select>
+                      </td>
+                      <td className="px-4 py-2">
+                        <input
+                          type="number"
+                          value={item.thickness}
+                          onChange={(e) => {
+                            const newItems = [...formData.items];
+                            newItems[index].thickness = parseInt(e.target.value);
+                            setFormData({ ...formData, items: newItems });
+                            calculateTotals();
+                          }}
+                          className="w-16 border rounded px-2 py-1"
+                        />
+                      </td>
+                      <td className="px-4 py-2">
+                        <input
+                          type="number"
+                          value={item.height}
+                          onChange={(e) => {
+                            const newItems = [...formData.items];
+                            newItems[index].height = parseInt(e.target.value);
+                            setFormData({ ...formData, items: newItems });
+                            calculateTotals();
+                          }}
+                          className="w-20 border rounded px-2 py-1"
+                        />
+                      </td>
+                      <td className="px-4 py-2">
+                        <input
+                          type="number"
+                          value={item.width}
+                          onChange={(e) => {
+                            const newItems = [...formData.items];
+                            newItems[index].width = parseInt(e.target.value);
+                            setFormData({ ...formData, items: newItems });
+                            calculateTotals();
+                          }}
+                          className="w-20 border rounded px-2 py-1"
+                        />
+                      </td>
+                      <td className="px-4 py-2">
+                        <input
+                          type="number"
+                          value={item.quantity}
+                          onChange={(e) => {
+                            const newItems = [...formData.items];
+                            newItems[index].quantity = parseInt(e.target.value);
+                            setFormData({ ...formData, items: newItems });
+                            calculateTotals();
+                          }}
+                          className="w-20 border rounded px-2 py-1 text-right"
+                        />
+                      </td>
+                      <td className="px-4 py-2">
+                        <input
+                          type="number"
+                          value={item.rate}
+                          onChange={(e) => {
+                            const newItems = [...formData.items];
+                            newItems[index].rate = parseInt(e.target.value);
+                            setFormData({ ...formData, items: newItems });
+                            calculateTotals();
+                          }}
+                          className="w-24 border rounded px-2 py-1 text-right"
+                        />
+                      </td>
+                      <td className="px-4 py-2">
+                        <input
+                          type="number"
+                          value={item.discount}
+                          onChange={(e) => {
+                            const newItems = [...formData.items];
+                            newItems[index].discount = parseInt(e.target.value);
+                            setFormData({ ...formData, items: newItems });
+                            calculateTotals();
+                          }}
+                          className="w-16 border rounded px-2 py-1 text-right"
+                        />
+                      </td>
+                      <td className="px-4 py-2">
+                        <input
+                          type="number"
+                          value={item.tax}
+                          onChange={(e) => {
+                            const newItems = [...formData.items];
+                            newItems[index].tax = parseInt(e.target.value);
+                            setFormData({ ...formData, items: newItems });
+                            calculateTotals();
+                          }}
+                          className="w-16 border rounded px-2 py-1 text-right"
+                        />
+                      </td>
+                      <td className="px-4 py-2 text-right font-medium">
+                        ₹{(calculateItemTotal(item) / 100).toFixed(2)}
+                      </td>
+                      <td className="px-4 py-2">
+                        <button
+                          onClick={() => {
+                            const newItems = formData.items.filter(i => i.id !== item.id);
+                            setFormData({ ...formData, items: newItems });
+                            calculateTotals();
+                          }}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          ×
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Summary Section */}
+          <div className="flex justify-end mb-6">
+            <div className="w-64">
+              <div className="flex justify-between py-2">
+                <span>Subtotal:</span>
+                <span className="font-medium">₹{(formData.subtotal / 100).toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between py-2">
+                <span>Discount:</span>
+                <span className="font-medium">₹{(formData.discount_total / 100).toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between py-2">
+                <span>Taxable:</span>
+                <span className="font-medium">₹{(formData.taxable_amount / 100).toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between py-2">
+                <span>CGST:</span>
+                <span className="font-medium">₹{(formData.cgst_total / 100).toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between py-2">
+                <span>SGST:</span>
+                <span className="font-medium">₹{(formData.sgst_total / 100).toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between py-2 border-t font-bold">
+                <span>Grand Total:</span>
+                <span>₹{(formData.grand_total / 100).toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex justify-end space-x-4">
+            <button
+              onClick={() => setShowForm(false)}
+              className="px-6 py-2 border rounded-lg hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Save PI
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow">
+          <DataTable columns={columns} data={piList} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ProformaInvoice;
+
+// ==========================================================
+// 6. src/components/DataTable.js - Reusable Table Component
+// ==========================================================
+
+import React from 'react';
+import { useTable, useSortBy, usePagination } from 'react-table';
+
+const DataTable = ({ columns, data }) => {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    prepareRow,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize }
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 0, pageSize: 10 }
+    },
+    useSortBy,
+    usePagination
+  );
+
+  return (
+    <div className="p-4">
+      <table {...getTableProps()} className="min-w-full">
+        <thead className="bg-gray-50">
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                >
+                  {column.render('Header')}
+                  <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? ' 🔽'
+                        : ' 🔼'
+                      : ''}
+                  </span>
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()} className="bg-white divide-y divide-gray-200">
+          {page.map(row => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()} className="hover:bg-gray-50">
+                {row.cells.map(cell => (
+                  <td {...cell.getCellProps()} className="px-6 py-4 whitespace-nowrap text-sm">
+                    {cell.render('Cell')}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      {/* Pagination */}
+      <div className="flex items-center justify-between mt-4">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => gotoPage(0)}
+            disabled={!canPreviousPage}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            {'<<'}
+          </button>
+          <button
+            onClick={() => previousPage()}
+            disabled={!canPreviousPage}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            {'<'}
+          </button>
+          <button
+            onClick={() => nextPage()}
+            disabled={!canNextPage}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            {'>'}
+          </button>
+          <button
+            onClick={() => gotoPage(pageCount - 1)}
+            disabled={!canNextPage}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            {'>>'}
+          </button>
+          <span>
+            Page{' '}
+            <strong>
+              {pageIndex + 1} of {pageOptions.length}
+            </strong>{' '}
+          </span>
+        </div>
+        <select
+          value={pageSize}
+          onChange={e => setPageSize(Number(e.target.value))}
+          className="border rounded px-2 py-1"
+        >
+          {[10, 25, 50].map(size => (
+            <option key={size} value={size}>
+              Show {size}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+};
+
+export default DataTable;
+
+// ==========================================================
+// 7. src/pages/Login.js - Login Page
+// ==========================================================
+
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+
+const Login = () => {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await axios.post('/api/auth/login', formData);
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      toast.success('Login successful');
+      navigate('/dashboard');
+    } catch (error) {
+      toast.error('Invalid username or password');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-blue-900">SP-7 ERP</h1>
+          <p className="text-gray-600 mt-2">Glass Manufacturing ERP</p>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Username</label>
+            <input
+              type="text"
+              value={formData.username}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2">Password</label>
+            <input
+              type="password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          >
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+        </form>
+
+        <div className="mt-4 text-center text-sm text-gray-600">
+          <p>Demo Credentials:</p>
+          <p>Username: admin | Password: admin123</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
+
+// ==========================================================
+// 8. src/components/PrivateRoute.js - Protected Route
+// ==========================================================
+
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+
+const PrivateRoute = ({ children }) => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+
+  return children;
+};
+
+export default PrivateRoute;
+
+// ==========================================================
+// 9. src/index.js - Entry Point
+// ==========================================================
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// ==========================================================
+// 10. tailwind.config.js - Tailwind Configuration
+// ==========================================================
+
+/*
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+*/
+
+// ==========================================================
+// 11. src/index.css - Global Styles
+// ==========================================================
+
+/*
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700;
+  }
+  .btn-secondary {
+    @apply border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50;
+  }
+  .input-field {
+    @apply border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+}
+*/
+
+// ==========================================================
+// 12. .env - Environment Variables
+// ==========================================================
+
+/*
+REACT_APP_API_URL=http://localhost:5000/api
+REACT_APP_APP_NAME=SP-7 Glass ERP
+*/
+
+// ==========================================================
+// FRONTEND COMPLETE - 12 FILES
+// ==========================================================
